@@ -1,0 +1,79 @@
+//blog主页
+.blog-home {
+    padding: 20px 160px;
+    display: flex;
+
+    .personal-info{
+        display: flex;
+        flex-direction: column;
+        flex: 1;   //占据比例
+
+        .personal-card{
+            width: 90%;
+            padding: 2em;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+
+            //个人信息
+            .avatar img{
+                width: 100%;
+                height: 100%;
+            }
+
+            //名称
+            h4{
+                font-size:2em;
+                margin: 10px;
+                display: flex;
+                justify-self: center;
+                align-items: center;
+            }
+
+            //描述
+            p{
+                display: flex;
+                justify-content: center;
+                align-self: center;
+            }
+        }
+    }
+
+    //文章
+    .article-list {
+        display: flex;
+        flex-direction: column;
+        flex: 3.5;   //占据比例
+
+        .article-card {
+            margin-bottom: 20px;
+            border: 1px solid #ebeef5; /* 添加边框 */
+            box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
+        }
+    }
+}
+
+//分页
+.el-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+// //返回顶部
+// .el-backtop{
+//     background-color: #00a6ff;
+//     color: #ffffff;
+
+//     .el-icon{      //箭头 
+//         font-size: 25px;
+//         width: 40px;     //悬浮生效范围
+//         height: 40px;
+//     }
+
+//     :hover{
+//         color:#00a6ff    //悬浮箭头颜色
+//     }
+// }

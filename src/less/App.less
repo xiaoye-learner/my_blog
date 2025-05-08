@@ -1,0 +1,65 @@
+body{
+    margin: 0;
+    background: var(--el-color-primary-light-9);
+
+    .el-scrollbar {
+        height: 100vh;
+    }
+
+    .el-scrollbar__thumb{    //滚动条样式设置
+        background-color: #0088ff;
+        opacity: 0.4;
+    }
+
+    //返回顶部
+    .el-backtop{
+        background-color: #00a6ff;
+        color: #ffffff;
+
+        .el-icon{      //箭头 
+            font-size: 25px;
+            width: 40px;     //悬浮生效范围
+            height: 40px;
+        }
+
+        :hover{
+            color:#00a6ff    //悬浮箭头颜色
+        }
+    }
+}
+
+.app{
+    header {
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+        padding: 0 20px;
+        text-align: right;   // 将文本对齐方式设置为右对齐
+
+        nav ul {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;  // 使ul右对齐
+            margin: 0;
+
+            li {
+                display: flex;
+                flex-direction: row;
+                margin-right: 10px;   //链接右侧间隔
+
+                a{
+                    color: white;
+                    text-decoration: none;
+                    padding: 15px 10px;
+                    
+                    &:hover {
+                        color: rgb(132, 189, 255);
+                    }
+                }
+            }
+        }
+    }   
+}
+
+.active {
+    border-bottom: 5px solid rgb(132, 189, 255);    // 给当前激活的标签页链接加上底部边框
+}
