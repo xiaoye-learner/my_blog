@@ -6,6 +6,7 @@ import Album from '../views/album.vue'
 import FriendLinks from '../views/friend-links.vue'
 import AboutMe from '../views/about-me.vue'
 import Article from '../components/MarkdownViewer.vue'
+import ArticleDetail from '../components/ArticleDetail.vue';
 
 const routes = [      // 路由配置
     {
@@ -42,7 +43,12 @@ const routes = [      // 路由配置
         path: '/Article/:id',
         name: 'Article',
         component: Article  // 文章组件
-    }
+    },
+    {
+        path: '/article/:id',
+        name: 'ArticleDetail',
+        component: ArticleDetail,
+    },
 ]
 
 const router = createRouter({    // 创建路由实例

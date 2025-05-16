@@ -42,6 +42,7 @@ export default {
             try {
                 const response = await axios.get(`/articles/article_1/${filename}.md`); //以路径发起请求，获取响应
                 this.markdownContent = response.data;  //将响应的内容读取
+                console.log('response:', response)
             } catch (error) {
                 console.error('Error fetching the markdown file:', error);
             }
