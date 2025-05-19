@@ -1,56 +1,161 @@
 //blog主页
 .blog-home {
-    padding: 20px 160px;
-    display: flex;
-
-    .personal-info{
+    .home-header {
+        position: relative;
         display: flex;
-        flex-direction: column;
-        flex: 1;   //占据比例
-
-        .personal-card{
-            width: 90%;
-            padding: 2em;
+        justify-content: center;   //首页组件内容居中
+        
+        .infoText {    //首页介绍文字
+            position: absolute;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            box-sizing: border-box;
+            justify-content: center;   //主轴方向从下到上
+            align-items: center;   //交叉轴方向从上到下
+            top: 40%;
+            z-index: 1000;
+            color: #ffffff;
 
-            //个人信息
-            .avatar img{
-                width: 100%;
-                height: 100%;
+            h1 {
+                font-size: 4em;
+                margin: 15px;
+
+                .name {
+                    position: relative;
+
+                    &::before {
+                        position: absolute;
+                        border-radius: 5px;
+                        bottom: 0;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        z-index: -1;
+                        content: "";
+                        background: #fe8599c4;
+                        height: 30%;
+                        width: 110%;
+                        display: inline-block;
+                    }
+                }
+            }  
+        }
+
+        .arrow-down {
+            position: absolute; 
+            bottom: 5rem;           
+            z-index: 1000;   
+
+            animation: float 2s ease-in-out infinite;    //漂浮效果（慢速开始与结束，2s无限循环）
+            transform: translate3d(0, 0, 0);    // 启用硬件加速
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate3d(0, -15%, 0) scale(1);     //设置移动范围、缩放、透明度
+                opacity: 1;
+                filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
             }
-
-            //名称
-            h4{
-                font-size:2em;
-                margin: 10px;
-                display: flex;
-                justify-self: center;
-                align-items: center;
+            50% {
+                transform: translate3d(0, 15%, 0) scale(0.95);
+                opacity: 0.5;
+                filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
             }
+        }
 
-            //描述
-            p{
-                display: flex;
-                justify-content: center;
-                align-self: center;
+        //首页波浪效果
+        .waves {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 999;
+        }
+        //多个波浪产生层次动画效果
+        .parallax > use {
+            animation: move-forever 25s cubic-bezier(0.55, 0.5, 0.45, 0.5) infinite;
+        }
+        .parallax > use:nth-child(1) {    //伪类选择器，选择第一个波浪
+            animation-delay: -2s;
+            animation-duration: 5s;
+            fill: var(--wave-one-color);
+        }
+        .parallax > use:nth-child(2) {
+            animation-delay: -3s;
+            animation-duration: 10s;
+            fill: var(--wave-two-color);
+        }
+        .parallax > use:nth-child(3) {
+            animation-delay: -4s;
+            animation-duration: 15s;
+            fill: var(--wave-four-color);
+        }
+        .parallax > use:nth-child(4) {
+            animation-delay: -5s;
+            animation-duration: 20s;
+            fill: var(--wave-three-color);
+        }
+        @keyframes move-forever {
+            0% {
+                transform: translate3d(-90px, 0, 0);
+            }
+            100% {
+                transform: translate3d(85px, 0, 0);
             }
         }
     }
 
-    //文章
-    .article-list {
+    .home-content {
+        padding: 20px 160px;
         display: flex;
-        flex-direction: column;
-        flex: 3.5;   //占据比例
 
-        .article-card {
-            margin-bottom: 20px;
-            border: 1px solid #ebeef5; /* 添加边框 */
-            box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
+        .personal-info{
+            display: flex;
+            flex-direction: column;
+            flex: 1;   //占据比例
+
+            .personal-card{
+                width: 90%;
+                padding: 2em;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                box-sizing: border-box;
+
+                //个人信息
+                .avatar img{
+                    width: 100%;
+                    height: 100%;
+                }
+
+                //名称
+                h4{
+                    font-size:2em;
+                    margin: 10px;
+                    display: flex;
+                    justify-self: center;
+                    align-items: center;
+                }
+
+                //描述
+                p{
+                    display: flex;
+                    justify-content: center;
+                    align-self: center;
+                }
+            }
+        }
+
+        //文章
+        .article-list {
+            display: flex;
+            flex-direction: column;
+            flex: 3.5;   //占据比例
+
+            .article-card {
+                margin-bottom: 20px;
+                border: 1px solid #ebeef5; /* 添加边框 */
+                box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
+            }
         }
     }
 }
@@ -61,19 +166,3 @@
     justify-content: center;
     align-items: center;
 }
-
-// //返回顶部
-// .el-backtop{
-//     background-color: #00a6ff;
-//     color: #ffffff;
-
-//     .el-icon{      //箭头 
-//         font-size: 25px;
-//         width: 40px;     //悬浮生效范围
-//         height: 40px;
-//     }
-
-//     :hover{
-//         color:#00a6ff    //悬浮箭头颜色
-//     }
-// }

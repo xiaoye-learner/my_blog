@@ -1,5 +1,8 @@
 <template>
     <div class="blog-life">
+        <div class="life-header">
+            <img src="../icons/life.png" alt="页首图片" style="width: 100vw; height: 30vh; object-fit: cover;"/>
+        </div>
         <el-tabs class="life-tabs" :tab-position="tabPosition" style="height: 100vh">
             <el-tab-pane label="2025年">
                 <div class="life_talk-container">     <!-- 说说 -->                    

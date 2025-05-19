@@ -47,7 +47,7 @@ const routes = [      // 路由配置
     {
         path: '/article/:id',
         name: 'ArticleDetail',
-        component: ArticleDetail,
+        component: ArticleDetail,   // 文章详情组件
     },
 ]
 

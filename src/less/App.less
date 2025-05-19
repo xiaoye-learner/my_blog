@@ -2,9 +2,16 @@ body{
     margin: 0;
     background: var(--el-color-primary-light-9);
 
+    font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB','Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+
     .el-scrollbar {
         height: 100vh;
+        z-index: 1000;
     }
+
+    .el-scrollbar__bar.is-vertical{  //更改图层
+        z-index: 1000;
+    }    
 
     .el-scrollbar__thumb{    //滚动条样式设置
         background-color: #0088ff;
@@ -15,6 +22,7 @@ body{
     .el-backtop{
         background-color: #00a6ff;
         color: #ffffff;
+        z-index: 1002;       //返回顶部图层
 
         .el-icon{      //箭头 
             font-size: 25px;
@@ -30,16 +38,25 @@ body{
 
 .app{
     header {
-        background-color: rgba(0, 0, 0, 0.5);
+        // background-color: rgba(0, 0, 0, 0.5);
         color: white;
-        padding: 0 20px;
         text-align: right;   // 将文本对齐方式设置为右对齐
+        position: fixed;  //导航栏固定在顶部
+        width: 100%;
+        height: auto;
+        z-index: 1000;
+
+        transition: background 0.7s cubic-bezier(0.4, 0, 0.2, 1),  //导航栏透明度平滑变换
+                    transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);   // 平滑显示与隐藏效果（使用贝塞尔曲线函数）
+        will-change: transform;  //  预通知浏览器进行优化
+        transform: translateZ(0);   // 触发GPU加速
 
         nav ul {
             display: flex;
             flex-direction: row;
             justify-content: flex-end;  // 使ul右对齐
             margin: 0;
+            padding: 0 20px;    //导航栏选项最右边边距
 
             li {
                 display: flex;

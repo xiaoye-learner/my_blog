@@ -1,5 +1,8 @@
 <template>
     <div class="blog-album">
+        <div class="album-header">
+            <img src="../icons/album.png" alt="页首图片" style="width: 100vw; height: 30vh; object-fit: cover;"/>
+        </div>
         <el-tabs :tab-position="tabPosition" style="height: 100vh" class="demo-tabs">
             <el-tab-pane label="生活">
                 <el-row class="row-space" v-if="photo_list.length">

@@ -1,5 +1,8 @@
 <template>
     <div class="blog-study">
+        <div class="study-header">
+            <img src="../icons/study.png" alt="页首图片" style="width: 100vw; height: 30vh; object-fit: cover;"/>
+        </div>
         <el-tabs class="study-tabs" :tab-position="tabPosition" style="height: 100vh" >
             <el-tab-pane label="嵌入式">
                 <el-row :gutter="20">

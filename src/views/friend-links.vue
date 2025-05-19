@@ -1,5 +1,9 @@
 <template>
     <div class="blog-friend-links">
+        <div class="friend-links-header">
+            <img src="../icons/friend-links.png" alt="页首图片" style="width: 100vw; height: 30vh; object-fit: cover;"/>
+        </div>
+
         <el-card class="about-card">
             <h2>关于友链:</h2>
             <p>头像URL:</p>
