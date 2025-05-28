@@ -1,6 +1,6 @@
 <template>
     <div class="blog-home">
-        <div class="home-header" ref="homeHeader">   <!-- ref：注册引用属性，可使用this.$refs访问该DOM元素 -->
+        <div class="blog-home-header" ref="homeHeader">   <!-- ref：注册引用属性，可使用this.$refs访问该DOM元素 -->
             <img src="../icons/home.png" style="width: 100vw; height: 100vh; object-fit: cover;"></img>
             
             <div class="infoText">
@@ -47,22 +47,47 @@
                         <p style="white-space: pre;">开发ing<b> >_< </b></p>
                     </div>
                 </el-card>
+
+                <el-card class="external-links-card">
+                    <el-row :gutter="5">
+                        <el-col :span="8">
+                            <a v-for= "i in link_list" :key="i.animate" :href = "i.href" target="_blank">
+                                <el-tooltip effect="light" :content="i.content" placement="top">
+                                    <button class="links-button" :style="{ backgroundColor: i.color, cursor: 'pointer' }">
+                                        <img :src="i.src" alt="link"/>
+                                    </button>
+                                </el-tooltip>
+                            </a>
+                        </el-col>
+                    </el-row>
+                </el-card>
             </div>
             
             <!-- 文章 -->
             <div class="article-list">
-                <el-card class="article-card" v-for="(article, index) in displayedArticles" :key="index">
-                    <el-empty description="内容暂为空"></el-empty>  <!-- 空白占位符 -->
+                <el-card class="article-card" v-for="(article, index) in displayedArticles.slice().reverse()" 
+                :key="index" 
+                @click="goToArticle(article.id)"
+                style="cursor: pointer;">
+                <!-- 文章封面图片 -->
+                <img :src="getCoverImagePath()" alt="cover_image" v-if="getCoverImagePath()"></img>
+                <h4 v-else>暂无封面</h4>
+
+                <!-- 文章相关信息 -->
+                <div class="article-info">
+                    <h3>{{ article.title }}</h3>
+                    <p>{{ article.edited_time.toLocaleString('zh').replace('T', ' ').replace('Z', '') }}</p>
+                </div>
                 </el-card>
 
                 <!-- 分页 -->
                 <el-pagination   
-                    @current-change="handleCurrentChange"   
+                    @current-change="handleCurrentChange"  
                     :current-page="current_page"
                     :page-size="page_size"
 
                     layout="prev, pager, next"
-                    :total="articles.length"
+                    :total="total_articles"
                 ></el-pagination>
             </div>
         </div>
@@ -70,41 +95,105 @@
 </template>
 
 <script>
+import axios from 'axios';
+
   export default {
     data() {
         return {
-            articles: Array(20),   // 20篇文章内容
+            displayedArticles: [],    // 显示的文章列表
             current_page: 1,    // 当前页码
-            page_size: 5    // 每页显示的文章数量
+            page_size: 5,    // 每页显示的文章数量
+            total_articles: 0,    // 文章总数
+
+            // 超链接列表
+            link_list: [
+                {
+                    icon: 'icon-github',
+                    animate: 'Github',
+                    content: 'Github',
+                    color: '#3d3d3d',
+                    href: 'https://github.com/xiaoye-learner',
+                    src: '/src/icons_link/GitHub.svg',
+                },
+                {
+                    icon: 'icon-bilibili',
+                    animate: 'BiliBili',
+                    content: '哔哩哔哩',
+                    color: '#0BA6D8',
+                    href: 'https://space.bilibili.com/76999298',
+                    src: '/src/icons_link/bilibili.svg'
+                },
+                {
+                    icon: 'icon-music',
+                    animate: 'Music',
+                    content: '歌单',
+                    color: '#65bbed',
+                    href: 'https://www.kugou.com/songlist/gcid_3z160l9dbz1vz0b4/',
+                    src: '/src/icons_link/music.svg'
+                },
+                {
+                    icon: 'icon-anime',
+                    animate: 'Anime',
+                    content: '动漫新番表',
+                    color: '#e549ed',
+                    href: 'https://xf.hmacg.cn/',
+                    src: '/src/icons_link/anime.png'
+                }
+            ]
         }
     },
 
     methods: {
-        //更新当前页码
+        async fetchArticles() {
+            try{
+                const response = await axios.get(`api/articles/?page=${this.current_page}&page_size=${this.page_size}`)
+                this.displayedArticles = response.data;       // 文章列表
+            }catch(error){
+                console.error(error)
+            }
+        },
+
+        // 动态获取文章封面图片路径
+        getCoverImagePath() {
+            return '/articles/article_1/img/cover.jpg'
+        },
+
+        // 跳转至文章详情页
+        goToArticle(id){
+            this.$router.push({ name: 'ArticleDetail', params: { id } });
+            // console.log('goToArticle:', id)
+        },
+
+        // 更新当前页码
         handleCurrentChange(new_page) {
             this.current_page = new_page
+            this.fetchArticles();
         },
 
         // 滚动到文章列表页面
         scrollToBottom() {
             this.$emit('scroll-to-header', this.$refs.homeHeader);  //向父组件App.vue传递自定义事件scroll-to-header，传ref
-        }
+        },
     },
     
     computed: {
-        // 页面显示的文章数组
-        displayedArticles() {
-            const start = (this.current_page - 1) * this.page_size   // 当前页面文章起始index
-            const end = start + this.page_size
-            return this.articles.slice(start, end)   // 截取当前页面显示的文章数组
-        }
+        // // 页面显示的文章数组
+        // displayedArticles() {
+        //     const start = (this.current_page - 1) * this.page_size   // 当前页面文章起始index
+        //     const end = start + this.page_size
+        //     return this.articles.slice(start, end)   // 截取当前页面显示的文章数组
+        // }
     },
 
     props: {
         height: {    // 波浪效果高度
             type: String,
-            default: "4.5rem",
+            default: "calc(4rem + 15px)",
         },
     },
+
+    created() {
+        this.fetchArticles();
+    }
 }
 </script>

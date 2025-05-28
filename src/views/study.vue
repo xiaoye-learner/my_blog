@@ -1,12 +1,13 @@
 <template>
     <div class="blog-study">
-        <div class="study-header">
-            <img src="../icons/study.png" alt="页首图片" style="width: 100vw; height: 30vh; object-fit: cover;"/>
+        <div class="blog-study-header">
+            <img src="../icons/study.png" alt="页首图片" style="width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6);"/>
+            <h1>学习总结&杂谈</h1>
         </div>
         <el-tabs class="study-tabs" :tab-position="tabPosition" style="height: 100vh" >
             <el-tab-pane label="嵌入式">
                 <el-row :gutter="20">
-                    <el-col :span="12" v-for="(card, index) in cards" :key="index">
+                    <el-col :sm="24" :md="12" v-for="(card, index) in cards" :key="index">
                         <el-card class="study-card" @click="goToMarkdown(card.id)" style="cursor: pointer;">
                             <div class="study-header">
                                 <img :src="card.image" :alt="card.image" >
@@ -21,7 +22,7 @@
                     </el-col>
                 </el-row>
             </el-tab-pane>
-            <el-tab-pane label="A I">AI</el-tab-pane>
+            <el-tab-pane label="通信">通信</el-tab-pane>
             <el-tab-pane label="前端">前端</el-tab-pane>
             <el-tab-pane label="后端">后端</el-tab-pane>
         </el-tabs>

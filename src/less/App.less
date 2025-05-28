@@ -34,6 +34,17 @@ body{
             color:#00a6ff    //悬浮箭头颜色
         }
     }
+
+    //页脚
+    .footer {
+        margin-bottom: 20px;
+        width: 100vw;
+        text-align: center;
+        
+        p {
+            font-size: calc(0.5rem + 10px);
+        }
+    }
 }
 
 .app{
@@ -61,13 +72,45 @@ body{
             li {
                 display: flex;
                 flex-direction: row;
-                margin-right: 10px;   //链接右侧间隔
+                justify-content: center;
+                align-items: center;
+                position: relative;
+                width: 75px;      //限制标签选项宽度
+
+                .search {
+                    width: 20px;
+                    height: 20px;
+                    position: absolute;
+                    display: flex;    // 使搜索图标居中
+
+                    &:hover {
+                        color: rgb(132, 189, 255);
+                    }
+                }
 
                 a{
                     color: white;
                     text-decoration: none;
-                    padding: 15px 10px;
+                    padding: 15px 0;
+                    margin: 0 10px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+
+                    svg {
+                        display: flex;
+                        flex: 1;
+                    }
                     
+                    p {
+                        display: flex;
+                        justify-content: center;
+                        flex: 2;
+                        margin: 0;
+                        font-size: 15px;
+                    }
+
                     &:hover {
                         color: rgb(132, 189, 255);
                     }
@@ -79,4 +122,22 @@ body{
 
 .active {
     border-bottom: 5px solid rgb(132, 189, 255);    // 给当前激活的标签页链接加上底部边框
+}
+
+@media screen and (max-width: 768px) {
+    .app {
+        li {
+            a {          //导航栏设置
+                flex-direction: column;
+
+                svg {
+                    width: 4rem;
+                }
+
+                p {
+                    font-size: 2rem !important;
+                }
+            }
+        }
+    }
 }

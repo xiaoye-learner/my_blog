@@ -10,12 +10,13 @@ import './assets/styles.css'  // 引入自定义样式（markdown 样式）
 import './less/App.less'
 import './less/home.less'
 import './less/study.less'
-import './less/life.less'
+import './less/time-articles.less'
 import './less/album.less'
 import './less/friend-links.less'
 import './less/about-me.less'
 import './less/MarkdownViewer.less'
 import './less/ArticleDetail.less'
+import './assets/rem'
 
 const app = createApp(App)
 app.use(ElementPlus).use(router)

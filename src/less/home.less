@@ -1,6 +1,6 @@
 //blog主页
 .blog-home {
-    .home-header {
+    .blog-home-header {
         position: relative;
         display: flex;
         justify-content: center;   //首页组件内容居中
@@ -16,7 +16,7 @@
             color: #ffffff;
 
             h1 {
-                font-size: 4em;
+                font-size: 70px;
                 margin: 15px;
 
                 .name {
@@ -64,7 +64,7 @@
         //首页波浪效果
         .waves {
             position: absolute;
-            bottom: 0;
+            bottom: -15px;      //修复大屏出现的断层现象
             left: 0;
             width: 100%;
             z-index: 999;
@@ -104,7 +104,7 @@
     }
 
     .home-content {
-        padding: 20px 160px;
+        padding: 20px 8rem;
         display: flex;
 
         .personal-info{
@@ -129,7 +129,7 @@
 
                 //名称
                 h4{
-                    font-size:2em;
+                    font-size: calc(1rem + 15px);
                     margin: 10px;
                     display: flex;
                     justify-self: center;
@@ -138,10 +138,56 @@
 
                 //描述
                 p{
+                    font-size: calc(0.5rem + 5px);
                     display: flex;
                     justify-content: center;
                     align-self: center;
                 }
+            }
+
+            .external-links-card {
+                width: 90%;
+                margin-top: 1rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                position: relative;
+
+                .el-card__body {
+                    padding-left: 1.5rem;
+                    padding-right: 1.5rem;
+                }
+
+                .el-col {     //按钮总体布局
+                    display: flex;
+
+                    .links-button {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        position: relative;
+
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 30%;
+                        border: 0;
+                        margin-left: 5px;
+                        margin-right: 5px;
+
+                        transition: box-shadow var(--button-transition-duration);     //按钮过渡效果
+
+                        &:hover {          //悬停效果
+                            box-shadow: 0 0 10px 6px var(--button-hover-shadow-color);
+                        }
+
+                        img{
+                            width: 100%;
+                            height: auto;
+                        }
+                    }
+
+                }
+
             }
         }
 
@@ -152,9 +198,50 @@
             flex: 3.5;   //占据比例
 
             .article-card {
+                height: 15rem;
                 margin-bottom: 20px;
                 border: 1px solid #ebeef5; /* 添加边框 */
                 box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
+                display: flex;
+                flex-direction: row;
+
+                .el-card__body {
+                    display: flex;
+                    width: 100%;
+                    height: auto;
+
+                    img, h4 {
+                        flex: 2;
+                        display: flex;
+                        max-width: 100%;
+                        height: auto;
+                        margin: 0;
+                        margin-right: 2.5rem;
+                        object-fit: cover; // 确保图片填充整个区域 
+                    }
+
+                    .article-info {
+                        flex: 3;
+                        display: flex;
+                        flex-direction: column;
+
+                        h3{
+                            flex: 7;
+                            font-size:2rem;
+                            display: flex;
+                            justify-self: start;
+                            align-items: center;
+                        }
+
+                        p{
+                            flex: 3;
+                            font-size:1rem;
+                            display: flex;
+                            justify-self: start;
+                            align-items: end;
+                        }
+                    }
+                }
             }
         }
     }
@@ -165,4 +252,87 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+//平板适配
+@media screen and (max-width: 1024px) {
+    .blog-home {
+        .home-content {
+            padding: 20px;
+        }
+    }
+}
+
+// 移动端适配
+@media screen and (max-width: 768px) {
+    .blog-home {
+        .blog-home-header {
+            img {
+                object-position: 90% 50%;        //移动端图片裁剪位置
+            }
+
+            h1 {
+                font-size: 40px !important;
+            }
+
+            .infoText {
+                top: 45%; // 如果需要，可以调整 top 位置以适应小屏幕
+            }
+        }
+
+        .home-content {
+            padding: 10px; // 减少 padding 以适应小屏幕
+            display: flex;
+            flex-direction: column;
+
+            .personal-info {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin-bottom: 2rem;
+
+                .personal-card {
+                    width: 90%;
+                    padding: 7rem;  //调整第一个card内容占比             
+                }
+
+                .external-links-card {
+                    width: 90%;
+
+                    .el-card__body {
+                        padding: 0;
+                        .el-col {
+                            display: flex;
+                            flex-direction: row;
+
+                            .links-button {
+                                margin: 10px; // 调整按钮间距
+                            }
+                        }
+                    }                   
+                }
+            }
+
+            .article-list {
+                .article-card {
+                    height: 35rem;
+                    margin-bottom: 10px; // 减少 margin-bottom 以适应小屏幕
+
+                    .el-card__body {
+                        padding: 10px;
+
+                        .article-info {
+                            h3 {
+                                font-size: 3rem; 
+                            }
+
+                            p {
+                                font-size: 2rem;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

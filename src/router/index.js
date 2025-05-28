@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/home.vue'
 import Study from '../views/study.vue'
-import Life from '../views/life.vue'
+import TimeArticles from '../views/time-articles.vue'
 import Album from '../views/album.vue'
 import FriendLinks from '../views/friend-links.vue'
 import AboutMe from '../views/about-me.vue'
@@ -20,9 +20,9 @@ const routes = [      // 路由配置
         component: Study  // 学习组件
     },
     {
-        path: '/life',
-        name: 'Life',
-        component: Life  // 学习组件
+        path: '/time-articles',
+        name: 'TimeArticles',
+        component: TimeArticles  // 归档组件
     },
     {
         path: '/album',

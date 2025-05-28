@@ -1,0 +1,72 @@
+.blog-time-articles {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .blog-study-header {
+        width: 100vw;
+        height: 20rem;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        h1 {
+            position: absolute;
+            color: #ffffff;
+            font-size: 2.5rem;
+        }
+    }
+
+    .time-articles-card {
+        width: calc(35rem + 100px);
+        margin-top: 20px;
+
+        .sorted-years {     // 归档按年份排序
+            .year-header {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+
+                svg {
+                    width: calc(1rem + 20px);
+                    height: calc(1rem + 20px);
+                    color: #0088ff;
+                }
+
+                h3 {
+                    font-size: calc(1.5rem + 15px);
+                    margin: 1rem 0.5rem;
+                    color: #0088ff;
+                }
+            }
+
+            .el-timeline-item {
+                padding-top: calc(0.5rem + 5px);
+                padding-bottom: calc(0.5rem + 5px);
+
+                h3 {
+                    margin: 0;
+                    font-size: calc(1rem + 10px);
+                }
+
+                h4 {
+                    margin: 0;
+                    font-size: calc(0.5rem + 10px);
+                }
+            }
+        }   
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .blog-time-articles {
+        .blog-study-header {
+            height: 40rem;
+
+            h1 {
+                font-size: 4rem;
+            }
+        }
+    }
+}

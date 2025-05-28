@@ -1,18 +1,54 @@
 .blog-album {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .blog-album-header {
+        width: 100vw;
+        height: 20rem;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        h1 {
+            position: absolute;
+            color: #ffffff;
+            font-size: 2.5rem;
+        }
+    }
+
     .el-tabs{
-        padding: 20px 400px;   //确定内容界面大小
+        padding-top: 20px; 
+        width: 65rem;   //确定内容界面大小
+        display: flex;
 
         .row-space {
             padding: 5px; 
+            
+            .col-space{
+                display: flex;
+                justify-content: center;
 
-            .photo_list-card {
-                margin: 10px;
+                .photo_list-card {
+                    width: calc(10rem + 30px);
+                    height: calc(10rem + 30px);
+                    margin: 15px 5px;  //相册图片页边距
+                    display: flex;
+
+                    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+                }
+
+                .el-card__body {
+                    width: 100%;
+                    height: auto;
+                    padding: 0;
+                }
             }
         }
 
         .el-tabs__nav-scroll {
             display: flex;
-            justify-content: center;    //居中显示标签页
         }
 
         .el-tabs__content {
@@ -27,8 +63,32 @@
         }
 
         .el-tabs__item {
-            height: 100px;
-            font-size: 25px;
+            height: 7rem;   //标签栏选项高度
+            font-size: 1.7rem;  //标签栏字体大小
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .blog-album {
+        .blog-album-header {
+            height: 40rem;
+
+            h1 {
+                font-size: 4rem;
+            }
+        }
+
+        .el-tabs {
+            width: 75rem;
+            
+            .photo_list-card {
+                width: 20rem !important;
+                height: 20rem !important;
+            }
+            .el-tabs__content {
+                padding: 5px !important;
+            }
         }
     }
 }

@@ -1,7 +1,8 @@
 <template>
     <div class="blog-friend-links">
-        <div class="friend-links-header">
-            <img src="../icons/friend-links.png" alt="页首图片" style="width: 100vw; height: 30vh; object-fit: cover;"/>
+        <div class="blog-friend-links-header">
+            <img src="../icons/friend-links.png" alt="页首图片" style="width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6);"/>
+            <h1>XiaoYeの友人帐</h1>
         </div>
 
         <el-card class="about-card">
