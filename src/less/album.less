@@ -33,16 +33,25 @@
                 .photo_list-card {
                     width: calc(10rem + 30px);
                     height: calc(10rem + 30px);
-                    margin: 15px 5px;  //相册图片页边距
+                    margin: 15px 5px;  // 相册图片页边距
                     display: flex;
 
                     box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+
+                    :hover {
+                        transform: scale(1);    //抑制内部图片放大
+                    }
                 }
 
                 .el-card__body {
                     width: 100%;
                     height: auto;
                     padding: 0;
+                }
+
+                :hover {
+                    transform: scale(1.4);  //图片放大预览
+                    z-index: 1005;
                 }
             }
         }

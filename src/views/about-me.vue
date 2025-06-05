@@ -20,16 +20,52 @@
             <div class="profile">
                 <p>个人简介部分</p>
             </div>
+            <!-- <div class="music" @click="miniMusic">
+                <aplayer ref="aplayer" 
+                    :music="firstMusic(music_list)" 
+                    :list="music_list"
+                    :repeat="list"
+                    :listFolded="true"
+                    :mini="false"/>
+            </div> -->
         </el-card>
     </div>
 </template>
 
 <script>
+import aplayer from 'vue3-aplayer'
+
 export default {
+    components: {
+        aplayer
+    },
+
     data() {
         return {
-            
+            ismini: true,
+            music_list: [
+                {
+                    title: 'なごみ風',
+                    artist: ' ',
+                    src: 'src/music/渡辺善太郎 - なごみ風.mp3'
+                },
+                {
+                    title: 'Lyrical Amber',
+                    artist: ' ',
+                    src: 'src/music/Falcom Sound Team jdk - Lyrical Amber.mp3'
+                },
+            ]
         }
-    }
+    },
+
+    methods: {
+        firstMusic(music_list){
+            return music_list[0]
+        },
+
+        miniMusic(){
+            this.ismini = !this.ismini
+        }
+    },
 }
 </script>

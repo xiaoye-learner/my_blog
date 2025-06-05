@@ -9,7 +9,10 @@
                 <el-row class="row-space" v-if="photo_anime_list.length">
                     <el-col class="col-space" :xs="12" :sm="8" :md="6" v-for="(item, index) in photo_anime_list" :key="index">
                         <el-card class="photo_list-card">
-                            <img :src="item.image" :alt="item.image" width="100%" height="100%" style="object-fit: cover;"></img>
+                            <el-image :src="item.image" :alt="item.image" fit="cover"
+                                style="width: 100%; height: 100%;" 
+                                v-loading="item.loading"
+                            ></el-image>
                         </el-card>
                     </el-col>
                 </el-row>
@@ -45,13 +48,50 @@
                 ],
 
                 photo_anime_list: [
-                    { image: 'https://gitee.com/xiaoye2301/blog_images/raw/master/%E6%8F%92%E7%94%BB1.jpg'},
-                    { image: 'https://gitee.com/xiaoye2301/blog_images/raw/master/_20250523171604.jpg'},
-                    { image: 'https://gitee.com/xiaoye2301/blog_images/raw/master/_20250523171624.jpg'},
-                    { image: 'https://gitee.com/xiaoye2301/blog_images/raw/master/_202505231716241.jpg'},
-                    { image: 'https://gitee.com/xiaoye2301/blog_images/raw/master/_202505231716242.jpg'},
+                    { 
+                        image: 'https://gitee.com/xiaoye2301/blog_images/raw/master/%E6%8F%92%E7%94%BB1.jpg',
+                        loading: true,
+                    },
+                    {   
+                        image: 'https://gitee.com/xiaoye2301/blog_images/raw/master/_20250523171604.jpg',
+                        loading: true,
+                    },
+                    {   
+                        image: 'https://gitee.com/xiaoye2301/blog_images/raw/master/_20250523171624.jpg',
+                        loading: true,
+                    },
+                    {   image: 'https://gitee.com/xiaoye2301/blog_images/raw/master/_202505231716241.jpg',
+                        loading: true,
+                    },
+                    {   image: 'https://gitee.com/xiaoye2301/blog_images/raw/master/_202505231716242.jpg',
+                        loading: true,
+                    },
                 ],
             }
+        },
+
+        methods: {
+            //图片加载
+            loadImage(item){
+                const img = new Image();
+                img.src = item.image;
+
+                img.onload = () => {
+                    item.loading = false;
+                };
+
+                img.onerror = () => {
+                    console.error('图片加载失败', item.image);
+                    item.loading = false;
+                };
+            }
+        },
+
+        mounted() {
+            //遍历图片执行加载
+            this.photo_anime_list.forEach(item => {
+                this.loadImage(item);
+            })
         }
     }
 </script>

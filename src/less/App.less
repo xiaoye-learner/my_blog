@@ -65,7 +65,8 @@ body{
         nav ul {
             display: flex;
             flex-direction: row;
-            justify-content: flex-end;  // 使ul右对齐
+            // justify-content: flex-end;  // 使ul右对齐
+            justify-content: center;   // 使ul居中
             margin: 0;
             padding: 0 20px;    //导航栏选项最右边边距
 
@@ -118,6 +119,31 @@ body{
             }
         }
     }   
+
+    .music {
+        display: flex;
+        flex-direction: row;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        z-index: 1003;
+        transition: transform 0.5s ease-in-out;
+
+        .aplayer {
+            width: 300px;
+        }
+
+        .arrow {
+            display: flex;
+            justify-content: start;
+            align-self: center;
+            opacity: 0.3;
+
+            &:hover {
+                opacity: 1;
+            }
+        }
+    }
 }
 
 .active {

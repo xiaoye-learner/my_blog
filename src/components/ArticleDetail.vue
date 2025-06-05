@@ -3,7 +3,7 @@
         <div class="blog-article-detail-header">
             <div class="title">
                 <h2>{{ article.title }}</h2>
-                <p>编辑时间: {{ article.edited_time.toLocaleString('zh').replace('T', ' ').replace('Z', '') }}</p>
+                <p>编辑时间: {{ article.edited_time.toLocaleString('zh').replace('T', ' ').split('.')[0] }}</p>
             </div>
         </div>
         
@@ -47,9 +47,6 @@ export default {
                 const id = this.$route.params.id      //点击文章的id
                 const response = await axios.get(`/api/articles/${id}`)   //选定id下的文章内容
                 this.article = response.data; 
-                
-                console.log(`api/articles/${id}`)
-                console.log(response)
             }catch(error){
                 console.error(error)
             }

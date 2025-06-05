@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host --port 5173",
     "build": "vite build",
     "preview": "vite preview"
   },
@@ -13,9 +13,11 @@
     "axios": "^1.9.0",
     "element-plus": "^2.9.9",
     "highlight.js": "^11.11.1",
+    "hls": "^0.0.1",
     "markdown-it": "^14.1.0",
     "vue": "^3.5.13",
-    "vue-router": "^4.5.1"
+    "vue-router": "^4.5.1",
+    "vue3-aplayer": "^1.7.3"
   },
   "devDependencies": {
     "@types/markdown-it": "^14.1.2",

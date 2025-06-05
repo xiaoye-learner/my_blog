@@ -1,8 +1,14 @@
 <template>
     <div class="blog-home">
         <div class="blog-home-header" ref="homeHeader">   <!-- ref：注册引用属性，可使用this.$refs访问该DOM元素 -->
-            <img src="../icons/home.png" style="width: 100vw; height: 100vh; object-fit: cover;"></img>
-            
+            <div class="slideshow">
+                <img v-for="(img, index) in img_list" :key="index" 
+                :src="img.src" 
+                :class="{ active: index === currentIndex }"
+                :alt="img.alt"
+                style="object-fit: cover;"></img>
+            </div>
+
             <div class="infoText">
                 <h1>Hi,</h1>
                 <h1>I'm <span class="name">XiaoYe</span></h1>
@@ -70,13 +76,13 @@
                 @click="goToArticle(article.id)"
                 style="cursor: pointer;">
                 <!-- 文章封面图片 -->
-                <img :src="getCoverImagePath()" alt="cover_image" v-if="getCoverImagePath()"></img>
+                <img :src="article.article_cover" alt="cover_image" v-if="article.article_cover != null"></img>
                 <h4 v-else>暂无封面</h4>
 
                 <!-- 文章相关信息 -->
                 <div class="article-info">
                     <h3>{{ article.title }}</h3>
-                    <p>{{ article.edited_time.toLocaleString('zh').replace('T', ' ').replace('Z', '') }}</p>
+                    <p>{{ article.edited_time.toLocaleString('zh').replace('T', ' ').split('.')[0] }}</p>
                 </div>
                 </el-card>
 
@@ -100,10 +106,23 @@ import axios from 'axios';
   export default {
     data() {
         return {
+            currentIndex: 0,    //首页图片当前序号
             displayedArticles: [],    // 显示的文章列表
             current_page: 1,    // 当前页码
             page_size: 5,    // 每页显示的文章数量
             total_articles: 0,    // 文章总数
+
+            // 首页图片列表
+            img_list: [
+                {
+                    src: '/src/icons/home.png',
+                    alt: 'img',
+                },
+                {
+                    src: '/src/icons/home2.png',
+                    alt: 'img',
+                }
+            ],     
 
             // 超链接列表
             link_list: [
@@ -134,7 +153,7 @@ import axios from 'axios';
                 {
                     icon: 'icon-anime',
                     animate: 'Anime',
-                    content: '动漫新番表',
+                    content: '动漫新番表（外链）',
                     color: '#e549ed',
                     href: 'https://xf.hmacg.cn/',
                     src: '/src/icons_link/anime.png'
@@ -144,6 +163,11 @@ import axios from 'axios';
     },
 
     methods: {
+        //轮播显示首页图片
+        showNextImage(){
+            this.currentIndex = (this.currentIndex + 1) % this.img_list.length;
+        },
+
         async fetchArticles() {
             try{
                 const response = await axios.get(`api/articles/?page=${this.current_page}&page_size=${this.page_size}`)
@@ -161,7 +185,6 @@ import axios from 'axios';
         // 跳转至文章详情页
         goToArticle(id){
             this.$router.push({ name: 'ArticleDetail', params: { id } });
-            // console.log('goToArticle:', id)
         },
 
         // 更新当前页码
@@ -193,6 +216,7 @@ import axios from 'axios';
     },
 
     created() {
+        setInterval(this.showNextImage, 6000)  //6s切换一次首页图片
         this.fetchArticles();
     }
 }

@@ -1,4 +1,6 @@
 <template>
+    <StartLoading :show="showLoading"/>
+    
     <!-- 网页滚动条 -->
     <el-scrollbar wrap-class="wrap" ref="scrollbar" @scroll="handleScroll">  <!-- 加入wrap-class(包裹容器的自定义类名)用于让el-backtop绑定 --><!-- 监听滚动 -->
         <div class="app">
@@ -42,6 +44,23 @@
                 </nav>
             </header>
             <router-view @scroll-to-header="scrollToElement"></router-view>   <!-- 根据路由渲染不同的组件 --><!-- 监听home.vue组件传来的对象，用于传递由其他vue组件内容指定的滚动距离 -->
+            
+            <div class="music" :style="{transform: musicTransform}">
+                <div :class="{ hide: isMusicHidden }">
+                    <aplayer ref="aplayer"
+                    :music="firstMusic(music_list)" 
+                    :list="music_list"
+                    :repeat="list"
+                    :listFolded="true"
+                    :mini="false"/>
+                </div>
+                
+                <div class="arrow" style="cursor: pointer;" @click="toggleMusicHidden()">
+                    <el-icon v-if="isMusicHidden === true" :size="35"><CaretRight /></el-icon>
+                    <el-icon v-else :size="35"><CaretLeft /></el-icon>
+                </div>
+            </div>
+
             <div class="footer">
                 <p>By XiaoYe | ©2025</p>    <!-- alt+169 -->
             </div>
@@ -53,26 +72,65 @@
 </template>
 
 <script>
+import aplayer from 'vue3-aplayer'
+import { CaretLeft, CaretRight } from '@element-plus/icons-vue'  //element-plus图标库
+import StartLoading from './views/start-loading.vue'
+
 export default {
     name: 'App',
+    components: {
+        aplayer,   // 音乐播放器组件
+        CaretLeft,  //音乐播放器显示与隐藏按钮
+        CaretRight,
+        StartLoading,  //启动动画组件
+    },
+
     data() {
         return {
             activeName: 'home',   //当前所处页面
 
+            showLoading: true,   //启动动画显示
+
             lastScrollTop: 0,   //滚动条滚动后所在的位置
             recordScrollTop: 0,  //记录前往文章详情页前滚动条的位置
-            headerHeight: 60,    // 根据实际header高度调整
+            headerHeight: 70,    // 根据实际header高度调整
             isHeaderHidden: false,   //隐藏与显示状态栏
             isHeaderTop: true,    //靠近顶部
+
+            isMusicHidden: true,  // 音乐播放器显示与隐藏状态
+            musicWeight: 300,  //音乐播放器宽度
+
+            // 音乐列表
+            music_list: [
+                {
+                    title: 'なごみ風',
+                    artist: ' ',
+                    src: 'src/music/渡辺善太郎 - なごみ風.mp3',
+                    pic: 'src/music/なごみ風.png',     //注：pic文件名不支持空格
+                },
+                {
+                    title: 'Lyrical Amber',
+                    artist: ' ',
+                    src: 'src/music/Falcom Sound Team jdk - Lyrical Amber.mp3',
+                    pic: 'src/music/Lyrical_Amber.png',
+                },
+            ]
         }
     },
 
     computed: {
+        //标签栏显示与隐藏
         headerTransform() {
             return this.isHeaderHidden      //实现显示与隐藏效果
                 ? `translateY(-${this.headerHeight}px)` 
                 : 'translateY(0)'
-        }
+        },
+        //音乐播放器显示与隐藏
+        musicTransform() {
+            return this.isMusicHidden
+                ? `translateX(-${this.musicWeight}px)`
+                : 'translateX(0)' 
+        },
     },
 
     methods: {
@@ -105,8 +163,6 @@ export default {
                 }
             }
             this.lastScrollTop = currentScrollTop   
-            // console.log('当前滚动条位置：', currentScrollTop)  
-            // console.log('当前~~~~~~~~位置：', this.recordScrollTop)
         },
 
         // 快速切换滚动条位置
@@ -114,6 +170,16 @@ export default {
             this.$refs.scrollbar.$el.querySelector('.el-scrollbar__wrap').style.scrollBehavior = 'auto';   // 立刻回到顶部 
             this.$refs.scrollbar.setScrollTop(to_positon);   
             this.$refs.scrollbar.$el.querySelector('.el-scrollbar__wrap').style.scrollBehavior = 'smooth'; // 平滑滚动
+        },
+
+        // 取音乐列表首个音乐
+        firstMusic(music_list) {
+            return music_list[0]
+        },
+
+        //音乐播放器隐藏与显示
+        toggleMusicHidden() {
+            this.isMusicHidden = !this.isMusicHidden
         }
     },
 
@@ -140,6 +206,11 @@ export default {
         if (wrapElement) {
             wrapElement.style.scrollBehavior = 'smooth'     // 平滑滚动
         }
+
+        // 模拟加载完成，实际应用中根据页面加载情况来触发
+        setTimeout(() => {
+            this.showLoading = false;
+        }, 3000);  // 3秒后模拟加载完成
     },
 }
 </script>
