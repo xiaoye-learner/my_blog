@@ -1,9 +1,12 @@
 <template>
     <div class="blog-article-detail">
         <div class="blog-article-detail-header">
-            <div class="title">
-                <h2>{{ article.title }}</h2>
-                <p>编辑时间: {{ article.edited_time.toLocaleString('zh').replace('T', ' ').split('.')[0] }}</p>
+            <img :src="article.article_cover" alt="页首图片" style="width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6);"/>
+            <div class="blog-article-detail-info">
+                <div class="title">
+                    <h2>{{ article.title }}</h2>
+                    <p>编辑时间: {{ article.edited_time.toLocaleString('zh').replace('T', ' ').split('.')[0] }}</p>
+                </div>
             </div>
         </div>
         

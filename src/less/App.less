@@ -2,21 +2,9 @@ body{
     margin: 0;
     background: var(--el-color-primary-light-9);
 
+    overflow-x: hidden;   // 去除默认的横向滚动条
+
     font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB','Microsoft YaHei', '微软雅黑', Arial, sans-serif;
-
-    .el-scrollbar {
-        height: 100vh;
-        z-index: 1000;
-    }
-
-    .el-scrollbar__bar.is-vertical{  //更改图层
-        z-index: 1000;
-    }    
-
-    .el-scrollbar__thumb{    //滚动条样式设置
-        background-color: #0088ff;
-        opacity: 0.4;
-    }
 
     //返回顶部
     .el-backtop{
@@ -55,7 +43,7 @@ body{
         position: fixed;  //导航栏固定在顶部
         width: 100%;
         height: auto;
-        z-index: 1000;
+        z-index: 1006;
 
         transition: background 0.7s cubic-bezier(0.4, 0, 0.2, 1),  //导航栏透明度平滑变换
                     transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);   // 平滑显示与隐藏效果（使用贝塞尔曲线函数）

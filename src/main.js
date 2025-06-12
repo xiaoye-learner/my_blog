@@ -15,7 +15,6 @@ import './less/album.less'
 import './less/friend-links.less'
 import './less/about-me.less'
 import './less/start-loading.less'
-import './less/MarkdownViewer.less'
 import './less/ArticleDetail.less'
 import './assets/rem'
 

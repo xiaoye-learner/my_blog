@@ -61,7 +61,7 @@
         .arrow-down {
             position: absolute; 
             bottom: 5rem;           
-            z-index: 1000;   
+            z-index: 1010;   
 
             animation: float 2s ease-in-out infinite;    //漂浮效果（慢速开始与结束，2s无限循环）
             transform: translate3d(0, 0, 0);    // 启用硬件加速
@@ -123,7 +123,7 @@
     }
 
     .home-content {
-        padding: 20px 8rem;
+        padding: 20px 12rem;
         display: flex;
 
         .personal-info{
@@ -133,7 +133,7 @@
 
             .personal-card{
                 width: 90%;
-                padding: 2em;
+                padding: 1em;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
@@ -172,11 +172,6 @@
                 justify-content: center;
                 align-items: center;
                 position: relative;
-
-                .el-card__body {
-                    padding-left: 1.5rem;
-                    padding-right: 1.5rem;
-                }
 
                 .el-col {     //按钮总体布局
                     display: flex;

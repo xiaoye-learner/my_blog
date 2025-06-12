@@ -14,7 +14,7 @@
                 <h1>I'm <span class="name">XiaoYe</span></h1>
             </div>
             
-            <div class="arrow-down" @click="scrollToBottom" style="cursor: pointer;">
+            <div class="arrow-down" id="arrow-down" @click="scrollToHomeContent" style="cursor: pointer;">
                 <el-icon :size="35" color="#ffffff"><ArrowDownBold /></el-icon>
             </div>
 
@@ -40,7 +40,7 @@
             </svg>
         </div>
 
-        <div class="home-content">
+        <div class="home-content" ref="homeContent">
             <!-- 个人信息 -->
             <div class="personal-info">
                 <el-card class="personal-card">
@@ -74,7 +74,8 @@
                 <el-card class="article-card" v-for="(article, index) in displayedArticles.slice().reverse()" 
                 :key="index" 
                 @click="goToArticle(article.id)"
-                style="cursor: pointer;">
+                style="cursor: pointer;"
+                data-aos="fade-up" data-aos-duration="1000">
                 <!-- 文章封面图片 -->
                 <img :src="article.article_cover" alt="cover_image" v-if="article.article_cover != null"></img>
                 <h4 v-else>暂无封面</h4>
@@ -102,8 +103,16 @@
 
 <script>
 import axios from 'axios';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
-  export default {
+AOS.init({})
+
+export default {
+    components: {
+        AOS,
+    },
+
     data() {
         return {
             currentIndex: 0,    //首页图片当前序号
@@ -175,6 +184,7 @@ import axios from 'axios';
             }catch(error){
                 console.error(error)
             }
+            // console.log(this.displayedArticles)
         },
 
         // 动态获取文章封面图片路径
@@ -193,9 +203,35 @@ import axios from 'axios';
             this.fetchArticles();
         },
 
-        // 滚动到文章列表页面
-        scrollToBottom() {
-            this.$emit('scroll-to-header', this.$refs.homeHeader);  //向父组件App.vue传递自定义事件scroll-to-header，传ref
+        // 页面滚动到首页内容区域
+        scrollToHomeContent() {
+            const targetElement = this.$refs.homeContent;
+            if (targetElement) {
+                const targetPosition = targetElement.offsetTop;   // 相对于父元素顶部的距离
+                const startPosition = window.pageYOffset;   // 当前页面滚动条位置
+                const distance = targetPosition - startPosition;
+                const duration = 1000; // 滚动总时间（毫秒）
+                let start = null;   // 在第一次调用step时赋值为当前的时间戳（滚动时间起点）
+
+                window.requestAnimationFrame(step);   //在下次重绘之前调用指定的函数
+
+                function step(timestamp) {    // 每次重绘之前调用，传入当前的时间戳
+                    if (!start) start = timestamp;
+                    const progress = timestamp - start;   //计算当前已经滚动的时间
+                    window.scrollTo(0, easeInOutQuad(progress, startPosition, distance, duration));
+                    if (progress < duration) {
+                        window.requestAnimationFrame(step);   // 滚动未结束，继续调用函数继续滚动
+                    }
+                }
+
+                // 缓动函数
+                function easeInOutQuad(t, b, c, d) {   // 当前时间进度、起始位置、滚动距离、滚动总时间
+                    t /= d / 2;   // 将时间进度 t 规范化为 0 到 2 之间的值
+                    if (t < 1) return c / 2 * t * t + b;   // 未过半，加速
+                    t--;
+                    return -c / 2 * (t * (t - 2) - 1) + b;   //过半，减速
+                }
+            }
         },
     },
     
@@ -218,6 +254,6 @@ import axios from 'axios';
     created() {
         setInterval(this.showNextImage, 6000)  //6s切换一次首页图片
         this.fetchArticles();
-    }
+    },
 }
 </script>

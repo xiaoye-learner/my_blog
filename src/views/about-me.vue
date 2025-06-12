@@ -5,7 +5,7 @@
             <h1>关于我</h1>
         </div>
 
-        <el-card class="about-me-content">
+        <el-card class="about-me-content" data-aos="zoom-in" data-aos-duration="1000">
             <div class="info">
                 <div class="header">
                     <img src="../icons/avatar.png" alt="头像"></img>
@@ -20,52 +20,28 @@
             <div class="profile">
                 <p>个人简介部分</p>
             </div>
-            <!-- <div class="music" @click="miniMusic">
-                <aplayer ref="aplayer" 
-                    :music="firstMusic(music_list)" 
-                    :list="music_list"
-                    :repeat="list"
-                    :listFolded="true"
-                    :mini="false"/>
-            </div> -->
         </el-card>
     </div>
 </template>
 
 <script>
-import aplayer from 'vue3-aplayer'
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
+AOS.init({})
 
 export default {
     components: {
-        aplayer
+        AOS,
     },
-
     data() {
         return {
-            ismini: true,
-            music_list: [
-                {
-                    title: 'なごみ風',
-                    artist: ' ',
-                    src: 'src/music/渡辺善太郎 - なごみ風.mp3'
-                },
-                {
-                    title: 'Lyrical Amber',
-                    artist: ' ',
-                    src: 'src/music/Falcom Sound Team jdk - Lyrical Amber.mp3'
-                },
-            ]
+
         }
     },
 
     methods: {
-        firstMusic(music_list){
-            return music_list[0]
-        },
-
-        miniMusic(){
-            this.ismini = !this.ismini
-        }
+        
     },
 }
 </script>
