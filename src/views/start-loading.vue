@@ -8,7 +8,7 @@
 
 <script>
 export default {
-    name: 'StartLoading',
+    name: 'startLoading',
     data() {
         return {}
     },

@@ -1,7 +1,7 @@
 <template>
     <div class="blog-album">
         <div class="blog-album-header">
-            <img src="../icons/album.png" alt="页首图片" style="width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6);"/>
+            <img src="/src/icons/album.png" alt="页首图片" style="width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6);"/>
             <h1>相册</h1>
         </div>
         <el-tabs :tab-position="tabPosition" style="height: 100vh" class="demo-tabs">

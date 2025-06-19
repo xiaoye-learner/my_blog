@@ -1,0 +1,150 @@
+.blog-friend-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .blog-friend-links-header {
+        width: 100vw;
+        height: 20rem;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        h1 {
+            position: absolute;
+            color: #ffffff;
+            font-size: 2.5rem;
+        }
+    }
+
+    .about-card {
+        width: calc(25rem + 200px);
+        margin-top: 2rem;
+        margin-bottom: 20px;
+        border-radius: 20px;
+
+        h2 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-size: calc(1rem + 20px);
+        }
+
+        p {
+            font-size: calc(0.5rem + 10px);
+        }
+
+        .button-container {    //布局按钮位置
+            display: flex;
+            flex-direction: row;
+            justify-content: end;
+
+            .el-button {
+                border-radius: 10px;
+            }
+        }
+    }
+
+    .friends-card {
+        width: calc(25rem + 200px);
+        display: flex;
+        border-radius: 20px;
+
+        .el-card__body {
+            padding: 1rem;
+            width: 100%;
+
+            .el-col {
+                display: flex;
+                justify-content: center;
+
+                .friend-card {
+                    margin: 10px;
+                    width: 90%;
+                    height: calc(10rem + 30px);       // 每个友链卡片的高度
+                    display: flex;
+                    position: relative;
+                    border-radius: 20px;
+                    margin: 0;
+                    margin-bottom: calc(1rem + 10px);
+                    transition: transform 0.3s, box-shadow 0.3s;   // 添加阴影时也渐变
+                    overflow: hidden;   // 隐藏超出容器的内容
+
+                    &:hover {
+                        transform: translateY(-10px);
+                        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+                    }
+
+                    .el-card__body {
+                        padding: 0;
+                        display: flex;
+                        justify-content: center;
+                        width: 100%;
+                        height: 100%;
+
+                        .background {
+                            width: 100%;
+                            height: 100%;
+
+                            img {
+                                width: 100%;
+                                height: 100%;
+                                object-fit: cover;
+                                filter: brightness(0.9) blur(3px);  // 背景图片的模糊效果
+                            }
+                        }
+
+                        .avator {
+                            width: calc(5rem + 5px);
+                            height: calc(5rem + 5px);
+                            display: flex;
+                            position: absolute;
+                            z-index: 1;
+                            top: 10%;
+
+                            img {
+                                width: 100%;
+                                height: 100%;
+                                border-radius: 50%;
+                                box-sizing: border-box;
+                                border: 3px solid #ffffff;
+                                object-fit: cover;
+                            }
+                        }
+
+                        .info {
+                            display: flex;
+                            justify-content: center;
+                            position: absolute;
+                            top: 50%;
+                            width: 100%;
+                            height: 50%;
+                            z-index: 1;
+                            background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 5%, 
+                            rgba(255, 255, 255, 0.7) 20%, rgba(255, 255, 255, 1) 30%);
+
+                            p {
+                                display: flex;
+                                align-items: center;
+                            }
+                        }
+                    }
+                }
+            }
+
+            
+        }  
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .blog-friend-links {
+        .blog-friend-links-header {
+            height: 40rem;
+
+            h1 {
+                font-size: 4rem;
+            }
+        }
+    }
+}

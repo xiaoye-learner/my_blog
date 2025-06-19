@@ -1,7 +1,7 @@
 <template>
     <div class="blog-study">
         <div class="blog-study-header">
-            <img src="../icons/study.png" alt="页首图片" style="width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6);"/>
+            <img src="/src/icons/study.png" alt="页首图片" style="width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6);"/>
             <h1>学习总结&杂谈</h1>
         </div>
         <el-tabs class="study-tabs" :tab-position="tabPosition" style="height: 100vh" >

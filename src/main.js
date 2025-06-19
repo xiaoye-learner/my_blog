@@ -6,14 +6,17 @@ import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'  //element-plus图标库
 import router from './router'   // 路由
 
-import './assets/styles.css'  // 引入自定义样式（markdown 样式）
+import './assets/markdown.css'  // markdown自定义样式
+import 'highlight.js/styles/vs.min.css'
+
+import './assets/styles.css'  // 全局样式
 import './less/App.less'
-import './less/home.less'
-import './less/study.less'
-import './less/time-articles.less'
-import './less/album.less'
-import './less/friend-links.less'
-import './less/about-me.less'
+import './less/basic/home.less'
+import './less/basic/study.less'
+import './less/basic/time-articles.less'
+import './less/basic/album.less'
+import './less/basic/friend-links.less'
+import './less/basic/about-me.less'
 import './less/start-loading.less'
 import './less/ArticleDetail.less'
 import './assets/rem'

@@ -1,5 +1,5 @@
 <template>
-    <!-- <StartLoading :show="showLoading"/>  启动动画 -->
+    <!-- <startLoading :show="showLoading"/>  启动动画 -->
     
     <div class="app">
         <!-- 导航栏 -->
@@ -10,9 +10,19 @@
             <nav>
                 <ul>
                     <li>
-                        <div class="search" style="cursor: pointer;">
+                        <div class="search" @click="handleSearchClick" style="cursor: pointer;">
                             <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-ea893728=""><path fill="currentColor" d="m795.904 750.72 124.992 124.928a32 32 0 0 1-45.248 45.248L750.656 795.904a416 416 0 1 1 45.248-45.248zM480 832a352 352 0 1 0 0-704 352 352 0 0 0 0 704z"></path></svg>
                         </div>
+
+                        <el-dialog v-model="searchVisible" title="搜索文章" :append-to-body="true" :width="dialogWidth">
+                            <el-form :model="form">
+                                <el-form-item>
+                                    <el-input v-model="searchInput" @input="debounce(searchArticles, 300)"/>    <!-- 300ms延迟（防抖动） -->
+                                    <el-button type="primary" @click="searchArticles">搜索</el-button>
+                                    <div id="search-results"></div>
+                                </el-form-item>
+                            </el-form>
+                        </el-dialog>
                     </li>
                     <li :class="{ active: activeName === 'home' }">   <!-- 根据路由的activeName动态加入class=active -->
                         <router-link to="/"><svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-ea893728=""><path fill="currentColor" d="M512 128 128 447.936V896h255.936V640H640v256h255.936V447.936z"></path></svg>
@@ -37,7 +47,10 @@
                     <li :class="{ active: activeName === 'about-me' }">
                         <router-link to="/about-me"><svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-ea893728=""><path fill="currentColor" d="M384 960v-64h192.064v64H384zm448-544a350.656 350.656 0 0 1-128.32 271.424C665.344 719.04 640 763.776 640 813.504V832H320v-14.336c0-48-19.392-95.36-57.216-124.992a351.552 351.552 0 0 1-128.448-344.256c25.344-136.448 133.888-248.128 269.76-276.48A352.384 352.384 0 0 1 832 416zm-544 32c0-132.288 75.904-224 192-224v-64c-154.432 0-256 122.752-256 288h64z"></path></svg>
                             <p>关于</p></router-link>
-                    </li>                
+                    </li>  
+                    <li class="theme-switch">
+                        <themeSwitch/>
+                    </li>              
                 </ul>
             </nav>
         </header>
@@ -48,9 +61,9 @@
                 <aplayer ref="aplayer"
                 :music="firstMusic(music_list)" 
                 :list="music_list"
-                :repeat="list"
                 :listFolded="true"
-                :mini="false"/>
+                :mini="false"
+                loop="all"/>
             </div>
             
             <div class="arrow" style="cursor: pointer;" @click="toggleMusicHidden()">
@@ -71,15 +84,17 @@
 <script>
 import aplayer from 'vue3-aplayer'
 import { CaretLeft, CaretRight } from '@element-plus/icons-vue'  //element-plus图标库
-import StartLoading from './views/start-loading.vue'
+import startLoading from './views/start-loading.vue'
+import themeSwitch from './views/theme-switch.vue'
+import axios from 'axios'
 
 export default {
     name: 'App',
     components: {
         aplayer,   // 音乐播放器组件
-        CaretLeft,  //音乐播放器显示与隐藏按钮
-        CaretRight,
-        StartLoading,  //启动动画组件
+        CaretLeft, CaretRight,  //音乐播放器显示与隐藏按钮
+        startLoading,  //启动动画组件
+        themeSwitch,
     },
 
     data() {
@@ -87,6 +102,9 @@ export default {
             activeName: 'home',   //当前所处页面
 
             showLoading: true,   //启动动画显示
+            dialogWidth: 700,  //搜索框弹窗宽度
+            searchVisible: false,  //搜索框弹窗
+            searchInput: '',  //搜索框输入内容
 
             lastScrollTop: 0,   //滚动条滚动后所在的位置
             headerHeight: 70,    // 根据实际header高度调整
@@ -99,10 +117,16 @@ export default {
             // 音乐列表
             music_list: [
                 {
+                    title: ' 陽だまりにて和む猫 (阳光下安静的猫)',
+                    artist: ' ',
+                    src: 'src/music/Falcom Sound Team jdk - 陽だまりにて和む猫 (阳光下安静的猫).mp3',
+                    pic: 'src/music/陽だまりにて和む猫.png',     //注：pic文件名不支持空格
+                },
+                {
                     title: 'なごみ風',
                     artist: ' ',
                     src: 'src/music/渡辺善太郎 - なごみ風.mp3',
-                    pic: 'src/music/なごみ風.png',     //注：pic文件名不支持空格
+                    pic: 'src/music/なごみ風.png',    
                 },
                 {
                     title: 'Lyrical Amber',
@@ -130,6 +154,78 @@ export default {
     },
 
     methods: {
+        // 实时搜索的防抖动（减少请求次数）
+        debounce(func, delay) {
+            let timeout;           // 每次调用返回的函数时，就会清除之前的定时器
+            return this.delayEvent(func, delay, timeout);
+        },
+
+        delayEvent(func, delay, timeout) {          // 由于原return function（）不行，单独将function（）写成此函数
+            const context = this;
+            const args = arguments;
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(context, args), delay);     // 用户停止输入delay时间后，才会发起搜索请求
+        },
+
+        // 搜索文章
+        searchArticles() {
+            const query = this.searchInput.trim()    // 去除前后空格
+            if (query) {
+                this.fetchArticles(query)
+            }
+            else {
+                document.getElementById('search-results').innerHTML = ''   // 清空搜索结果
+            }
+        },
+
+        fetchArticles(query) {
+            console.log('搜索文章：', query)
+            const baseUrl = window.location.origin  // 获取当前页面的 origin（协议://主机名:端口号），确保在文章详情页搜索去除article/
+            axios.get(`${baseUrl}/api/articles/search/?q=${query}`)
+                .then(response => {
+                    const resultsDiv = document.getElementById('search-results')
+                    resultsDiv.innerHTML = ''   // 清空之前的搜索结果
+                    const articles = response.data
+
+                    articles.forEach(article => {
+                        const articleDiv = document.createElement('div');
+                        articleDiv.className = 'article-searchResult'
+
+                        const title = document.createElement('a');
+                        title.className = 'title-link'
+                        title.textContent = article.title;
+                        title.style = "cursor: pointer;"
+                        title.addEventListener('click', () => {
+                            this.goToArticle(article.id)
+                        })
+
+                        articleDiv.appendChild(title)
+                        resultsDiv.appendChild(articleDiv)
+                    })
+                })
+                .catch(error => {
+                    console.error('搜索文章时出现错误', error)
+                })
+        },
+
+        // 跳转至文章详情页
+        goToArticle(id){
+            this.searchVisible = false
+            this.$router.push({ name: 'ArticleDetail', params: { id } });
+        },
+
+        // 根据屏幕大小调整搜索弹窗宽度
+        updateDialogWidth() {
+            this.dialogWidth = window.innerWidth > 700 ? '700px' : '100%';
+        },
+
+        // 处理搜索点击事件
+        handleSearchClick() {
+            this.searchVisible = true
+            this.updateDialogWidth()
+        },
+
+        //导航栏的显示与隐藏
         handleScroll() {
             const currentScrollTop = window.scrollY || document.documentElement.scrollTop    //当前滚动条距离顶部的距离
             const scrollDelta = currentScrollTop - this.lastScrollTop   //根据相对位置判断是否隐藏导航栏
@@ -167,13 +263,14 @@ export default {
             immediate: true,  // 立即执行一次，确保初始路径也能被处理
             handler(newPath) {
                 this.activeName = newPath.slice(1) || 'home';
-            }
+            },
         }
     },
 
     mounted() {    
         this.activeName = this.$route.path.slice(1) || 'home';    // 页面加载完成后，初始化activeName
         window.addEventListener('scroll', this.handleScroll)   // 监听滚动事件
+        this.updateDialogWidth()   // 调整搜索弹窗宽度
 
         // 模拟加载完成，实际应用中根据页面加载情况来触发
         setTimeout(() => {

@@ -1,51 +1,20 @@
-/* 用于markdown样式的设置 */
+/* 全局样式 */
+:root {
+    --wave-one-color: rgba(235.9,245.3,255, 0.7);
+    --wave-two-color: rgba(235.9,245.3,255, 0.5);
+    --wave-three-color: rgba(235.9,245.3,255, 0.3);
+    --wave-four-color: rgba(235.9,245.3,255, 1);
 
-/* 标题样式 */
-/* h1, h2, h3, h4, h5, h6 {
-    margin-top: 20px;
-    margin-bottom: 10px;
-    color: #333;
-} */
-
-/* h1 {
-    font-size: 2.5em;
-    border-bottom: 2px solid #eee;
-    padding-bottom: 10px;
+    --button-hover-shadow-color: rgb(193, 222, 255);
+    --button-transition-duration: 0.3s;
 }
 
-h2 {
-    font-size: 2em;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 5px;
-}
-
-h3 {
-    font-size: 1.75em;
-}
-
-h4 {
-    font-size: 1.5em;
-}
-
-h5 {
-    font-size: 1.25em;
-}
-
-h6 {
-    font-size: 1em;
-} */
-
-/* 段落样式 */
-/* p {
-    margin: 10px 0;
-    line-height: 1.6;
-    color: #333;
-} */
 
 /* 自定义滚动条样式 */
 /* 适用于 WebKit 浏览器（如 Chrome 和 Safari） */
 ::-webkit-scrollbar {
-    width: 5px;  /* 滚动条宽度 */
+    width: 5px;  /* 滚动条（数轴）宽度 */
+    height: 5px;   /* 滚动条（横轴）高度 */
 }
 
 ::-webkit-scrollbar-track {
@@ -61,27 +30,8 @@ h6 {
     background: #00a6ff;  /* 滚动条滑块悬停背景色 */
 }
 
-/* 全局样式 */
-:root {
-    --wave-one-color: rgba(235.9,245.3,255, 0.7);
-    --wave-two-color: rgba(235.9,245.3,255, 0.5);
-    --wave-three-color: rgba(235.9,245.3,255, 0.3);
-    --wave-four-color: rgba(235.9,245.3,255, 1);
 
-    --button-hover-shadow-color: rgb(193, 222, 255);
-    --button-transition-duration: 0.3s;
-}
-
-/* 列表样式 */
-ul, ol {
-    margin: 10px 0;
-    padding-left: 1.5rem;
-}
-
-ul ul, ol ul, ul ol, ol ol {
-    padding-left: 20px;
-}
-
+/* 自定义标签样式 */
 /* 链接样式 */
 a {
     color: #007BFF;
@@ -92,56 +42,12 @@ a:hover {
     text-decoration: underline;
 }
 
-/* 强调样式 */
-strong {
-    font-weight: bold;
+hr {     
+    margin: 0;
+    margin-bottom: 10px;
 }
 
-em {
-    font-style: italic;
+p {
+    line-height: 1.6; /* 调整行间距，1.6 是一个常见的值 */
+    margin-bottom: 16px; /* 调整段落之间的间距 */
 }
-
-/* 代码块样式 */
-pre {
-    background-color: #f8f8f8;
-    border: 1px solid #ddd;
-    padding: 1rem;
-    overflow-x: auto;
-    white-space: pre-wrap;
-    font-family: 'Courier New', Courier, monospace;
-    border-radius: 0.4rem;
-    margin: 1rem 0;
-}
-
-code {
-    font-family: 'Courier New', Courier, monospace;
-    background-color: #f8f8f8;
-    padding: 2px 4px;
-    border-radius: 0.2rem;
-    color: #c7254e;
-}
-
-/* 块引用样式 */
-blockquote {
-    margin: 1rem 0;
-    padding: 0.5rem 1rem;
-    background-color: #f9f9f9;
-    border-left: 0.25rem solid #ccc;
-    /* font-style: italic; */
-}
-
-/* 水平线样式 */
-hr {
-    margin: 1.5rem 0;
-    border: 0;
-    border-top: 1px solid #eee;
-}
-
-/* 图像样式 */
-/* img {
-    max-width: 100%;
-    height: auto;
-    margin: 20px 0;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-} */

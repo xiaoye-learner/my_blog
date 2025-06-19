@@ -45,7 +45,7 @@
             <div class="personal-info">
                 <el-card class="personal-card">
                     <div class="avatar">
-                        <img src="../icons/avatar.png" alt="avatar"></img>
+                        <img src="/src/icons/avatar.png" alt="avatar"></img>
                     </div>
 
                     <div class="profile">
@@ -83,6 +83,7 @@
                 <!-- 文章相关信息 -->
                 <div class="article-info">
                     <h3>{{ article.title }}</h3>
+                    <hr>
                     <p>{{ article.edited_time.toLocaleString('zh').replace('T', ' ').split('.')[0] }}</p>
                 </div>
                 </el-card>
@@ -106,7 +107,9 @@ import axios from 'axios';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
-AOS.init({})
+AOS.init({
+    offset: 40,  // 组件进入视窗40px就触发
+})
 
 export default {
     components: {
@@ -124,13 +127,17 @@ export default {
             // 首页图片列表
             img_list: [
                 {
+                    src: '/src/icons/home3.png',
+                    alt: 'img',
+                },
+                {
                     src: '/src/icons/home.png',
                     alt: 'img',
                 },
                 {
                     src: '/src/icons/home2.png',
                     alt: 'img',
-                }
+                },
             ],     
 
             // 超链接列表

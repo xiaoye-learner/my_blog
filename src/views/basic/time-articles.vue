@@ -1,7 +1,7 @@
 <template>
     <div class="blog-time-articles">
         <div class="blog-study-header">
-            <img src="../icons/time-articles.png" alt="页首图片" style="width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6);"/>
+            <img src="/src/icons/time-articles.png" alt="页首图片" style="width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6);"/>
             <h1>归档</h1>
         </div>
 
@@ -57,7 +57,6 @@ export default {
         // 跳转至文章详情页
         goToArticle(id){
             this.$router.push({ name: 'ArticleDetail', params: { id } });
-            // console.log('goToArticle:', id)
         },
     },
 

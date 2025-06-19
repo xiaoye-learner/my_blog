@@ -57,6 +57,11 @@ body{
             justify-content: center;   // 使ul居中
             margin: 0;
             padding: 0 20px;    //导航栏选项最右边边距
+            transition: background 0.5s ease-in-out;    // 鼠标悬浮导航栏时更改背景色透明度
+
+            &:hover {
+                background: rgba(0, 0, 0, 0.3);
+            }
 
             li {
                 display: flex;
@@ -65,6 +70,7 @@ body{
                 align-items: center;
                 position: relative;
                 width: 75px;      //限制标签选项宽度
+                border-radius: 3px;
 
                 .search {
                     width: 20px;
@@ -136,6 +142,30 @@ body{
 
 .active {
     border-bottom: 5px solid rgb(132, 189, 255);    // 给当前激活的标签页链接加上底部边框
+}
+
+.el-form-item {
+    display: flex;
+    flex-direction: row;
+
+    .el-form-item__content {
+        display: flex;
+        justify-content: space-between; 
+    }
+
+    .el-input {
+        width: 85%;
+    }
+
+    .el-button {
+        width: 10%;
+        margin-left: auto; // 使用 margin-left: auto 将 .el-button 推到结束位置
+    }
+
+    #search-results {
+        width: 100%;
+        margin: 10px;
+    }
 }
 
 @media screen and (max-width: 768px) {

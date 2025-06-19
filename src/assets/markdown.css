@@ -1,0 +1,70 @@
+/* 用于markdown样式的设置 */
+
+/* 列表样式 */
+ul, ol {
+    margin: 10px 0;
+    padding-left: 1.5rem;
+}
+
+ul ul, ol ul, ul ol, ol ol {
+    padding-left: 20px;
+}
+
+/* 强调样式 */
+strong {
+    font-weight: bold;
+}
+
+em {
+    font-style: italic;
+}
+
+/* 代码块样式 */
+pre {
+    background-color: #f8f8f8 !important;
+    border: 1px solid #ddd;
+    padding: 8px;
+    overflow-x: auto;
+    font-family: "Courier New", monospace;
+}
+
+code {
+    background-color: #f1f1f1;
+    color: #333333;
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-family: "Courier New", monospace;
+}
+
+pre code {
+    background-color: transparent;
+    padding: 0;
+}
+
+/* 块引用样式 */
+blockquote {
+    margin: 1rem 0;
+    padding: 0.5rem 1rem;
+    background-color: #f9f9f9;
+    border-left: 0.25rem solid #63ca34;
+}
+
+/* 表格样式 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+}
+th {
+    background-color: #f2f2f2;
+}
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+tr:hover {
+    background-color: #ddd;
+}
