@@ -19,7 +19,7 @@
     }
 
     .el-tabs{
-        padding-top: 20px; 
+        padding: 20px 0; 
         width: 65rem;   //确定内容界面大小
         display: flex;
 
@@ -62,7 +62,6 @@
 
         .el-tabs__content {
             margin: 0 10px;
-            background-color: #ffffffe4;
 
             padding: 32px;
             border-radius: 1%;
@@ -74,6 +73,12 @@
         .el-tabs__item {
             height: 7rem;   //标签栏选项高度
             font-size: 1.7rem;  //标签栏字体大小
+            color: var(--text-color);
+            transition: color 0.5s ease;
+        }
+
+        .is-active {      // 标签栏选中样式（为了明暗主题重写）
+            color: var(--el-color-primary)
         }
     }
 }

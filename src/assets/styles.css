@@ -1,13 +1,51 @@
 /* 全局样式 */
 :root {
-    --wave-one-color: rgba(235.9,245.3,255, 0.7);
+    --primary-color: #EBF5FF;
+    --bg-color: #EBF5FF;
+    --text-color: #252525;
+    --article-bg-color: #f8f8f8;
+
+    --wave-one-color: rgba(235.9,245.3,255, 0.3);
     --wave-two-color: rgba(235.9,245.3,255, 0.5);
-    --wave-three-color: rgba(235.9,245.3,255, 0.3);
+    --wave-three-color: rgba(235.9,245.3,255, 0.7);
     --wave-four-color: rgba(235.9,245.3,255, 1);
+
+    --article-one-color: rgba(255, 255, 255, 0);
+    --article-two-color: rgba(255, 255, 255, 0.5);
+    --article-three-color: rgba(255, 255, 255, 0.8);
+    --article-four-color: rgba(255, 255, 255, 1);
 
     --button-hover-shadow-color: rgb(193, 222, 255);
     --button-transition-duration: 0.3s;
 }
+
+.dark-mode {
+    --primary-color: #EBF5FF;
+    --bg-color: #31333a;
+    --text-color: #e6e6e6;
+    --article-bg-color: #5c5c5c;
+
+    --wave-one-color: rgba(49, 51, 58, 0.3);
+    --wave-two-color: rgba(49, 51, 58, 0.5);
+    --wave-three-color: rgba(49, 51, 58, 0.7);
+    --wave-four-color: rgba(49, 51, 58, 1);
+
+    --article-one-color: rgba(51, 51, 51, 0);
+    --article-two-color: rgba(51, 51, 51, 0.5);
+    --article-three-color: rgba(51, 51, 51, 0.8);
+    --article-four-color: rgba(51, 51, 51, 1);
+
+    .el-card {
+        background-color: #333333;
+        box-shadow: 0 0 12px 0 rgba(255, 255, 255, 0.12);
+    }
+
+    .el-tabs__content {
+        background-color: #333333;
+        box-shadow: 0 0 12px 0 rgba(255, 255, 255, 0.12);
+    }
+}
+
 
 
 /* 自定义滚动条样式 */
@@ -48,6 +86,6 @@ hr {
 }
 
 p {
-    line-height: 1.6; /* 调整行间距，1.6 是一个常见的值 */
+    line-height: 1.6; /* 调整行间距 */
     margin-bottom: 16px; /* 调整段落之间的间距 */
 }

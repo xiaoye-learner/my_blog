@@ -1,6 +1,7 @@
 body{
     margin: 0;
-    background: var(--el-color-primary-light-9);
+    background-color: var(--bg-color);
+    transition: background-color 0.5s ease;
 
     overflow-x: hidden;   // 去除默认的横向滚动条
 
@@ -31,6 +32,7 @@ body{
         
         p {
             font-size: calc(0.5rem + 10px);
+            color: var(--text-color)
         }
     }
 }
@@ -132,6 +134,7 @@ body{
             justify-content: start;
             align-self: center;
             opacity: 0.3;
+            color: var(--text-color);
 
             &:hover {
                 opacity: 1;

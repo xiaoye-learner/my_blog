@@ -4,7 +4,7 @@
             <div class="slideshow">
                 <img v-for="(img, index) in img_list" :key="index" 
                 :src="img.src" 
-                :class="{ active: index === currentIndex }"
+                :class="[`img-${index}`, { active: index === currentIndex }]"
                 :alt="img.alt"
                 style="object-fit: cover;"></img>
             </div>
@@ -124,6 +124,8 @@ export default {
             page_size: 5,    // 每页显示的文章数量
             total_articles: 0,    // 文章总数
 
+            height: 'calc(6rem + 15px)',  // 波浪效果高度
+
             // 首页图片列表
             img_list: [
                 {
@@ -166,14 +168,14 @@ export default {
                     href: 'https://www.kugou.com/songlist/gcid_3z160l9dbz1vz0b4/',
                     src: '/src/icons_link/music.svg'
                 },
-                {
-                    icon: 'icon-anime',
-                    animate: 'Anime',
-                    content: '动漫新番表（外链）',
-                    color: '#e549ed',
-                    href: 'https://xf.hmacg.cn/',
-                    src: '/src/icons_link/anime.png'
-                }
+                // {
+                //     icon: 'icon-anime',
+                //     animate: 'Anime',
+                //     content: '动漫新番表（外链）',
+                //     color: '#e549ed',
+                //     href: 'https://xf.hmacg.cn/',
+                //     src: '/src/icons_link/anime.png'
+                // }
             ]
         }
     },
@@ -249,13 +251,6 @@ export default {
         //     const end = start + this.page_size
         //     return this.articles.slice(start, end)   // 截取当前页面显示的文章数组
         // }
-    },
-
-    props: {
-        height: {    // 波浪效果高度
-            type: String,
-            default: "calc(4rem + 15px)",
-        },
     },
 
     created() {

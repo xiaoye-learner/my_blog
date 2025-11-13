@@ -14,7 +14,7 @@
                         style="cursor: pointer;"
                         data-aos="zoom-in" data-aos-duration="1000">
                             <div class="study-header">
-                                <img :src="article.article_cover" :alt="文章封面" style="object-fit: cover; width: 100%; height: 100%;"/>
+                                <img :src="article.article_cover" alt="文章封面" style="object-fit: cover; width: 100%; height: 100%;"/>
                                 <div class="stduy-info">
                                     <h2 class="study-title">{{ article.title }}</h2>
                                     <div class="stduy-edit-time">

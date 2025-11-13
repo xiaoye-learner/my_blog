@@ -44,7 +44,12 @@
             
             .el-card__body {
                 padding: 1rem;
-            }
+                color: var(--text-color);
+
+                h1, h2, h3, h4, h5, h6 {
+                    scroll-margin-top: 20vh;   //标题顶部距离
+                }
+            }  
         }  
 
         .blog-article-detail-toc {
@@ -53,8 +58,8 @@
             top: 20px;
             max-height: calc(100vh - 40px);
             overflow-y: auto;
-            padding-left: 20px;
-            margin-right: calc(3rem + 20px);
+            padding: 0 20px;
+            margin-right: calc(2rem + 20px);
             flex: 1;
 
             ul {
@@ -62,15 +67,28 @@
                 padding-left: 0;
             }
 
+            h3 {
+                color: var(--text-color)
+            }
+
             a {
-                color: #333;
+                color: var(--text-color);
                 text-decoration: none;
                 display: block;
                 padding: 5px 0;
 
                 &:hover {
-                    color: #42b983;
+                    color: var(--el-color-primary);
                 }
+            }
+
+            .active {
+                color: var(--el-color-primary);
+                font-weight: bold;     // 字体加粗
+
+                border-bottom: 0px;
+                border-left: 3px solid var(--el-color-primary);
+                padding-left: 0.5rem;
             }
         }
     }

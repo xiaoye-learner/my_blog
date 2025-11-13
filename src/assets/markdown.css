@@ -21,7 +21,7 @@ em {
 
 /* 代码块样式 */
 pre {
-    background-color: #f8f8f8 !important;
+    background-color: var(--article-bg-color) !important;
     border: 1px solid #ddd;
     padding: 8px;
     overflow-x: auto;
@@ -29,8 +29,8 @@ pre {
 }
 
 code {
-    background-color: #f1f1f1;
-    color: #333333;
+    background-color: var(--article-bg-color);
+    color: var(--text-color);
     padding: 2px 4px;
     border-radius: 4px;
     font-family: "Courier New", monospace;
@@ -45,7 +45,7 @@ pre code {
 blockquote {
     margin: 1rem 0;
     padding: 0.5rem 1rem;
-    background-color: #f9f9f9;
+    background-color: var(--article-bg-color);
     border-left: 0.25rem solid #63ca34;
 }
 
@@ -59,12 +59,24 @@ th, td {
     padding: 8px;
     text-align: left;
 }
-th {
+
+th {          /* 标题 */
     background-color: #f2f2f2;
 }
-tr:nth-child(even) {
+.dark-mode th {
+    background-color: #222222
+}
+
+tr:nth-child(even) {       /* 行 */
     background-color: #f9f9f9;
 }
+.dark-mode tr:nth-child(even) {
+    background-color: #414141
+}
+
 tr:hover {
     background-color: #ddd;
+}
+.dark-mode tr:hover {
+    background-color: #5c5c5c;
 }

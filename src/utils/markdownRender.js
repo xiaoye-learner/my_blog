@@ -24,7 +24,7 @@ const md = new MarkdownIt({
 
 // 添加锚点插件
 md.use(markdownItAnchor, {
-    permalink: true,     // 显示锚点链接
+    permalink: false,     // 显示锚点链接
     permalinkBefore: true,  // 在标题前显示锚点
     permalinkSymbol: '#',
 })
