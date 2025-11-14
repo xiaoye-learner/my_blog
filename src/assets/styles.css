@@ -1,6 +1,5 @@
 /* 全局样式 */
 :root {
-    --primary-color: #EBF5FF;
     --bg-color: #EBF5FF;
     --text-color: #252525;
     --article-bg-color: #f8f8f8;
@@ -20,7 +19,6 @@
 }
 
 .dark-mode {
-    --primary-color: #EBF5FF;
     --bg-color: #31333a;
     --text-color: #e6e6e6;
     --article-bg-color: #5c5c5c;

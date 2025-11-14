@@ -1,0 +1,87 @@
+// 通用板块容器布局
+.blog-about-me,
+.blog-album,
+.blog-friend-links,
+.blog-study,
+.blog-time-articles,
+.blog-article-detail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+// 顶部头图区域
+.blog-about-me-header,
+.blog-album-header,
+.blog-friend-links-header,
+.blog-study-header,
+.blog-time-articles-header,
+.blog-article-detail-header {
+    width: 100vw;
+    height: 15rem;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+// 头图标题样式
+.blog-about-me-header h1,
+.blog-album-header h1,
+.blog-friend-links-header h1,
+.blog-study-header h1,
+.blog-time-articles-header h1,
+.blog-article-detail-header h1 {
+    position: absolute;
+    color: #ffffff;
+    font-size: 2.5rem;
+}
+
+@media screen and (max-width: 768px) {
+    .blog-about-me-header,
+    .blog-album-header,
+    .blog-friend-links-header,
+    .blog-study-header,
+    .blog-time-articles-header,
+    .blog-article-detail-header {
+        height: 40rem;
+    }
+
+    .blog-about-me-header h1,
+    .blog-album-header h1,
+    .blog-friend-links-header h1,
+    .blog-study-header h1,
+    .blog-time-articles-header h1,
+    .blog-article-detail-header h1 {
+        font-size: 4rem;
+    }
+}
+
+// 通用 tab 组件框架
+.blog-album .el-tabs,
+.blog-study .el-tabs {
+    padding: 20px 0;
+    width: 65rem;
+    display: flex;
+}
+
+.blog-album .el-tabs__content,
+.blog-study .el-tabs__content {
+    margin: 0 10px;
+    color: #6b778c;
+    font-size: 32px;
+    font-weight: 600;
+}
+
+.blog-album .el-tabs__item,
+.blog-study .el-tabs__item {
+    height: 7rem;
+    font-size: 1.7rem;
+    color: var(--text-color);
+    transition: color 0.5s ease;
+}
+
+.blog-album .el-tabs .is-active,
+.blog-study .el-tabs .is-active {
+    color: var(--el-color-primary);
+}

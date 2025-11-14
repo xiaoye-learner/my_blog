@@ -1,27 +1,5 @@
 .blog-album {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    .blog-album-header {
-        width: 100vw;
-        height: 20rem;
-        position: relative;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        h1 {
-            position: absolute;
-            color: #ffffff;
-            font-size: 2.5rem;
-        }
-    }
-
     .el-tabs{
-        padding: 20px 0; 
-        width: 65rem;   //确定内容界面大小
-        display: flex;
 
         .row-space {
             padding: 5px; 
@@ -61,38 +39,14 @@
         }
 
         .el-tabs__content {
-            margin: 0 10px;
-
             padding: 32px;
             border-radius: 1%;
-            color: #6b778c;
-            font-size: 32px;
-            font-weight: 600;
-        }
-
-        .el-tabs__item {
-            height: 7rem;   //标签栏选项高度
-            font-size: 1.7rem;  //标签栏字体大小
-            color: var(--text-color);
-            transition: color 0.5s ease;
-        }
-
-        .is-active {      // 标签栏选中样式（为了明暗主题重写）
-            color: var(--el-color-primary)
         }
     }
 }
 
 @media screen and (max-width: 768px) {
     .blog-album {
-        .blog-album-header {
-            height: 40rem;
-
-            h1 {
-                font-size: 4rem;
-            }
-        }
-
         .el-tabs {
             width: 75rem;
             

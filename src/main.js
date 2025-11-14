@@ -11,6 +11,7 @@ import 'highlight.js/styles/vs.min.css'
 
 import './assets/styles.css'  // 全局样式
 import './less/App.less'
+import './less/basic/common.less'
 import './less/basic/home.less'
 import './less/basic/study.less'
 import './less/basic/time-articles.less'
