@@ -14,7 +14,7 @@
                         style="cursor: pointer;"
                         data-aos="zoom-in" data-aos-duration="1000">
                             <div class="study-header">
-                                <img :src="article.article_cover" alt="文章封面" style="object-fit: cover; width: 100%; height: 100%;"/>
+                                <img :src="article.article_cover" alt="文章封面" style="object-fit: cover;"/>
                                 <div class="stduy-info">
                                     <h2 class="study-title">{{ article.title }}</h2>
                                     <div class="stduy-edit-time">
@@ -49,10 +49,10 @@ export default {
             current_page: 1,    // 当前页码
             page_size: 20,    // 每页显示的文章数量
             categories: [
-                {id: 1, label: '嵌入式', articles: []},  //分类为1（嵌入式）的文章列表
-                {id: 2, label: '通信', articles: []},    //分类为2（通信）的文章列表
-                {id: 3, label: '前端', articles: []},    //分类为3（前端）的文章列表
-                {id: 4, label: '后端', articles: []},    //分类为4（后端）的文章列表
+                {id: 3, label: '嵌入式', articles: []},  //分类为1（嵌入式）的文章列表
+                {id: 4, label: '通信', articles: []},    //分类为2（通信）的文章列表
+                {id: 1, label: '前端', articles: []},    //分类为3（前端）的文章列表
+                {id: 2, label: '后端', articles: []},    //分类为4（后端）的文章列表
                 {id: 5, label: '日语', articles: []},    //分类为5（日语）的文章列表
             ],
         }

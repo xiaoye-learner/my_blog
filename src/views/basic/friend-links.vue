@@ -31,7 +31,7 @@
 
         <el-card class="friends-card">
             <el-row class="row-space" v-if="friend_list.length">
-                <el-col class="col-space" :xs="12" :sm="8" v-for="(item, index) in friend_list" :key="index">
+                <el-col class="col-space" :xs="8" :sm="8" v-for="(item, index) in friend_list" :key="index">
                     <el-card class="friend-card" style="cursor: pointer;">
                         <div class="background">
                             <img :src="item.image" :alt="item.image"></img>
@@ -68,10 +68,10 @@
                         image: 'src/icons_link/friend-link1.png', 
                         info: '信息1' 
                     },
-                    { 
-                        image: 'src/icons_link/friend-link1.png', 
-                        info: '信息1' 
-                    },
+                    // { 
+                    //     image: 'src/icons_link/friend-link1.png', 
+                    //     info: '信息1' 
+                    // },
                 ]
             }
         }

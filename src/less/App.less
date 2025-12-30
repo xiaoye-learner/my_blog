@@ -3,6 +3,7 @@ body{
     background-color: var(--bg-color);
     transition: background-color 0.5s ease;
 
+    overflow-y: overlay;
     overflow-x: hidden;   // 去除默认的横向滚动条
 
     font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB','Microsoft YaHei', '微软雅黑', Arial, sans-serif;
@@ -37,13 +38,13 @@ body{
     }
 }
 
+
 .app{
     header {
         // background-color: rgba(0, 0, 0, 0.5);
         color: white;
-        text-align: right;   // 将文本对齐方式设置为右对齐
         position: fixed;  //导航栏固定在顶部
-        width: 100%;
+        width: 100vw;
         height: auto;
         z-index: 1006;
 
@@ -141,10 +142,10 @@ body{
             }
         }
     }
-}
 
-.active {
-    border-bottom: 5px solid rgb(132, 189, 255);    // 给当前激活的标签页链接加上底部边框
+    .active {
+        border-bottom: 5px solid rgb(132, 189, 255);    // 给当前激活的标签页链接加上底部边框
+    }
 }
 
 .el-form-item {

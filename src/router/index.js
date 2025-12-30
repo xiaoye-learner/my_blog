@@ -81,7 +81,9 @@ const router = createRouter({    // 创建路由实例
 })
 
 router.afterEach((to, from) => {
-    window.scrollTo(0, 0)  // 页面切换后滚动到顶部（修复了上面定位不到顶部的部分bug）
+    if (!to.hash) {
+        window.scrollTo(0, 0)  // 页面切换后滚动到顶部（修复了上面定位不到顶部的部分bug）
+    }
 
     if (to.name === 'ArticleDetail') {       // 进入文章详情页时就覆盖历史记录（确保返回时直接返回到之前的页面）
         window.history.replaceState(
@@ -95,6 +97,11 @@ router.afterEach((to, from) => {
 // 监听浏览器前进/后退按钮
 window.addEventListener('popstate', (event) => {
     const currentState = event.state;
+
+    // 在部分浏览器中，hash 变化也会触发 popstate，这里避免误判回退
+    if (window.location.hash) {
+        return;
+    }
 
     if (currentState?.isArticlePage && currentState?.hasAnchorJumped) {
         router.go(-1)

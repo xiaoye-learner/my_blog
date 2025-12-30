@@ -50,7 +50,7 @@
 
                     <div class="profile">
                         <h4>XiaoYe</h4>
-                        <p style="white-space: pre;">开发ing<b> >_< </b></p>
+                        <p style="white-space: pre;">一个又菜又爱玩的多领域玩家<b> >_< </b></p>
                     </div>
                 </el-card>
 
