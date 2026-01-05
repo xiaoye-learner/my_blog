@@ -168,7 +168,15 @@
                     //描述
                     p{
                         font-size: calc(0.1rem + 15px);
-                        color: var(--text-color)
+                        color: var(--text-color);
+
+                        white-space: pre-wrap;    // 允许自动换行
+                        word-wrap: break-word;    // 当单词太长超过容器宽度时，允许断开单词
+                        word-break: normal;       // 英文只在空格或连字符处换行
+                        
+                        text-align: center;
+                        width: 100%;
+                        box-sizing: border-box; 
                     }
                 }
             }

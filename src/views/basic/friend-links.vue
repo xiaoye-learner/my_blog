@@ -1,7 +1,7 @@
 <template>
     <div class="blog-friend-links">
         <div class="blog-friend-links-header">
-            <img src="/src/icons/friend-links.png" alt="页首图片" style="width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6);"/>
+            <img :src="friendBg" alt="页首图片" style="width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6);"/>
             <h1>XiaoYeの友人帐</h1>
         </div>
 
@@ -50,30 +50,34 @@
 </template>
 
 <script>
-    export default {
-        data() {
-            return {
-                dialogVisible: false,
+import headerBgImage from '@/icons/friend-links.png';
+import friendAvatar from '@/icons_link/friend-link1.png';
 
-                friend_list: [
-                    { 
-                        image: 'src/icons_link/friend-link1.png', 
-                        info: '信息1' 
-                    },
-                    { 
-                        image: 'src/icons_link/friend-link1.png', 
-                        info: '信息1' 
-                    },
-                    { 
-                        image: 'src/icons_link/friend-link1.png', 
-                        info: '信息1' 
-                    },
-                    // { 
-                    //     image: 'src/icons_link/friend-link1.png', 
-                    //     info: '信息1' 
-                    // },
-                ]
-            }
+export default {
+    data() {
+        return {
+            friendBg: headerBgImage,
+            dialogVisible: false,
+
+            friend_list: [
+                { 
+                    image: friendAvatar, 
+                    info: '信息1' 
+                },
+                { 
+                    image: friendAvatar, 
+                    info: '信息1' 
+                },
+                { 
+                    image: friendAvatar, 
+                    info: '信息1' 
+                },
+                // { 
+                //     image: 'src/icons_link/friend-link1.png', 
+                //     info: '信息1' 
+                // },
+            ]
         }
     }
+}
 </script>

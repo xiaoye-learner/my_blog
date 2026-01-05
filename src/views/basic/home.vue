@@ -45,12 +45,12 @@
             <div class="personal-info">
                 <el-card class="personal-card">
                     <div class="avatar">
-                        <img src="/src/icons/avatar.png" alt="avatar"></img>
+                        <img :src="avatarImg" alt="avatar"></img>
                     </div>
 
                     <div class="profile">
                         <h4>XiaoYe</h4>
-                        <p style="white-space: pre;">一个又菜又爱玩的多领域玩家<b> >_< </b></p>
+                        <p>一个又菜又爱玩的多领域玩家</p>
                     </div>
                 </el-card>
 
@@ -106,6 +106,13 @@
 import axios from 'axios';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import avatarImage from '@/icons/avatar.png';
+import homeImage1 from '@/icons/home3.png';
+import homeImage2 from '@/icons/home.png';
+import homeImage3 from '@/icons/home2.png';
+import githubIcon from '@/icons_link/GitHub.svg';
+import bilibiliIcon from '@/icons_link/bilibili.svg';
+import musicIcon from '@/icons_link/music.svg';
 
 AOS.init({
     offset: 40,  // 组件进入视窗40px就触发
@@ -116,10 +123,18 @@ export default {
         AOS,
     },
 
+    props: {
+        initialData: {
+            type: Array,
+            default: () => []
+        }
+    },
     data() {
         return {
+            avatarImg: avatarImage,
+            
             currentIndex: 0,    //首页图片当前序号
-            displayedArticles: [],    // 显示的文章列表
+            displayedArticles: this.initialData || [],    // 显示的文章列表
             current_page: 1,    // 当前页码
             page_size: 5,    // 每页显示的文章数量
             total_articles: 0,    // 文章总数
@@ -129,15 +144,15 @@ export default {
             // 首页图片列表
             img_list: [
                 {
-                    src: '/src/icons/home3.png',
+                    src: homeImage1,
                     alt: 'img',
                 },
                 {
-                    src: '/src/icons/home.png',
+                    src: homeImage2,
                     alt: 'img',
                 },
                 {
-                    src: '/src/icons/home2.png',
+                    src: homeImage3,
                     alt: 'img',
                 },
             ],     
@@ -150,7 +165,7 @@ export default {
                     content: 'Github',
                     color: '#3d3d3d',
                     href: 'https://github.com/xiaoye-learner',
-                    src: '/src/icons_link/GitHub.svg',
+                    src: githubIcon,
                 },
                 {
                     icon: 'icon-bilibili',
@@ -158,7 +173,7 @@ export default {
                     content: '哔哩哔哩',
                     color: '#0BA6D8',
                     href: 'https://space.bilibili.com/76999298',
-                    src: '/src/icons_link/bilibili.svg'
+                    src: bilibiliIcon,
                 },
                 {
                     icon: 'icon-music',
@@ -166,7 +181,7 @@ export default {
                     content: '歌单',
                     color: '#65bbed',
                     href: 'https://www.kugou.com/songlist/gcid_3z160l9dbz1vz0b4/',
-                    src: '/src/icons_link/music.svg'
+                    src: musicIcon,
                 },
                 // {
                 //     icon: 'icon-anime',
@@ -244,6 +259,14 @@ export default {
         },
     },
     
+    watch: {
+        initialData(newVal) {      // 监听 props 变化（应对异步数据延迟到达的情况）
+            if (newVal && newVal.length > 0) {
+                this.displayedArticles = newVal;
+            }
+        }
+    },
+
     computed: {
         // // 页面显示的文章数组
         // displayedArticles() {
@@ -254,8 +277,11 @@ export default {
     },
 
     created() {
-        setInterval(this.showNextImage, 6000)  //6s切换一次首页图片
-        this.fetchArticles();
+        if (this.displayedArticles.length === 0) {     // 如果 props 里已经有数据了，就不用请求第一页了
+             this.fetchArticles();
+        }
+        
+        setInterval(this.showNextImage, 6000);    // 6s切换一次首页图片
     },
 }
 </script>

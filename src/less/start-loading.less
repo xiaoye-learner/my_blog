@@ -1,4 +1,4 @@
-.fade-leave-active {        //启动动画结束的渐隐效果
+.fade-leave-active {       // 启动动画的渐隐效果
     transition: opacity 1s;
 }
 .fade-leave-to {
@@ -16,28 +16,102 @@
     justify-content: center;
     align-items: center;
     z-index: 2000;
+    flex-direction: column;
 
-    #spinner {
-        width: 50px;
-        height: 50px;
-        border: 10px solid transparent;
-        border-color: #007bff;
-        border-radius: 10px;
-        animation: rotate 2s linear infinite;
+    // 容器用于固定整体大小，保证 flex 居中正常
+    .spinner-wrapper {
+        position: relative;
+        width: 70px;
+        height: 70px;
+
+        // 公共矩形样式
+        .spinner-rect {
+            position: absolute; // 绝对定位实现同心
+            box-sizing: border-box;  // 确保边框包含在宽高内
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            border-style: solid;
+            border-color: #007bff;
+            border-radius: 0; // 无圆角
+            border-width: 3px;   // 边框变细
+            
+            opacity: 0; // 初始透明，依赖动画显示
+        }
+
+        // 外层矩形
+        .outer {
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            animation: rotate 2s linear infinite;    // 正向旋转
+        }
+
+        // 内层矩形
+        .inner {
+            width: 100%;     // 与外层一致
+            height: 100%;
+            top: 0;
+            left: 0;
+            animation: rotate 2s linear infinite reverse;     // 反向旋转
+        }
+
+        // 中间圆心
+        .center-dot {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #007bff;
+            border-radius: 50%;
+            opacity: 0.9;
+            z-index: 10;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+            0%, 100%{       // 透明度渐变效果
+                opacity: 0;
+            }
+            50%{
+                opacity: 1;
+            }
+        }
     }
 
-    @keyframes rotate {
-        from {
-            transform: rotate(0deg);
+    // 进度条
+    .progress-bar {
+        width: 140px;
+        height: 6px;
+        margin-top: 40px;
+        background-color: #ffffff;
+        border-radius: 3px;
+        overflow: hidden;
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background-color: #007bff;
+            transition: width 0.2s ease-out;
+            // animation: progress 2.8s ease-in-out forwards;
         }
-        to {
-            transform: rotate(360deg);
+    }
+
+    @keyframes progress {
+        0% {
+            width: 0%;
         }
-        0%, 100%{
-            opacity: 0;
-        }
-        50%{
-            opacity: 1;
+        100% {
+            width: 100%;
         }
     }
 }

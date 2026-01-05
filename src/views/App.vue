@@ -1,5 +1,5 @@
 <template>
-    <!-- <startLoading :show="showLoading"/>  启动动画 -->
+    <startLoading :show="showLoading" :progress="loadingProgress"/>  <!-- 启动动画 -->
     
     <div class="app">
         <!-- 导航栏 -->
@@ -30,7 +30,7 @@
                     </li>
                     <li :class="{ active: activeName === 'study' }">
                         <router-link to="/study"><svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-ea893728=""><path fill="currentColor" d="m512 863.36 384-54.848v-638.72L525.568 222.72a96 96 0 0 1-27.136 0L128 169.792v638.72l384 54.848zM137.024 106.432l370.432 52.928a32 32 0 0 0 9.088 0l370.432-52.928A64 64 0 0 1 960 169.792v638.72a64 64 0 0 1-54.976 63.36l-388.48 55.488a32 32 0 0 1-9.088 0l-388.48-55.488A64 64 0 0 1 64 808.512v-638.72a64 64 0 0 1 73.024-63.36z"></path><path fill="currentColor" d="M480 192h64v704h-64z"></path></svg>
-                            <p>学习</p></router-link>
+                            <p>文章</p></router-link>
                     </li>
                     <li :class="{ active: activeName === 'time-articles' }">
                         <router-link to="/time-articles"><svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-ea893728=""><path fill="currentColor" d="M448 68.48v64.832A384.128 384.128 0 0 0 512 896a384.128 384.128 0 0 0 378.688-320h64.768A448.128 448.128 0 0 1 64 512 448.128 448.128 0 0 1 448 68.48z"></path><path fill="currentColor" d="M576 97.28V448h350.72A384.064 384.064 0 0 0 576 97.28zM512 64V33.152A448 448 0 0 1 990.848 512H512V64z"></path></svg>
@@ -84,8 +84,8 @@
 <script>
 import aplayer from 'vue3-aplayer'
 import { CaretLeft, CaretRight } from '@element-plus/icons-vue'  //element-plus图标库
-import startLoading from './views/start-loading.vue'
-import themeSwitch from './views/theme-switch.vue'
+import startLoading from './start-loading.vue'
+import themeSwitch from './theme-switch.vue'
 import axios from 'axios'
 
 export default {
@@ -99,20 +99,22 @@ export default {
 
     data() {
         return {
-            activeName: 'home',   //当前所处页面
+            activeName: 'home',   // 当前所处页面
 
-            showLoading: true,   //启动动画显示
-            dialogWidth: 700,  //搜索框弹窗宽度
-            searchVisible: false,  //搜索框弹窗
-            searchInput: '',  //搜索框输入内容
+            showLoading: true,   // 启动动画显示
+            loadingProgress: 0,   // 启动进度
+            homeArticles: [], // 用来暂存首页文章数据
+            dialogWidth: 700,  // 搜索框弹窗宽度
+            searchVisible: false,  // 搜索框弹窗
+            searchInput: '',  // 搜索框输入内容
 
-            lastScrollTop: 0,   //滚动条滚动后所在的位置
+            lastScrollTop: 0,   // 滚动条滚动后所在的位置
             headerHeight: 70,    // 根据实际header高度调整
-            isHeaderHidden: false,   //隐藏与显示状态栏
-            isHeaderTop: true,    //靠近顶部
+            isHeaderHidden: false,   // 隐藏与显示状态栏
+            isHeaderTop: true,    // 靠近顶部
 
             isMusicHidden: true,  // 音乐播放器显示与隐藏状态
-            musicWeight: 300,  //音乐播放器宽度
+            musicWeight: 300,  // 音乐播放器宽度
 
             // 音乐列表
             music_list: [
@@ -154,6 +156,57 @@ export default {
     },
 
     methods: {
+        // 资源预加载控制中心
+        async preloadResources() {
+            const modules = import.meta.glob('/src/icons/*.png', { eager: true, import: 'default' });
+            const imageSources = Object.values(modules);      // 所有图片的正确打包路径
+
+            // 追踪图片加载与接口请求
+            const totalTasks = imageSources.length + 1;
+            let completedTasks = 0;
+
+            // 更新进度的辅助函数
+            const updateProgress = (sourceName) => {
+                completedTasks++;
+                // 计算百分比
+                this.loadingProgress = Math.floor((completedTasks / totalTasks) * 100);
+
+                console.log(`[完成] ${sourceName} | 当前进度: ${this.loadingProgress}% (${completedTasks}/${totalTasks})`);
+
+                // 如果全部完成
+                if (completedTasks === totalTasks) {
+                    setTimeout(() => {
+                        this.showLoading = false;
+                    }, 200); 
+                }
+            };
+
+            // 开始加载图片
+            if (imageSources.length === 0) updateProgress(); // 防御代码
+            imageSources.forEach(src => {
+                const img = new Image();
+                const fileName = src.split('/').pop();
+
+                img.onload = () => updateProgress(`图片: ${fileName}`);
+                img.onerror = () => updateProgress(`图片(失败): ${fileName}`);
+                img.src = src;
+            });
+
+            // 请求后端数据
+            const baseUrl = window.location.origin;
+            axios.get(`${baseUrl}/api/articles/?page=1&page_size=5`)
+                .then(response => {
+                    console.log('[HTTP] 文章数据请求成功，数据长度:', response.data.length);
+                    this.homeArticles = response.data;      // 请求成功，把数据存起来，准备传给 Home.vue
+                    updateProgress('API: 文章列表');
+                })
+                .catch(error => {
+                    console.error('预加载文章失败', error);
+                    // 即使失败也要让进度条走完，否则卡死
+                    updateProgress('API: 文章列表(失败)');
+                });
+        },
+
         // 实时搜索的防抖动（减少请求次数）
         debounce(func, delay) {
             let timeout;           // 每次调用返回的函数时，就会清除之前的定时器
@@ -272,10 +325,7 @@ export default {
         window.addEventListener('scroll', this.handleScroll)   // 监听滚动事件
         this.updateDialogWidth()   // 调整搜索弹窗宽度
 
-        // 模拟加载完成，实际应用中根据页面加载情况来触发
-        setTimeout(() => {
-            this.showLoading = false;
-        }, 3000);  // 3秒后模拟加载完成
+        this.preloadResources();
     },
 
     beforeDestroy() {

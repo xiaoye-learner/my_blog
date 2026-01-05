@@ -71,11 +71,89 @@ export default {
                 if (firstTocLink) {
                     firstTocLink.classList.add('active');
                 }
+                this.initCopyButtons();
+            });
+        },
+
+        // 代码块的复制按钮
+        initCopyButtons() {
+            const content = this.$refs.contentRef;
+            if (!content) return;
+
+            // 获取所有代码块容器 pre
+            const preTags = content.querySelectorAll('pre');
+            
+            preTags.forEach(pre => {
+                // 防止重复添加
+                if (pre.parentNode.classList.contains('code-block-wrapper')) return;
+
+                // 创建外层包装容器 (为了定位按钮，不管代码块怎么滚动，按钮都固定在容器右上角)
+                const wrapper = document.createElement('div');
+                wrapper.className = 'code-block-wrapper';
+                
+                // 将 wrapper 插入到 pre 之前
+                pre.parentNode.insertBefore(wrapper, pre);
+                
+                // 将 pre 移动到 wrapper 内部
+                wrapper.appendChild(pre);
+
+                // 创建复制按钮
+                const btn = document.createElement('span');
+                btn.className = 'copy-code-btn';
+                btn.innerText = '复制';
+
+                // 绑定点击复制事件
+                btn.onclick = () => {
+                    // 获取内部 code 标签的文本
+                    const code = pre.querySelector('code').innerText;
+                    
+                    // 使用 Clipboard API 复制
+                    if (navigator.clipboard) {
+                        navigator.clipboard.writeText(code).then(() => {
+                            btn.innerText = '成功';
+                            btn.classList.add('copied');
+                            // 2秒后恢复原状
+                            setTimeout(() => {
+                                btn.innerText = '复制';
+                                btn.classList.remove('copied');
+                            }, 2000);
+                        }).catch(err => {
+                            console.error('复制失败', err);
+                            btn.innerText = '失败';
+                        });
+                    } else {
+                        btn.innerText = '不支持';
+                    }
+                };
+
+                // 6. 将按钮加入 wrapper
+                wrapper.appendChild(btn);
             });
         },
 
         handleTocClick(e) {
-            if (e.target.tagName === 'A') {
+            // 确保点击的是A标签（兼容包含子元素的情况）
+            const link = e.target.closest('a');
+            
+            if (link) {
+                // 阻止浏览器默认的锚点跳转行为
+                e.preventDefault();
+
+                // 获取目标元素的ID
+                const href = link.getAttribute('href'); // 获取如 "#title-1"
+                if (href && href.startsWith('#')) {
+                    const id = href.substring(1); // 去掉 # 号，拿到 "title-1"
+                    const targetElement = document.getElementById(id);
+
+                    // 3. 执行平滑滚动
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth', // 关键参数：平滑滚动
+                            block: 'start'      // 滚动到元素顶部
+                        });
+                    }
+                }
+
                 // 标记为手动点击，并清除之前的定时器
                 this.isManualClick = true;
                 if (this.clickTimer) clearTimeout(this.clickTimer);
@@ -85,12 +163,12 @@ export default {
                     link.classList.remove('active');
                 });
                 // 给当前点击的a标签添加active类
-                e.target.classList.add('active');
+                link.classList.add('active');
 
-                // 300ms 后恢复滚动检测
+                // 800ms 后恢复滚动检测
                 this.clickTimer = setTimeout(() => {
                     this.isManualClick = false;
-                }, 300);
+                }, 800);
             }
         },
 

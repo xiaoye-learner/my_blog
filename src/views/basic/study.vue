@@ -1,18 +1,17 @@
 <template>
     <div class="blog-study">
         <div class="blog-study-header">
-            <img src="/src/icons/study.png" alt="页首图片" style="width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6);"/>
-            <h1>学习总结&杂谈</h1>
+            <img :src="studyBg" alt="页首图片" style="width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6);"/>
+            <h1>总结&杂谈</h1>
         </div>
         <el-tabs class="study-tabs" :tab-position="tabPosition" style="height: 100vh" >
             <el-tab-pane v-for="(category, index) in categories" :key="index" :label="category.label" :lazy="true">
                 <el-row :gutter="20">
-                    <el-col :sm="24" :md="12">
-                        <el-card class="study-card" v-for="(article, articleIndex) in category.articles.slice().reverse()" 
-                        :key="articleIndex"
-                        @click="goToArticle(article.id)" 
-                        style="cursor: pointer;"
-                        data-aos="zoom-in" data-aos-duration="1000">
+                    <el-col :sm="24" :md="12" v-for="(article, articleIndex) in category.articles.slice().reverse()" :key="articleIndex">
+                        <el-card class="study-card"  
+                            @click="goToArticle(article.id)" 
+                            style="cursor: pointer;"
+                            data-aos="zoom-in" data-aos-duration="1000">
                             <div class="study-header">
                                 <img :src="article.article_cover" alt="文章封面" style="object-fit: cover;"/>
                                 <div class="stduy-info">
@@ -34,6 +33,7 @@
 import axios from 'axios';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import headerBgImage from '@/icons/study.png';
 
 AOS.init({})
 
@@ -44,6 +44,7 @@ export default {
 
     data() {
         return{
+            studyBg: headerBgImage,
             tabPosition: 'left',     //左边显示选项卡
             displayedArticles: [],    // 显示的文章列表
             current_page: 1,    // 当前页码
