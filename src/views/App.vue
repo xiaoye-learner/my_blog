@@ -1,27 +1,62 @@
 <template>
     <startLoading :show="showLoading" :progress="loadingProgress"/>  <!-- 启动动画 -->
     
-    <div class="app">
+    <div class="app" :style="appStyle">
         <!-- 导航栏 -->
-        <header :style="{ 
-            background: isHeaderTop? 'rgba(0, 0, 0, 0)' : 'rgba(0, 0, 0, 0.3)', 
+        <header :class="{ 'is-top': isHeaderTop }" :style="{ 
             transform: headerTransform 
             }">   <!-- 导航栏显示与隐藏动态样式绑定 -->
-            <nav>
-                <ul>
-                    <li>
-                        <div class="search" @click="handleSearchClick" style="cursor: pointer;">
-                            <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-ea893728=""><path fill="currentColor" d="m795.904 750.72 124.992 124.928a32 32 0 0 1-45.248 45.248L750.656 795.904a416 416 0 1 1 45.248-45.248zM480 832a352 352 0 1 0 0-704 352 352 0 0 0 0 704z"></path></svg>
+            <nav class="site-nav">
+                <router-link class="site-brand" to="/">
+                    <span class="brand-main">XiaoYe</span>
+                    <span class="brand-sub">Lab</span>
+                </router-link>
+
+                <ul class="nav-menu">
+                    <li class="nav-search">
+                        <div class="search nav-icon-button" @click="handleSearchClick" style="cursor: pointer;">
+                            <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                <circle cx="11" cy="11" r="6.5"></circle>
+                                <path d="M16.2 16.2 20 20"></path>
+                            </svg>
                         </div>
 
-                        <el-dialog v-model="searchVisible" title="搜索文章" :append-to-body="true" :width="dialogWidth">
-                            <el-form :model="form">
-                                <el-form-item>
-                                    <el-input v-model="searchInput" @input="debounce(searchArticles, 300)"/>    <!-- 300ms延迟（防抖动） -->
-                                    <el-button type="primary" @click="searchArticles">搜索</el-button>
-                                    <div id="search-results"></div>
-                                </el-form-item>
-                            </el-form>
+                        <el-dialog v-model="searchVisible" class="search-dialog" title="搜索文章" :append-to-body="true" :width="dialogWidth" :lock-scroll="false" align-center @opened="focusSearchInput">
+                            <div class="search-panel">
+                                <div class="search-box">
+                                    <el-input
+                                        ref="searchInputRef"
+                                        v-model="searchInput"
+                                        clearable
+                                        placeholder="输入关键词，搜索文章标题"
+                                        @input="queueSearch"
+                                        @keydown.down.prevent="selectNextSearchResult"
+                                        @keydown.up.prevent="selectPrevSearchResult"
+                                        @keydown.enter.prevent="confirmSearchSelection"
+                                    />
+                                </div>
+
+                                <div class="search-results">
+                                    <div v-if="searchLoading" class="search-state">正在搜索...</div>
+                                    <div v-else-if="searchError" class="search-state error">{{ searchError }}</div>
+                                    <div v-else-if="!searchInput.trim()" class="search-state">输入关键词后会显示匹配文章。</div>
+                                    <div v-else-if="hasSearched && searchResults.length === 0" class="search-state">没有找到相关文章。</div>
+
+                                    <template v-else>
+                                        <button
+                                            v-for="(article, index) in searchResults"
+                                            :key="article.id"
+                                            class="search-result-card"
+                                            :class="{ 'is-active': selectedSearchIndex === index }"
+                                            @click="goToArticle(article.id)"
+                                        >
+                                            <span class="result-category">{{ categoryName(article.category_id) }}</span>
+                                            <strong>{{ article.title }}</strong>
+                                            <small>{{ formatDate(article.edited_time) }}</small>
+                                        </button>
+                                    </template>
+                                </div>
+                            </div>
                         </el-dialog>
                     </li>
                     <li :class="{ active: activeName === 'home' }">   <!-- 根据路由的activeName动态加入class=active -->
@@ -54,7 +89,12 @@
                 </ul>
             </nav>
         </header>
-        <router-view></router-view>   <!-- 根据路由渲染不同的组件 -->
+        <main class="route-stage">
+            <AmbientBackground/>
+            <router-view v-slot="{ Component, route }">   <!-- 根据路由渲染不同的组件 -->
+                <component :is="Component" :key="route.fullPath" />
+            </router-view>
+        </main>
         
         <div class="music" :style="{transform: musicTransform}">
             <div :class="{ hide: isMusicHidden }">
@@ -86,7 +126,9 @@ import aplayer from 'vue3-aplayer'
 import { CaretLeft, CaretRight } from '@element-plus/icons-vue'  //element-plus图标库
 import startLoading from './start-loading.vue'
 import themeSwitch from './theme-switch.vue'
+import AmbientBackground from '@/components/AmbientBackground.vue'
 import axios from 'axios'
+import AOS from 'aos'
 
 export default {
     name: 'App',
@@ -95,6 +137,7 @@ export default {
         CaretLeft, CaretRight,  //音乐播放器显示与隐藏按钮
         startLoading,  //启动动画组件
         themeSwitch,
+        AmbientBackground,
     },
 
     data() {
@@ -107,6 +150,12 @@ export default {
             dialogWidth: 700,  // 搜索框弹窗宽度
             searchVisible: false,  // 搜索框弹窗
             searchInput: '',  // 搜索框输入内容
+            searchResults: [],
+            searchLoading: false,
+            searchError: '',
+            hasSearched: false,
+            searchTimer: null,
+            selectedSearchIndex: -1,
 
             lastScrollTop: 0,   // 滚动条滚动后所在的位置
             headerHeight: 70,    // 根据实际header高度调整
@@ -153,6 +202,13 @@ export default {
                 ? `translateX(-${this.musicWeight}px)`
                 : 'translateX(0)' 
         },
+
+        appStyle() {
+            return {
+                '--nav-progress-offset': this.isHeaderHidden ? '0px' : '64px',
+            };
+        },
+
     },
 
     methods: {
@@ -207,17 +263,28 @@ export default {
                 });
         },
 
-        // 实时搜索的防抖动（减少请求次数）
-        debounce(func, delay) {
-            let timeout;           // 每次调用返回的函数时，就会清除之前的定时器
-            return this.delayEvent(func, delay, timeout);
-        },
+        queueSearch() {
+            if (this.searchTimer) {
+                clearTimeout(this.searchTimer);
+            }
 
-        delayEvent(func, delay, timeout) {          // 由于原return function（）不行，单独将function（）写成此函数
-            const context = this;
-            const args = arguments;
-            clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(context, args), delay);     // 用户停止输入delay时间后，才会发起搜索请求
+            if (!this.searchInput.trim()) {
+                this.searchResults = [];
+                this.hasSearched = false;
+                this.searchError = '';
+                this.searchLoading = false;
+                this.selectedSearchIndex = -1;
+                return;
+            }
+
+            this.searchLoading = true;
+            this.searchError = '';
+            this.hasSearched = true;
+            this.selectedSearchIndex = -1;
+
+            this.searchTimer = setTimeout(() => {
+                this.searchArticles();
+            }, 300);    // 用户停止输入300ms后再发起搜索请求
         },
 
         // 搜索文章
@@ -227,44 +294,56 @@ export default {
                 this.fetchArticles(query)
             }
             else {
-                document.getElementById('search-results').innerHTML = ''   // 清空搜索结果
+                this.searchResults = []   // 清空搜索结果
+                this.hasSearched = false
+                this.searchError = ''
+                this.selectedSearchIndex = -1
             }
         },
 
         fetchArticles(query) {
             console.log('搜索文章：', query)
             const baseUrl = window.location.origin  // 获取当前页面的 origin（协议://主机名:端口号），确保在文章详情页搜索去除article/
-            axios.get(`${baseUrl}/api/articles/search/?q=${query}`)
+            this.searchLoading = true
+            this.searchError = ''
+            this.hasSearched = true
+            axios.get(`${baseUrl}/api/articles/search/?q=${encodeURIComponent(query)}`)
                 .then(response => {
-                    const resultsDiv = document.getElementById('search-results')
-                    resultsDiv.innerHTML = ''   // 清空之前的搜索结果
-                    const articles = response.data
-
-                    articles.forEach(article => {
-                        const articleDiv = document.createElement('div');
-                        articleDiv.className = 'article-searchResult'
-
-                        const title = document.createElement('a');
-                        title.className = 'title-link'
-                        title.textContent = article.title;
-                        title.style = "cursor: pointer;"
-                        title.addEventListener('click', () => {
-                            this.goToArticle(article.id)
-                        })
-
-                        articleDiv.appendChild(title)
-                        resultsDiv.appendChild(articleDiv)
-                    })
+                    this.searchResults = response.data
+                    this.selectedSearchIndex = -1
                 })
                 .catch(error => {
                     console.error('搜索文章时出现错误', error)
+                    this.searchError = '搜索失败，请稍后再试。'
+                    this.searchResults = []
+                    this.selectedSearchIndex = -1
+                })
+                .finally(() => {
+                    this.searchLoading = false
                 })
         },
 
         // 跳转至文章详情页
-        goToArticle(id){
+        async goToArticle(id){
             this.searchVisible = false
-            this.$router.push({ name: 'ArticleDetail', params: { id } });
+            await this.$nextTick()
+            this.resetSearchState()
+            await this.$router.push({ name: 'ArticleDetail', params: { id } });
+            this.searchVisible = false
+        },
+
+        resetSearchState() {
+            if (this.searchTimer) {
+                clearTimeout(this.searchTimer)
+                this.searchTimer = null
+            }
+
+            this.searchInput = ''
+            this.searchResults = []
+            this.searchError = ''
+            this.searchLoading = false
+            this.hasSearched = false
+            this.selectedSearchIndex = -1
         },
 
         // 根据屏幕大小调整搜索弹窗宽度
@@ -276,6 +355,63 @@ export default {
         handleSearchClick() {
             this.searchVisible = true
             this.updateDialogWidth()
+        },
+
+        focusSearchInput() {
+            this.$nextTick(() => {
+                setTimeout(() => {
+                    this.$refs.searchInputRef?.focus?.()
+                    document.querySelector('.search-dialog input')?.focus()
+                }, 180)
+            })
+        },
+
+        selectNextSearchResult() {
+            if (this.searchLoading || this.searchResults.length === 0) return
+            this.selectedSearchIndex = (this.selectedSearchIndex + 1) % this.searchResults.length
+        },
+
+        selectPrevSearchResult() {
+            if (this.searchLoading || this.searchResults.length === 0) return
+            this.selectedSearchIndex = this.selectedSearchIndex <= 0
+                ? this.searchResults.length - 1
+                : this.selectedSearchIndex - 1
+        },
+
+        confirmSearchSelection() {
+            if (this.searchLoading) return
+
+            if (this.searchResults.length > 0) {
+                const safeIndex = this.selectedSearchIndex >= 0 ? this.selectedSearchIndex : 0
+                this.goToArticle(this.searchResults[safeIndex].id)
+                return
+            }
+
+            this.searchArticles()
+        },
+
+        resolveActiveName(path) {
+            const firstSegment = path.split('/')[1] || 'home'
+
+            if (firstSegment === 'article') return 'study'
+
+            return firstSegment
+        },
+
+        categoryName(id) {
+            const categoryMap = {
+                1: '前端',
+                2: '后端',
+                3: '嵌入式',
+                4: '通信',
+                5: '日语',
+            };
+            return categoryMap[id] || '随笔';
+        },
+
+        formatDate(date) {
+            if (!date) return '暂无时间';
+            return date.toLocaleString('zh').replace('T', ' ').split('.')[0];
         },
 
         //导航栏的显示与隐藏
@@ -308,28 +444,53 @@ export default {
         //音乐播放器隐藏与显示
         toggleMusicHidden() {
             this.isMusicHidden = !this.isMusicHidden
+        },
+
+        refreshRouteReveal() {
+            this.$nextTick(() => {
+                requestAnimationFrame(() => {
+                    if (AOS.refreshHard) {
+                        AOS.refreshHard()
+                    } else {
+                        AOS.refresh()
+                    }
+                })
+            })
         }
     },
 
     watch: {
+        searchVisible(visible) {
+            if (visible) {
+                this.focusSearchInput()
+            }
+        },
+
         '$route.path': {  // 监听页面跳转
             immediate: true,  // 立即执行一次，确保初始路径也能被处理
             handler(newPath) {
-                this.activeName = newPath.slice(1) || 'home';
+                this.activeName = this.resolveActiveName(newPath);
+                this.searchVisible = false;
+                this.refreshRouteReveal();
             },
         }
     },
 
     mounted() {    
-        this.activeName = this.$route.path.slice(1) || 'home';    // 页面加载完成后，初始化activeName
+        this.activeName = this.resolveActiveName(this.$route.path);    // 页面加载完成后，初始化activeName
         window.addEventListener('scroll', this.handleScroll)   // 监听滚动事件
+        window.addEventListener('resize', this.updateDialogWidth)   // 监听窗口变化并同步搜索弹窗宽度
         this.updateDialogWidth()   // 调整搜索弹窗宽度
 
         this.preloadResources();
     },
 
-    beforeDestroy() {
+    beforeUnmount() {
+        if (this.searchTimer) {
+            clearTimeout(this.searchTimer)
+        }
         window.removeEventListener('scroll', this.handleScroll)   // 移除滚动事件
+        window.removeEventListener('resize', this.updateDialogWidth)   // 移除窗口变化事件
     }
 }
 </script>

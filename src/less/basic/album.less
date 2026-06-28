@@ -1,67 +1,511 @@
 .blog-album {
-    .el-tabs{
-        // 瀑布流容器样式
-        .masonry-container {
-            column-count: 4;  // 默认显示4列
-            column-gap: 15px; // 列间距
-            padding: 10px;    // 容器内边距
+    min-height: 100vh;
+    color: var(--text-color);
+
+    .blog-album-header {
+        position: relative;
+        width: 100%;
+        height: min(38vh, 340px);
+        min-height: 260px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+
+        img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.58) saturate(1.08);
+            transform: scale(1.02);
         }
 
-        // 新增：每一个图片项的样式
-        .masonry-item {
-            break-inside: avoid; // 禁止在卡片内部换列（防止图片被切成两半）
-            margin-bottom: 15px; // 上下间距
-            
-            .photo_list-card {
-                width: 100%; 
-                height: auto; 
-                
-                margin: 0; // 边距由外层 .masonry-item 控制
-                display: block;
-                box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-                border-radius: 8px; // 可选：圆角更好看
-                overflow: hidden;
+        &::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0.12), transparent 30%),
+                linear-gradient(180deg, rgba(10, 18, 32, 0.18), rgba(10, 18, 32, 0.58));
+        }
 
-                .el-card__body {
-                    padding: 0;
-                    line-height: 0; // 防止图片底部出现细微白边
-                }
+        .page-hero-copy {
+            position: relative;
+            z-index: 1;
+            width: min(960px, calc(100% - 40px));
+            color: #ffffff;
+            text-align: center;
+            text-shadow: 0 18px 42px rgba(0, 0, 0, 0.36);
 
-                // 悬停效果
-                &:hover {
-                    transform: scale(1.02); // 轻微放大
-                    transition: transform 0.3s;
-                    z-index: 10;
-                }
+            h1 {
+                position: static;
+                margin: 12px 0 10px;
+                font-size: clamp(42px, 7vw, 70px);
+                line-height: 1.02;
+            }
+
+            p {
+                margin: 0;
+                color: rgba(255, 255, 255, 0.84);
             }
         }
-        
-        .el-tabs__content {
-            padding: 32px;
-            border-radius: 1%;
-            // 如果 tabs 内容区域高度不够，可能会出现滚动条，建议设置 auto
-            height: auto; 
+    }
+
+    .eyebrow {
+        color: var(--primary-color);
+        font-size: 12px;
+        font-weight: 900;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+    }
+
+    .album-stage {
+        position: relative;
+        width: min(1220px, calc(100% - 48px));
+        margin: 46px auto 90px;
+    }
+
+    .album-view-enter-active,
+    .album-view-leave-active {
+        pointer-events: none;
+        transition:
+            opacity 0.45s ease,
+            transform 0.45s ease,
+            filter 0.45s ease;
+    }
+
+    .album-view-leave-active {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+    }
+
+    .album-view-enter-from {
+        opacity: 0;
+        filter: blur(1px);
+        transform: translateY(28px);
+    }
+
+    .album-view-leave-to {
+        opacity: 0;
+        filter: blur(1px);
+        transform: translateY(28px);
+    }
+
+    .album-view-enter-to,
+    .album-view-leave-from {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateY(0);
+    }
+
+    .album-landing {
+        min-height: 560px;
+    }
+
+    .album-landing-head,
+    .album-detail-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 24px;
+        margin-bottom: 32px;
+
+        h2 {
+            margin: 8px 0 8px;
+            font-size: clamp(42px, 6vw, 68px);
+            line-height: 1;
+            letter-spacing: 0;
+        }
+
+        p {
+            margin: 0;
+            color: var(--text-muted-color);
+            font-size: 16px;
+            line-height: 1.7;
+        }
+    }
+
+    .album-search {
+        width: min(360px, 100%);
+        height: 52px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 0 18px;
+        border: 1px solid rgba(255, 255, 255, 0.32);
+        border-radius: 999px;
+        background:
+            linear-gradient(135deg, rgba(42, 48, 75, 0.58), rgba(30, 34, 54, 0.38)),
+            rgba(255, 255, 255, 0.14);
+        box-shadow:
+            0 18px 40px rgba(37, 47, 72, 0.16),
+            inset 0 1px 0 rgba(255, 255, 255, 0.26);
+        backdrop-filter: blur(18px) saturate(1.24);
+        -webkit-backdrop-filter: blur(18px) saturate(1.24);
+
+        span {
+            color: rgba(180, 214, 255, 0.9);
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        input {
+            width: 100%;
+            border: 0;
+            outline: none;
+            color: #ffffff;
+            background: transparent;
+            font-size: 14px;
+
+            &::placeholder {
+                color: rgba(217, 228, 246, 0.68);
+            }
+        }
+    }
+
+    .album-collections {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: clamp(24px, 4vw, 52px);
+        align-items: center;
+        padding: 28px 0 12px;
+    }
+
+    .album-showcase-card {
+        appearance: none;
+        position: relative;
+        min-width: 0;
+        border: 0;
+        color: #ffffff;
+        background: transparent;
+        text-align: center;
+        cursor: pointer;
+        transition: transform 0.34s var(--theme-transition-ease), filter 0.34s var(--theme-transition-ease);
+
+        &:hover {
+            transform: translateY(-8px);
+            filter: saturate(1.08);
+        }
+
+        &:nth-child(1) {
+            margin-top: 34px;
+
+            .photo-stack-large {
+                height: 300px;
+            }
+        }
+
+        &:nth-child(2) {
+            .photo-stack-large {
+                height: 430px;
+            }
+        }
+
+        &:nth-child(3) {
+            margin-top: 48px;
+
+            .photo-stack-large {
+                height: 380px;
+            }
+        }
+    }
+
+    .photo-stack-large {
+        position: relative;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .stack-photo {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: min(86%, 330px);
+        height: min(82%, 360px);
+        border: 6px solid rgba(234, 241, 255, 0.92);
+        border-radius: 10px;
+        object-fit: cover;
+        box-shadow:
+            0 28px 70px rgba(22, 31, 58, 0.28),
+            inset 0 1px 0 rgba(255, 255, 255, 0.35);
+        transform: translate(-50%, -50%);
+        transition: transform 0.34s var(--theme-transition-ease), opacity 0.34s var(--theme-transition-ease);
+    }
+
+    .stack-1 {
+        z-index: 3;
+    }
+
+    .stack-2 {
+        z-index: 2;
+        opacity: 0.66;
+        filter: grayscale(0.3) brightness(0.88);
+        transform: translate(-50%, -50%) rotate(-6deg) translate(-20px, 10px);
+    }
+
+    .stack-3 {
+        z-index: 1;
+        opacity: 0.54;
+        filter: grayscale(0.55) brightness(0.78);
+        transform: translate(-50%, -50%) rotate(7deg) translate(22px, 14px);
+    }
+
+    .album-showcase-card:hover {
+        .stack-1 {
+            transform: translate(-50%, -52%) scale(1.02);
+        }
+
+        .stack-2 {
+            transform: translate(-50%, -50%) rotate(-8deg) translate(-28px, 14px);
+        }
+
+        .stack-3 {
+            transform: translate(-50%, -50%) rotate(9deg) translate(30px, 16px);
+        }
+    }
+
+    .album-card-copy {
+        position: relative;
+        z-index: 4;
+        width: min(90%, 380px);
+        margin: -18px auto 0;
+        text-shadow: 0 10px 28px rgba(0, 0, 0, 0.42);
+
+        small {
+            display: inline-flex;
+            align-items: center;
+            min-height: 30px;
+            padding: 0 14px;
+            border-radius: 999px;
+            color: #ffffff;
+            background:
+                linear-gradient(135deg, var(--card-accent), rgba(120, 216, 255, 0.72)),
+                rgba(255, 255, 255, 0.18);
+            box-shadow: 0 12px 24px rgba(40, 57, 112, 0.18);
+            font-size: 12px;
+            font-weight: 900;
+        }
+
+        h3 {
+            margin: 14px 0 8px;
+            color: #ffffff;
+            font-size: clamp(24px, 3vw, 34px);
+            line-height: 1.12;
+            text-shadow: 0 14px 36px rgba(0, 0, 0, 0.48);
+        }
+
+        div {
+            display: flex;
+            justify-content: center;
+            align-items: baseline;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        time {
+            padding: 4px 10px;
+            border-radius: 999px;
+            color: rgba(255, 255, 255, 0.88);
+            background: rgba(14, 20, 34, 0.34);
+            font-size: 12px;
+            font-weight: 900;
+        }
+
+        p {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.74);
+            font-size: 14px;
+        }
+    }
+
+    .album-detail {
+        padding: clamp(18px, 3vw, 30px);
+        border: 1px solid var(--glass-panel-border-color);
+        border-radius: 28px;
+        background: var(--glass-panel-bg);
+        box-shadow: var(--card-shadow), inset 0 1px 0 var(--glass-panel-highlight-color);
+        backdrop-filter: var(--glass-panel-filter);
+        -webkit-backdrop-filter: var(--glass-panel-filter);
+    }
+
+    .album-detail-head {
+        align-items: flex-end;
+        margin-bottom: 24px;
+
+        h2 {
+            font-size: clamp(34px, 5vw, 56px);
+        }
+    }
+
+    .album-back {
+        min-width: 118px;
+        height: 42px;
+        border: 1px solid rgba(120, 216, 255, 0.46);
+        border-radius: 999px;
+        color: var(--primary-color);
+        background:
+            linear-gradient(135deg, rgba(120, 216, 255, 0.16), rgba(106, 124, 255, 0.1)),
+            rgba(255, 255, 255, 0.24);
+        box-shadow: 0 12px 28px rgba(51, 71, 112, 0.12);
+        font-weight: 900;
+        cursor: pointer;
+        transition: transform 0.24s ease, box-shadow 0.24s ease, background 0.24s ease;
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 18px 36px rgba(51, 71, 112, 0.18);
+        }
+    }
+
+    .masonry-container {
+        column-count: 3;
+        column-gap: 18px;
+    }
+
+    .masonry-item {
+        break-inside: avoid;
+        margin-bottom: 18px;
+    }
+
+    .photo_list-card {
+        width: 100%;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.18);
+        box-shadow: 0 18px 46px rgba(51, 71, 112, 0.16);
+        transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+
+        .el-card__body {
+            padding: 0;
+            line-height: 0;
+        }
+
+        img,
+        .el-image {
+            width: 100%;
+            min-height: 220px;
+            display: block;
+            background:
+                linear-gradient(135deg, rgba(120, 216, 255, 0.14), rgba(106, 124, 255, 0.08)),
+                rgba(255, 255, 255, 0.16);
+        }
+
+        .el-image__inner {
+            width: 100%;
+            min-height: 220px;
+            object-fit: cover;
+        }
+
+        &:hover {
+            transform: translateY(-4px);
+            border-color: rgba(120, 216, 255, 0.56);
+            box-shadow: var(--card-hover-shadow);
+        }
+    }
+
+    .album-empty {
+        padding: 58px 20px;
+        border: 1px dashed rgba(106, 124, 255, 0.22);
+        border-radius: 22px;
+        color: var(--text-muted-color);
+        text-align: center;
+        background: rgba(255, 255, 255, 0.12);
+    }
+}
+
+.dark-mode {
+    .blog-album {
+        .album-search {
+            border-color: rgba(255, 255, 255, 0.14);
+            background:
+                linear-gradient(135deg, rgba(18, 24, 42, 0.66), rgba(18, 24, 42, 0.44)),
+                rgba(8, 14, 26, 0.28);
+        }
+
+        .album-detail,
+        .photo_list-card {
+            border-color: rgba(255, 255, 255, 0.14);
+            background: rgba(12, 20, 36, 0.28);
         }
     }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 980px) {
     .blog-album {
-        .el-tabs {
-            .masonry-container {
-                column-count: 2; // 手机端改为2列
-                column-gap: 10px;
+        .album-landing-head,
+        .album-detail-head {
+            flex-direction: column;
+        }
+
+        .album-collections {
+            grid-template-columns: 1fr;
+            gap: 22px;
+        }
+
+        .album-showcase-card {
+            margin-top: 0 !important;
+
+            .photo-stack-large {
+                height: 300px !important;
             }
-            
-            // 手机端不需要强制固定宽高，只需自适应
-            .photo_list-card {
-               width: 100% !important;
-               height: auto !important;
+        }
+
+        .masonry-container {
+            column-count: 2;
+        }
+    }
+}
+
+@media screen and (max-width: 620px) {
+    .blog-album {
+        .album-stage {
+            width: min(calc(100% - 24px), 540px);
+            margin-top: 32px;
+        }
+
+        .blog-album-header {
+            min-height: 220px;
+        }
+
+        .album-landing-head,
+        .album-detail-head {
+            h2 {
+                font-size: 38px;
             }
-            
-            .el-tabs__content {
-                padding: 5px !important;
+        }
+
+        .album-showcase-card {
+            .photo-stack-large {
+                height: 250px !important;
             }
+        }
+
+        .stack-photo {
+            width: min(88%, 300px);
+            height: min(82%, 240px);
+            border-width: 5px;
+        }
+
+        .album-card-copy {
+            margin-top: -8px;
+
+            h3 {
+                font-size: 26px;
+            }
+        }
+
+        .album-detail {
+            padding: 16px;
+            border-radius: 22px;
+        }
+
+        .masonry-container {
+            column-count: 1;
         }
     }
 }

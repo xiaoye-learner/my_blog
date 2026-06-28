@@ -5,6 +5,8 @@ import ElementPlus from 'element-plus'  // UI 框架
 import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'  //element-plus图标库
 import router from './router'   // 路由
+import AOS from 'aos'
+import 'aos/dist/aos.css'
 
 import './assets/markdown.css'  // markdown自定义样式
 import 'highlight.js/styles/vs.min.css'
@@ -21,6 +23,15 @@ import './less/basic/about-me.less'
 import './less/start-loading.less'
 import './less/ArticleDetail.less'
 import './assets/rem'
+
+AOS.init({
+    offset: 48,
+    duration: 1100,
+    easing: 'ease-out-cubic',
+    once: false,
+    mirror: false,
+    anchorPlacement: 'top-bottom',
+})
 
 const app = createApp(App)
 app.use(ElementPlus).use(router)

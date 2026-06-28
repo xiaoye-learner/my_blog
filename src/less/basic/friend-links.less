@@ -1,120 +1,338 @@
 .blog-friend-links {
-    .about-card {
-        width: calc(30rem + 200px);
-        margin-top: 2rem;
-        margin-bottom: 20px;
-        border-radius: 20px;
-        color: var(--text-color);
+    min-height: 100vh;
+    color: var(--text-color);
 
-        h2 {
-            margin-top: 0;
-            margin-bottom: 1rem;
-            font-size: calc(1rem + 20px);
+    .blog-friend-links-header {
+        position: relative;
+        width: 100%;
+        height: min(38vh, 340px);
+        min-height: 260px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+
+        img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.58) saturate(1.08);
+            transform: scale(1.02);
         }
 
-        p {
-            font-size: calc(0.5rem + 10px);
+        &::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0.12), transparent 30%),
+                linear-gradient(180deg, rgba(10, 18, 32, 0.18), rgba(10, 18, 32, 0.58));
         }
 
-        .button-container {    //布局按钮位置
-            display: flex;
-            flex-direction: row;
-            justify-content: end;
+        .page-hero-copy {
+            position: relative;
+            z-index: 1;
+            width: min(960px, calc(100% - 40px));
+            color: #ffffff;
+            text-align: center;
+            text-shadow: 0 18px 42px rgba(0, 0, 0, 0.36);
 
-            .el-button {
-                border-radius: 10px;
+            h1 {
+                position: static;
+                margin: 12px 0 10px;
+                font-size: clamp(38px, 6vw, 66px);
+                line-height: 1.05;
+            }
+
+            p {
+                margin: 0;
+                color: rgba(255, 255, 255, 0.84);
             }
         }
     }
 
-    .friends-card {
-        width: calc(30rem + 200px);
+    .eyebrow {
+        color: var(--primary-color);
+        font-size: 12px;
+        font-weight: 900;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+    }
+
+    .friend-shell {
+        width: min(1120px, calc(100% - 48px));
+        margin: 0 auto;
+        padding: 46px 0 90px;
+        display: grid;
+        gap: 26px;
+    }
+
+    .site-card,
+    .friends-section {
+        border: 1px solid var(--glass-panel-border-color);
+        border-radius: 28px;
+        background: var(--glass-panel-bg);
+        box-shadow: var(--card-shadow), inset 0 1px 0 var(--glass-panel-highlight-color);
+        backdrop-filter: var(--glass-panel-filter);
+        -webkit-backdrop-filter: var(--glass-panel-filter);
+    }
+
+    .site-card {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(280px, 0.8fr) auto;
+        align-items: center;
+        gap: 24px;
+        padding: clamp(22px, 4vw, 34px);
+
+        h2 {
+            margin: 8px 0 10px;
+            font-size: clamp(26px, 3.4vw, 40px);
+        }
+
+        p {
+            margin: 0;
+            color: var(--text-muted-color);
+        }
+    }
+
+    .site-meta {
+        display: grid;
+        gap: 10px;
+        margin: 0;
+
+        div {
+            display: grid;
+            grid-template-columns: 74px minmax(0, 1fr);
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.22);
+        }
+
+        dt {
+            color: var(--primary-color);
+            font-size: 12px;
+            font-weight: 900;
+        }
+
+        dd {
+            min-width: 0;
+            margin: 0;
+            color: var(--text-color);
+            font-weight: 800;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+
+    .apply-button {
+        appearance: none;
+        border: 0;
+        border-radius: 999px;
+        padding: 12px 18px;
+        color: #ffffff;
+        background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+        box-shadow: 0 16px 34px rgba(106, 124, 255, 0.26);
+        font-weight: 900;
+        cursor: pointer;
+        transition: transform 0.24s ease, box-shadow 0.24s ease;
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 42px rgba(106, 124, 255, 0.34);
+        }
+    }
+
+    .friends-section {
+        padding: clamp(22px, 4vw, 34px);
+    }
+
+    .section-heading {
         display: flex;
-        border-radius: 20px;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 24px;
+        margin-bottom: 22px;
 
-        .el-card__body {
-            padding: 1rem;
-            width: 100%;
+        h2 {
+            margin: 8px 0 0;
+            font-size: clamp(30px, 4vw, 46px);
+        }
 
-            .el-col {
-                display: flex;
-                justify-content: center;
+        p {
+            margin: 0;
+            color: var(--text-muted-color);
+        }
+    }
 
-                .friend-card {
-                    margin: 10px;
-                    width: 90%;
-                    height: calc(10rem + 40px);       // 每个友链卡片的高度
-                    display: flex;
-                    position: relative;
-                    border-radius: 20px;
-                    margin: 0;
-                    margin-bottom: calc(1rem + 10px);
-                    transition: transform 0.3s, box-shadow 0.3s;   // 添加阴影时也渐变
-                    overflow: hidden;   // 隐藏超出容器的内容
+    .friend-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+    }
 
-                    &:hover {
-                        transform: translateY(-0.5rem);
-                        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-                    }
+    .friend-card {
+        position: relative;
+        min-height: 260px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.42);
+        border-radius: 26px;
+        color: #ffffff;
+        text-decoration: none;
+        box-shadow: 0 22px 54px rgba(51, 71, 112, 0.18);
+        isolation: isolate;
+        transition: transform 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease;
 
-                    .el-card__body {
-                        padding: 0;
-                        display: flex;
-                        justify-content: center;
-                        width: 100%;
-                        height: 100%;
+        &:hover {
+            transform: translateY(-6px);
+            border-color: rgba(120, 216, 255, 0.58);
+            box-shadow: var(--card-hover-shadow);
 
-                        .background {
-                            width: 100%;
-                            height: 100%;
-
-                            img {
-                                width: 100%;
-                                height: 100%;
-                                object-fit: cover;
-                                filter: brightness(0.9) blur(3px);  // 背景图片的模糊效果
-                            }
-                        }
-
-                        .avator {
-                            width: calc(5rem + 5px);
-                            height: calc(5rem + 5px);
-                            display: flex;
-                            position: absolute;
-                            z-index: 1;
-                            top: 10%;
-
-                            img {
-                                width: 100%;
-                                height: 100%;
-                                border-radius: 50%;
-                                box-sizing: border-box;
-                                border: 3px solid #ffffff;
-                                object-fit: cover;
-                            }
-                        }
-
-                        .info {
-                            display: flex;
-                            justify-content: center;
-                            position: absolute;
-                            top: 50%;
-                            width: 100%;
-                            height: 50%;
-                            z-index: 1;
-                            background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 5%, 
-                            rgba(255, 255, 255, 0.7) 20%, rgba(255, 255, 255, 1) 30%);
-
-                            p {
-                                display: flex;
-                                align-items: center;
-                            }
-                        }
-                    }
-                }
+            .friend-bg {
+                transform: scale(1.06);
             }
+        }
+    }
 
-            
-        }  
+    .friend-bg {
+        position: absolute;
+        inset: 0;
+        z-index: -2;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: brightness(0.82) saturate(1.08);
+        transition: transform 0.55s ease;
+    }
+
+    .friend-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background:
+            radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.18), transparent 26%),
+            linear-gradient(180deg, rgba(10, 18, 32, 0.08), rgba(10, 18, 32, 0.76));
+    }
+
+    .friend-avatar {
+        width: 72px;
+        height: 72px;
+        margin: 24px;
+        border: 3px solid rgba(255, 255, 255, 0.72);
+        border-radius: 22px;
+        object-fit: cover;
+        box-shadow: 0 16px 34px rgba(0, 0, 0, 0.22);
+    }
+
+    .friend-info {
+        position: absolute;
+        left: 24px;
+        right: 24px;
+        bottom: 22px;
+
+        h3 {
+            margin: 0 0 8px;
+            color: #ffffff;
+            font-size: 24px;
+        }
+
+        p {
+            margin: 0 0 14px;
+            color: rgba(255, 255, 255, 0.78);
+        }
+
+        span {
+            display: inline-flex;
+            padding: 5px 10px;
+            border-radius: 999px;
+            color: #ffffff;
+            background: rgba(120, 216, 255, 0.24);
+            font-size: 12px;
+            font-weight: 900;
+            backdrop-filter: blur(12px);
+        }
+    }
+
+    .friend-empty {
+        padding: 44px;
+        color: var(--text-muted-color);
+        text-align: center;
+    }
+}
+
+.friend-dialog.el-dialog {
+    border: 1px solid var(--glass-panel-border-color);
+    border-radius: 24px;
+    background: var(--glass-panel-strong-bg);
+    box-shadow: var(--card-shadow);
+    backdrop-filter: var(--glass-panel-filter);
+    -webkit-backdrop-filter: var(--glass-panel-filter);
+
+    .friend-apply-copy {
+        color: var(--text-color);
+
+        p {
+            margin: 0 0 12px;
+        }
+
+        ul {
+            margin: 0 0 12px;
+            padding-left: 20px;
+        }
+    }
+}
+
+.dark-mode {
+    .blog-friend-links {
+        .site-meta div {
+            background: rgba(12, 20, 36, 0.28);
+        }
+
+        .friend-card {
+            border-color: rgba(255, 255, 255, 0.16);
+            box-shadow: 0 22px 54px rgba(0, 0, 0, 0.28);
+        }
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .blog-friend-links {
+        .site-card {
+            grid-template-columns: 1fr;
+        }
+
+        .apply-button {
+            justify-self: start;
+        }
+
+        .friend-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+}
+
+@media screen and (max-width: 560px) {
+    .blog-friend-links {
+        .friend-shell {
+            width: min(calc(100% - 24px), 540px);
+            padding-top: 32px;
+        }
+
+        .section-heading {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .friend-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .site-meta div {
+            grid-template-columns: 1fr;
+            gap: 4px;
+        }
     }
 }

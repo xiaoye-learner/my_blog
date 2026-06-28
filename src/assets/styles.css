@@ -3,6 +3,36 @@
     --bg-color: #EBF5FF;
     --text-color: #252525;
     --article-bg-color: #f8f8f8;
+    --text-muted-color: #64748b;
+    --panel-bg-color: rgba(255, 255, 255, 0.72);
+    --panel-strong-bg-color: rgba(255, 255, 255, 0.88);
+    --panel-border-color: rgba(255, 255, 255, 0.55);
+    --glass-panel-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.48));
+    --glass-panel-strong-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.62));
+    --glass-panel-border-color: rgba(255, 255, 255, 0.68);
+    --glass-panel-highlight-color: rgba(255, 255, 255, 0.46);
+    --glass-panel-filter: blur(24px) saturate(1.28);
+    --glass-nav-bg-color: rgba(255, 255, 255, 0.40);
+    --glass-nav-solid-color: rgba(255, 255, 255, 0.58);
+    --glass-nav-border-color: rgba(255, 255, 255, 0.22);
+    --glass-nav-text-color: #1f2937;
+    --glass-nav-muted-color: #475569;
+    --glass-nav-hover-bg: rgba(255, 255, 255, 0.42);
+    --glass-nav-active-bg: rgba(255, 255, 255, 0.54);
+    --glass-nav-shadow: 0 12px 34px rgba(88, 112, 146, 0.14);
+    --site-bg-image: url("/p3.jpg");
+    --site-bg-position: center 38%;
+    --site-bg-size: cover;
+    --site-bg-filter: blur(6px) saturate(1.08);
+    --site-bg-opacity: 0.72;
+    --site-bg-scale: 1.04;
+    --primary-color: #6a7cff;
+    --accent-color: #78d8ff;
+    --pink-accent-color: #fe8599;
+    --card-radius: 22px;
+    --card-shadow: 0 24px 70px rgba(63, 83, 112, 0.16);
+    --card-hover-shadow: 0 28px 80px rgba(63, 83, 112, 0.22);
+    --glass-blur: 18px;
 
     --wave-one-color: rgba(235.9,245.3,255, 0.3);
     --wave-two-color: rgba(235.9,245.3,255, 0.5);
@@ -16,33 +46,245 @@
 
     --button-hover-shadow-color: rgb(193, 222, 255);
     --button-transition-duration: 0.3s;
+    --theme-transition-duration: 620ms;
+    --reveal-transition-duration: 1100ms;
+    --theme-transition-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    color-scheme: light;
 }
 
 .dark-mode {
+    color-scheme: dark;
     --bg-color: #31333a;
     --text-color: #e6e6e6;
     --article-bg-color: #5c5c5c;
+    --text-muted-color: #aab3c5;
+    --panel-bg-color: rgba(32, 39, 56, 0.72);
+    --panel-strong-bg-color: rgba(32, 39, 56, 0.88);
+    --panel-border-color: rgba(255, 255, 255, 0.12);
+    --glass-panel-bg: linear-gradient(135deg, rgba(36, 44, 63, 0.78), rgba(24, 30, 45, 0.5));
+    --glass-panel-strong-bg: linear-gradient(135deg, rgba(42, 51, 72, 0.86), rgba(26, 32, 48, 0.66));
+    --glass-panel-border-color: rgba(255, 255, 255, 0.16);
+    --glass-panel-highlight-color: rgba(255, 255, 255, 0.12);
+    --glass-panel-filter: blur(24px) saturate(1.22);
+    --glass-nav-bg-color: rgba(15, 23, 42, 0.50);
+    --glass-nav-solid-color: rgba(15, 23, 42, 0.70);
+    --glass-nav-border-color: rgba(255, 255, 255, 0.08);
+    --glass-nav-text-color: #f8fafc;
+    --glass-nav-muted-color: #cbd5e1;
+    --glass-nav-hover-bg: rgba(255, 255, 255, 0.10);
+    --glass-nav-active-bg: rgba(255, 255, 255, 0.13);
+    --glass-nav-shadow: 0 12px 38px rgba(0, 0, 0, 0.28);
+    --site-bg-filter: blur(2px) saturate(0.92) brightness(0.58);
+    --site-bg-opacity: 0.76;
+    --primary-color: #8ea0ff;
+    --accent-color: #7dd7ff;
+    --card-shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
+    --card-hover-shadow: 0 28px 80px rgba(0, 0, 0, 0.48);
 
     --wave-one-color: rgba(49, 51, 58, 0.3);
     --wave-two-color: rgba(49, 51, 58, 0.5);
     --wave-three-color: rgba(49, 51, 58, 0.7);
     --wave-four-color: rgba(49, 51, 58, 1);
 
-    --article-one-color: rgba(51, 51, 51, 0);
-    --article-two-color: rgba(51, 51, 51, 0.5);
-    --article-three-color: rgba(51, 51, 51, 0.8);
-    --article-four-color: rgba(51, 51, 51, 1);
+    --article-one-color: rgba(32, 39, 56, 0);
+    --article-two-color: rgba(32, 39, 56, 0.5);
+    --article-three-color: rgba(32, 39, 56, 0.8);
+    --article-four-color: rgba(32, 39, 56, 1);
+    background-color: var(--bg-color);
 
     .el-card {
-        background-color: #202738 !important;        
-        border: none !important; 
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;    
         color: #e6e6e6;
     }
 
     .el-tabs__content {
-        background-color: #333333;
-        box-shadow: 0 0 12px 0 rgba(255, 255, 255, 0.12);
+        background-color: transparent;
+        box-shadow: none;
+    }
+}
+
+body.dark-mode {
+    background-color: var(--bg-color);
+}
+
+html,
+body {
+    transition:
+        background-color var(--theme-transition-duration) var(--theme-transition-ease),
+        color var(--theme-transition-duration) var(--theme-transition-ease);
+}
+
+body.theme-transitioning,
+body.theme-transitioning * {
+    transition-timing-function: var(--theme-transition-ease) !important;
+}
+
+.app header,
+.app header .site-nav,
+.app header .nav-menu li a,
+.app header .nav-menu .nav-icon-button,
+.ambient-background,
+.sakura-field,
+.firefly-field,
+.blog-home::before,
+.blog-home::after,
+.blog-home .home-content::before,
+.blog-about-me::before,
+.blog-about-me::after,
+.blog-album::before,
+.blog-album::after,
+.blog-friend-links::before,
+.blog-friend-links::after,
+.blog-study::before,
+.blog-study::after,
+.blog-time-articles::before,
+.blog-time-articles::after,
+.blog-article-detail::before,
+.blog-article-detail::after,
+.dashboard-card,
+.study-tabs .el-tabs__header,
+.study-tabs .el-tabs__item,
+.study-card,
+.search-dialog.el-dialog,
+.search-result-card,
+.el-card,
+.el-tabs__content {
+    transition:
+        background var(--theme-transition-duration) var(--theme-transition-ease),
+        background-color var(--theme-transition-duration) var(--theme-transition-ease),
+        color var(--theme-transition-duration) var(--theme-transition-ease),
+        border-color var(--theme-transition-duration) var(--theme-transition-ease),
+        box-shadow var(--theme-transition-duration) var(--theme-transition-ease),
+        filter var(--theme-transition-duration) var(--theme-transition-ease),
+        opacity var(--theme-transition-duration) var(--theme-transition-ease);
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation-duration: var(--theme-transition-duration);
+    animation-timing-function: var(--theme-transition-ease);
+}
+
+::view-transition-old(root) {
+    animation-name: theme-fade-out;
+}
+
+::view-transition-new(root) {
+    animation-name: theme-fade-in;
+}
+
+@keyframes theme-fade-out {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0.88;
+    }
+}
+
+@keyframes theme-fade-in {
+    from {
+        opacity: 0.78;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+[data-aos] {
+    transition-property: opacity, transform, filter !important;
+    transition-duration: var(--reveal-transition-duration) !important;
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1) !important;
+    will-change: opacity, transform, filter;
+}
+
+[data-aos^="fade"],
+[data-aos="zoom-in"] {
+    filter: blur(2px);
+}
+
+[data-aos^="fade"].aos-animate,
+[data-aos="zoom-in"].aos-animate {
+    filter: blur(0);
+}
+
+[data-aos="fade-up"] {
+    transform: translate3d(0, 20px, 0) scale(0.992);
+}
+
+[data-aos="fade-up"].aos-animate {
+    transform: translate3d(0, 0, 0) scale(1);
+}
+
+[data-aos="zoom-in"] {
+    transform: scale(0.985);
+}
+
+[data-aos="zoom-in"].aos-animate {
+    transform: scale(1);
+}
+
+.route-stage {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    isolation: isolate;
+}
+
+.route-stage > .ambient-background {
+    z-index: 0;
+}
+
+.route-stage > :not(.ambient-background) {
+    position: relative;
+    isolation: auto;
+}
+
+.route-stage > .blog-home,
+.route-stage > .blog-about-me,
+.route-stage > .blog-album,
+.route-stage > .blog-friend-links,
+.route-stage > .blog-study,
+.route-stage > .blog-time-articles,
+.route-stage > .blog-article-detail {
+    isolation: auto;
+}
+
+.route-stage > :not(.ambient-background) > * {
+    position: relative;
+    z-index: 2;
+}
+
+.route-stage > .blog-article-detail {
+    background: transparent;
+}
+
+.route-stage .blog-home .home-content {
+    z-index: auto;
+    isolation: auto;
+}
+
+.route-stage .blog-home .home-dashboard,
+.route-stage .blog-home .article-list {
+    position: relative;
+    z-index: 2;
+}
+
+.route-stage > * {
+    width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html,
+    body,
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
     }
 }
 

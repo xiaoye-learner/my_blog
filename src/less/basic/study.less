@@ -1,101 +1,425 @@
 .blog-study {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    min-height: 100vh;
+    color: var(--text-color);
 
     .blog-study-header {
-        width: 100vw;
-        height: 20rem;
         position: relative;
+        width: 100%;
+        height: min(42vh, 360px);
+        min-height: 280px;
         display: flex;
-        justify-content: center;
         align-items: center;
+        justify-content: center;
+        overflow: hidden;
 
-        h1 {
+        img {
             position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.62) saturate(1.08);
+            transform: scale(1.02);
+        }
+
+        &::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 50% 38%, rgba(255, 255, 255, 0.12), transparent 32%),
+                linear-gradient(180deg, rgba(10, 18, 32, 0.16), rgba(10, 18, 32, 0.55));
+        }
+
+        .study-hero-copy {
+            position: relative;
+            z-index: 1;
+            width: min(960px, calc(100% - 40px));
             color: #ffffff;
-            font-size: 2.5rem;
+            text-align: center;
+            text-shadow: 0 18px 42px rgba(0, 0, 0, 0.34);
+
+            .eyebrow {
+                color: var(--accent-color);
+            }
+
+            h1 {
+                position: static;
+                margin: 12px 0 10px;
+                font-size: clamp(42px, 7vw, 72px);
+                line-height: 1.02;
+            }
+
+            p {
+                margin: 0;
+                color: rgba(255, 255, 255, 0.86);
+                font-size: 16px;
+            }
         }
     }
 
-    .el-tabs{
-        padding: 20px 0;   //内容界面顶部间距
-        width: 65rem;   //确定内容界面大小
+    .study-shell {
+        width: min(1180px, calc(100% - 48px));
+        margin: 0 auto;
+        padding: 42px 0 78px;
+    }
+
+    .study-section-heading {
         display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 24px;
+        margin-bottom: 24px;
 
-        .el-col {
+        h2 {
+            margin: 8px 0 0;
+            font-size: clamp(30px, 4vw, 46px);
+            line-height: 1.08;
+        }
+
+        p {
+            max-width: 380px;
+            margin: 0;
+            color: var(--text-muted-color);
+            text-align: right;
+        }
+    }
+
+    .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        color: var(--primary-color);
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+    }
+
+    .study-tabs {
+        display: flex;
+        gap: 24px;
+        width: 100%;
+        padding: 0;
+        box-sizing: border-box;
+        overflow: visible !important;
+
+        .el-tabs__header {
+            flex: 0 0 176px;
+            min-width: 176px;
+            margin-right: 0;
+            padding: 12px;
+            border-radius: 28px;
+            background: var(--glass-panel-bg);
+            border: 1px solid var(--glass-panel-border-color);
+            box-shadow:
+                var(--card-shadow),
+                inset 0 1px 0 var(--glass-panel-highlight-color),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.12);
+            backdrop-filter: var(--glass-panel-filter);
+            -webkit-backdrop-filter: var(--glass-panel-filter);
+            box-sizing: border-box;
+            overflow: visible !important;
+        }
+
+        .el-tabs__nav-wrap::after {
+            display: none;
+        }
+
+        .el-tabs__active-bar {
+            display: none;
+        }
+
+        .el-tabs__nav-scroll {
+            height: auto !important;
+            width: 100%;
+            overflow: visible !important;
+        }
+
+        .el-tabs__nav-wrap {
+            height: auto !important;
+            width: 100%;
+            overflow: visible !important;
+        }
+
+        .el-tabs__nav {
+            position: relative;
             display: flex;
-            justify-content: center;
-            align-items: center;
+            flex-direction: column;
+            gap: 8px;
+            width: 100%;
+            transform: none !important;
+            overflow: visible !important;
+        }
 
-            .el-card {
-                display: flex;
-                margin: 1rem 0;   //上下卡片间距
-                width: 100%;   //卡片所占当栏宽度
-                height: calc(8rem + 60px);   //兼顾移动端
-                border-radius: 10px;
-                
-                .el-card__body {
-                    display: flex;
-                    padding: 0;
-                    width: 100%;
-                    height: 100%;
-                }
-    
-                .study-header {
-                    display: flex;
-                    width: 100%;
-                    height: 100%;
-        
-                    img {
-                        display: flex;
-                        width: 40%; 
-                        height: 100%;
-                    }
-        
-                    .stduy-info {
-                        flex: 1;
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: center;
-                        width: 100%;
-                        height: 100%;
-                        margin-left: 1rem;
-        
-                        .study-title {
-                            font-size: calc(1rem + 10px);
-                            color: var(--text-color);
-                            flex: 2;
-                            display: flex;
-                            align-items: center;
-                        }
-        
-                        .stduy-edit-time {
-                            flex: 1;
-                        }
-                    }
-                }
+        .el-tabs__item {
+            width: 100%;
+            height: 52px;
+            justify-content: flex-start;
+            padding: 0 18px;
+            border: 1px solid transparent;
+            border-radius: 18px;
+            box-sizing: border-box;
+            color: var(--text-muted-color);
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: 0.02em;
+            transition: color 0.24s ease, background 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease, transform 0.24s ease;
+
+            &:hover {
+                position: relative;
+                z-index: 2;
+                color: var(--primary-color);
+                background: rgba(106, 124, 255, 0.08);
+                transform: translateX(2px);
+            }
+
+            &.is-active {
+                color: var(--primary-color);
+                border-color: rgba(106, 124, 255, 0.18);
+                background-color: rgba(255, 255, 255, 0.5);
+                background-image: linear-gradient(135deg, rgba(106, 124, 255, 0.16), rgba(120, 216, 255, 0.12));
+                box-shadow:
+                    0 14px 28px rgba(76, 101, 144, 0.14),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.42);
+                backdrop-filter: blur(14px) saturate(1.2);
+                -webkit-backdrop-filter: blur(14px) saturate(1.2);
             }
         }
 
         .el-tabs__content {
-            margin: 0 10px;
+            flex: 1;
+            width: auto;
+            min-width: 0;
+            margin: 0;
+            padding: 0;
+            overflow: visible !important;
+            background: transparent;
+            box-shadow: none;
+            color: inherit;
+            font-size: inherit;
+            font-weight: inherit;
+        }
+    }
 
-            padding: 1.5rem;
-            color: #6b778c;
-            font-size: 32px;
-            font-weight: 600;
+    .study-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 24px;
+    }
+
+    .study-card {
+        height: 420px;
+        border: 1px solid rgba(255, 255, 255, 0.58);
+        border-radius: 28px;
+        background: #1f2535;
+        box-shadow:
+            0 24px 54px rgba(51, 71, 112, 0.18),
+            inset 0 1px 0 rgba(255, 255, 255, 0.28);
+        overflow: hidden;
+        opacity: 0;
+        filter: blur(1.2px);
+        transform: translate3d(0, 22px, 0) scale(0.992);
+        transition:
+            opacity 0.84s cubic-bezier(0.16, 1, 0.3, 1),
+            filter 0.84s cubic-bezier(0.16, 1, 0.3, 1),
+            transform 0.84s cubic-bezier(0.16, 1, 0.3, 1),
+            box-shadow 0.28s ease,
+            border-color 0.28s ease;
+        transition-delay: var(--study-reveal-delay, 0ms), var(--study-reveal-delay, 0ms), var(--study-reveal-delay, 0ms), 0ms, 0ms;
+
+        &.is-visible {
+            opacity: 1;
+            filter: blur(0);
+            transform: translate3d(0, 0, 0) scale(1);
         }
 
-        .el-tabs__item {
-            height: 7rem;   //标签栏选项高度
-            font-size: 1.7rem;  //标签栏字体大小
-            color: var(--text-color);
-            transition: color 0.5s ease;
+        &.is-visible:hover {
+            transform: translateY(-6px);
+            border-color: rgba(120, 216, 255, 0.62);
+            box-shadow: 0 34px 70px rgba(51, 71, 112, 0.26);
         }
 
-        .is-active {      // 标签栏选中样式（为了明暗主题重写）
-            color: var(--el-color-primary)
+        .el-card__body {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+        }
+
+        .study-card-body {
+            position: relative;
+            width: 100%;
+            height: 100%;
+
+            &::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                z-index: 1;
+                background:
+                    linear-gradient(180deg, rgba(10, 18, 32, 0.04) 0%, rgba(10, 18, 32, 0.08) 38%, rgba(10, 18, 32, 0.82) 100%),
+                    radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.2), transparent 28%);
+                pointer-events: none;
+            }
+        }
+
+        img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        &:hover img {
+            transform: scale(1.04);
+        }
+
+        .study-info {
+            position: absolute;
+            inset: auto 0 0 0;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 28px;
+            color: #ffffff;
+            background: linear-gradient(180deg, rgba(10, 18, 32, 0), rgba(10, 18, 32, 0.12));
+            backdrop-filter: blur(0.5px);
+            -webkit-backdrop-filter: blur(0.5px);
+        }
+
+        .study-card-tags {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .study-category,
+        .study-date {
+            display: inline-flex;
+            align-items: center;
+            min-height: 26px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .study-category {
+            background: linear-gradient(135deg, var(--primary-color), #7c8cff);
+            color: #ffffff;
+            box-shadow: 0 12px 26px rgba(106, 124, 255, 0.28);
+        }
+
+        .study-date {
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: rgba(10, 18, 32, 0.46);
+            color: rgba(255, 255, 255, 0.86);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+            backdrop-filter: blur(12px) saturate(1.16);
+            -webkit-backdrop-filter: blur(12px) saturate(1.16);
+        }
+
+        .study-title {
+            margin: 16px 0 18px;
+            color: #ffffff;
+            font-size: clamp(26px, 2.8vw, 38px);
+            line-height: 1.15;
+            text-shadow: 0 14px 30px rgba(0, 0, 0, 0.36);
+        }
+
+        .study-meta {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            color: rgba(255, 255, 255, 0.84);
+            font-size: 15px;
+
+            span {
+                position: relative;
+                padding-right: 26px;
+
+                &::after {
+                    content: "";
+                    position: absolute;
+                    right: 0;
+                    top: 50%;
+                    width: 16px;
+                    height: 2px;
+                    border-radius: 999px;
+                    background: rgba(255, 255, 255, 0.76);
+                    transform: translateY(-50%);
+                    transition: width 0.24s ease;
+                }
+            }
+        }
+
+        &:hover .study-meta span::after {
+            width: 22px;
+        }
+    }
+
+    .study-empty {
+        padding: 42px;
+        border: 1px dashed rgba(106, 124, 255, 0.24);
+        border-radius: var(--card-radius);
+        background: var(--glass-panel-bg);
+        color: var(--text-muted-color);
+        text-align: center;
+        box-shadow:
+            var(--card-shadow),
+            inset 0 1px 0 var(--glass-panel-highlight-color);
+        backdrop-filter: var(--glass-panel-filter);
+        -webkit-backdrop-filter: var(--glass-panel-filter);
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .blog-study {
+        .study-tabs {
+            display: flex;
+            flex-direction: column;
+
+            .el-tabs__header {
+                order: -1;
+                flex: 0 0 auto;
+                min-width: 0;
+                width: 100%;
+                height: auto !important;
+                margin-bottom: 22px;
+                padding: 10px;
+            }
+
+            .el-tabs__content {
+                order: 1;
+                width: 100%;
+            }
+
+            .el-tabs__nav-scroll {
+                height: auto !important;
+                overflow-x: auto;
+            }
+
+            .el-tabs__nav-wrap {
+                height: auto !important;
+            }
+
+            .el-tabs__nav {
+                display: flex;
+                flex-direction: row !important;
+                min-width: 100%;
+                gap: 8px;
+                transform: none !important;
+            }
+
+            .el-tabs__item {
+                flex: 1;
+                justify-content: center;
+                padding: 0 12px;
+            }
         }
     }
 }
@@ -103,15 +427,97 @@
 @media screen and (max-width: 768px) {
     .blog-study {
         .blog-study-header {
-            height: 40rem;
+            height: 340px;
 
-            h1 {
-                font-size: 4rem;
+            .study-hero-copy {
+                h1 {
+                    font-size: 46px;
+                }
             }
         }
 
-        .el-tabs{
-            width: 75rem;   //确定内容界面大小
+        .study-shell {
+            width: min(calc(100% - 24px), 540px);
+            padding-top: 30px;
+        }
+
+        .study-section-heading {
+            align-items: flex-start;
+            flex-direction: column;
+
+            p {
+                text-align: left;
+            }
+        }
+
+        .study-list {
+            grid-template-columns: 1fr;
+        }
+
+        .study-card {
+            height: 360px;
+
+            .study-info {
+                inset: auto 0 0 0;
+                padding: 24px;
+            }
+
+            .study-card-tags {
+                gap: 8px;
+            }
+
+            .study-category,
+            .study-date {
+                min-height: 24px;
+                padding: 6px 10px;
+                font-size: 12px;
+            }
+
+            .study-title {
+                margin: 14px 0 16px;
+                font-size: 22px;
+            }
+
+            .study-meta {
+                font-size: 12px;
+            }
+        }
+    }
+}
+
+.dark-mode {
+    .blog-study {
+        .study-tabs {
+            .el-tabs__item {
+                &:hover {
+                    color: var(--accent-color);
+                    background: rgba(142, 160, 255, 0.1);
+                }
+
+                &.is-active {
+                    color: var(--accent-color);
+                    border-color: rgba(142, 160, 255, 0.22);
+                    background-color: rgba(12, 18, 32, 0.34);
+                    background-image: linear-gradient(135deg, rgba(142, 160, 255, 0.2), rgba(125, 215, 255, 0.12));
+                    box-shadow:
+                        0 14px 30px rgba(0, 0, 0, 0.22),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.14);
+                }
+            }
+        }
+
+        .study-section-heading {
+            p {
+                color: var(--text-muted-color);
+            }
+        }
+
+        .study-empty {
+            border-color: rgba(142, 160, 255, 0.18);
+            background: var(--glass-panel-bg);
+            box-shadow:
+                var(--card-shadow),
+                inset 0 1px 0 var(--glass-panel-highlight-color);
         }
     }
 }

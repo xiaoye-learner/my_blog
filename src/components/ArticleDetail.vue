@@ -1,24 +1,41 @@
 <template>
     <div class="blog-article-detail">
-        <div class="blog-article-detail-header">
-            <img :src="article.article_cover" alt="页首图片" style="width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6);"/>
+        <div class="reading-progress" :style="{ width: `${readingProgress}%` }"></div>
+
+        <section class="blog-article-detail-header" data-aos="fade-up">
+            <img :src="coverImage" alt="文章封面" />
+            <div class="hero-shade"></div>
+
             <div class="blog-article-detail-info">
                 <div class="title">
-                    <h2>{{ article.title }}</h2>
-                    <p>编辑时间: {{ article.edited_time?.toLocaleString('zh').replace('T', ' ').split('.')[0] || '暂无编辑时间' }}</p>
+                    <h1>{{ article.title || '加载文章中...' }}</h1>
+                    <p>把内容留给阅读，把节奏留给页面。</p>
+                </div>
+                <div class="article-meta">
+                    <span>{{ categoryName(article.category_id) }}</span>
+                    <span>{{ formattedTime }}</span>
+                    <span>{{ readingMinutes }} min read</span>
                 </div>
             </div>
-        </div>
+        </section>
         
         <div class="blog-article-detail-container">
-            <div class="blog-article-detail-toc">
-                <h3>目录</h3>
-                <div v-html="toc" @click="handleTocClick"></div>
-            </div>
-
-            <el-card class="blog-article-detail-content">
-                <div v-html="content" ref="contentRef"></div>
+            <el-card class="blog-article-detail-content" data-aos="fade-up" data-aos-delay="80">
+                <div class="article-content-inner" v-html="content" ref="contentRef"></div>
             </el-card>
+
+            <aside class="blog-article-detail-toc" data-aos="fade-up" data-aos-delay="140">
+                <div class="toc-card">
+                    <div class="toc-head">
+                        <div>
+                            <span class="eyebrow">ON THIS PAGE</span>
+                            <h3>文章目录</h3>
+                        </div>
+                        <button class="back-button" @click="goBack">返回上一级</button>
+                    </div>
+                    <div class="toc-links" v-html="toc" @click="handleTocClick"></div>
+                </div>
+            </aside>
         </div>
     </div>
 </template>
@@ -26,6 +43,7 @@
 <script>
 import axios from 'axios';
 import md from '@/utils/markdownRender';
+import AOS from 'aos';
 
 export default {
     name: 'ArticleDetail',
@@ -35,6 +53,7 @@ export default {
             article: {},
             content: '',
             toc: '',
+            readingProgress: 0,
 
             observer: null, // IntersectionObserver实例
             headings: [], // 存储所有标题元素
@@ -53,6 +72,12 @@ export default {
                 this.renderMarkdown();
                 this.$nextTick(() => {
                     this.initScrollObserver();
+                    this.updateReadingProgress();
+                    if (AOS.refreshHard) {
+                        AOS.refreshHard();
+                    } else {
+                        AOS.refresh();
+                    }
                 })
             } catch(error) {
                 console.error('获取文章失败', error)
@@ -172,6 +197,31 @@ export default {
             }
         },
 
+        updateReadingProgress() {
+            const scrollTop = window.scrollY || document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+            this.readingProgress = scrollHeight > 0 ? Math.min(100, Math.max(0, (scrollTop / scrollHeight) * 100)) : 0;
+        },
+
+        goBack() {
+            if (window.history.length > 1) {
+                this.$router.back();
+            } else {
+                this.$router.push({ name: 'Home' });
+            }
+        },
+
+        categoryName(id) {
+            const categoryMap = {
+                1: '前端',
+                2: '后端',
+                3: '嵌入式',
+                4: '通信',
+                5: '日语',
+            };
+            return categoryMap[id] || '随笔';
+        },
+
         initScrollObserver() {
             // 获取所有标题元素
             this.headings = Array.from(this.$refs.contentRef.querySelectorAll('h1, h2, h3, h4, h5, h6'));
@@ -211,6 +261,21 @@ export default {
         }
     },
 
+    computed: {
+        coverImage() {
+            return this.article.article_cover || '/p3.jpg';
+        },
+
+        formattedTime() {
+            return this.article.edited_time?.toLocaleString('zh').replace('T', ' ').split('.')[0] || '暂无编辑时间';
+        },
+
+        readingMinutes() {
+            const text = this.article.content_md || '';
+            return Math.max(1, Math.ceil(text.length / 650));
+        },
+    },
+
     watch: {
         '$route.params.id': function(){    // 监听文章id变换，确保文章之间可以切换
             this.fetchArticle()
@@ -221,10 +286,20 @@ export default {
         this.fetchArticle();
     },
 
-    beforeDestroy() {
+    mounted() {
+        window.addEventListener('scroll', this.updateReadingProgress, { passive: true });
+        window.addEventListener('resize', this.updateReadingProgress);
+    },
+
+    beforeUnmount() {
         if (this.observer) {
             this.observer.disconnect();
         }
+        if (this.clickTimer) {
+            clearTimeout(this.clickTimer);
+        }
+        window.removeEventListener('scroll', this.updateReadingProgress);
+        window.removeEventListener('resize', this.updateReadingProgress);
     },
 };
 </script>

@@ -5,9 +5,37 @@
 .blog-study,
 .blog-time-articles,
 .blog-article-detail {
+    position: relative;
+    isolation: isolate;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
+    background: transparent;
+
+    &::before {
+        content: "";
+        position: fixed;
+        inset: -18px;
+        z-index: -2;
+        background: var(--site-bg-image) var(--site-bg-position) / var(--site-bg-size) no-repeat;
+        filter: var(--site-bg-filter);
+        opacity: var(--site-bg-opacity);
+        transform: scale(var(--site-bg-scale));
+        pointer-events: none;
+    }
+
+    &::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        background:
+            radial-gradient(circle at 18% 10%, rgba(255, 255, 255, 0.46), transparent 24%),
+            radial-gradient(circle at 88% 72%, rgba(106, 124, 255, 0.18), transparent 30%),
+            linear-gradient(180deg, rgba(235, 245, 255, 0.52) 0%, rgba(235, 245, 255, 0.38) 44%, rgba(235, 245, 255, 0.74) 100%);
+        pointer-events: none;
+    }
 }
 
 // 顶部头图区域
@@ -84,4 +112,21 @@
 .blog-album .el-tabs .is-active,
 .blog-study .el-tabs .is-active {
     color: var(--el-color-primary);
+}
+
+.dark-mode {
+    .blog-about-me,
+    .blog-album,
+    .blog-friend-links,
+    .blog-study,
+    .blog-time-articles,
+    .blog-article-detail {
+        &::after {
+            background:
+                radial-gradient(circle at 18% 10%, rgba(125, 156, 255, 0.16), transparent 26%),
+                radial-gradient(circle at 88% 72%, rgba(120, 216, 255, 0.12), transparent 32%),
+                linear-gradient(180deg, rgba(8, 13, 26, 0.42) 0%, rgba(8, 13, 26, 0.36) 42%, rgba(8, 13, 26, 0.64) 100%),
+                linear-gradient(90deg, rgba(4, 9, 20, 0.3), rgba(255, 255, 255, 0.04), rgba(4, 9, 20, 0.28));
+        }
+    }
 }

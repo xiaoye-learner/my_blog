@@ -1,6 +1,6 @@
 <template>
     <div class="blog-home">
-        <div class="blog-home-header" ref="homeHeader">   <!-- ref：注册引用属性，可使用this.$refs访问该DOM元素 -->
+        <div class="blog-home-header">
             <div class="slideshow">
                 <img v-for="(img, index) in img_list" :key="index" 
                 :src="img.src" 
@@ -12,9 +12,10 @@
             <div class="infoText">
                 <h1>Hi,</h1>
                 <h1>I'm <span class="name">XiaoYe</span></h1>
+                <p class="hero-subtitle">Code, notes, music and small joys.</p>
             </div>
             
-            <div class="arrow-down" id="arrow-down" @click="scrollToHomeContent" style="cursor: pointer;">
+            <div class="arrow-down" @click="scrollToHomeContent" style="cursor: pointer;">
                 <el-icon :size="35" color="#ffffff"><ArrowDownBold /></el-icon>
             </div>
 
@@ -40,42 +41,102 @@
             </svg>
         </div>
 
-        <div class="home-content" ref="homeContent">
-            <!-- 个人信息 -->
-            <div class="personal-info">
-                <el-card class="personal-card">
+        <div class="home-content" ref="homeContent" :class="{ 'show-all-posts': showAllPosts }">
+            <div class="home-dashboard" :aria-hidden="showAllPosts" :inert="showAllPosts">
+                <section class="dashboard-card intro-card" data-aos="fade-up" data-aos-duration="800">
                     <div class="avatar">
                         <img :src="avatarImg" alt="avatar"></img>
                     </div>
-
-                    <div class="profile">
-                        <h4>XiaoYe</h4>
-                        <p>一个又菜又爱玩的多领域玩家</p>
+                    <div class="intro-copy">
+                        <span class="eyebrow">XiaoYe Lab</span>
+                        <h2>写代码、做实验，也记录一点生活里的小确幸。</h2>
+                        <p>这里会慢慢沉淀前端、Linux、嵌入式、Kotlin 和一些学习杂谈。</p>
                     </div>
-                </el-card>
+                    <div class="intro-links">
+                        <a v-for="i in link_list" :key="i.animate" :href="i.href" target="_blank" :aria-label="i.content">
+                            <el-tooltip effect="light" :content="i.content" placement="top">
+                                <button class="links-button" :style="{ backgroundColor: i.color, cursor: 'pointer' }">
+                                    <img :src="i.src" alt="link"/>
+                                </button>
+                            </el-tooltip>
+                        </a>
+                    </div>
+                </section>
 
-                <el-card class="external-links-card">
-                    <el-row :gutter="5">
-                        <el-col :span="8">
-                            <a v-for= "i in link_list" :key="i.animate" :href = "i.href" target="_blank">
-                                <el-tooltip effect="light" :content="i.content" placement="top">
-                                    <button class="links-button" :style="{ backgroundColor: i.color, cursor: 'pointer' }">
-                                        <img :src="i.src" alt="link"/>
-                                    </button>
-                                </el-tooltip>
-                            </a>
-                        </el-col>
-                    </el-row>
-                </el-card>
+                <section class="dashboard-card stats-card" data-aos="fade-up" data-aos-duration="800">
+                    <span class="eyebrow">SITE STATUS</span>
+                    <div class="stats-grid">
+                        <div>
+                            <strong>{{ articleCount }}</strong>
+                            <span>文章</span>
+                        </div>
+                        <div>
+                            <strong>{{ categoryCount }}</strong>
+                            <span>分类</span>
+                        </div>
+                        <div>
+                            <strong>{{ latestTime }}</strong>
+                            <span>最近更新</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="dashboard-card music-card" data-aos="fade-up" data-aos-duration="800">
+                    <span class="eyebrow">NOW PLAYING</span>
+                    <h3>Lyrical Amber</h3>
+                    <p>安静一点，把页面留给文章和旋律。</p>
+                    <div class="music-wave">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </section>
+
+                <section class="dashboard-card recent-card" data-aos="fade-up" data-aos-duration="800">
+                    <div class="section-heading">
+                        <span class="eyebrow">RECENT POSTS</span>
+                        <button class="view-all-button" @click="showAllArticles">查看全部</button>
+                    </div>
+                    <div class="recent-list">
+                        <article v-for="article in recentArticles" :key="article.id" @click="goToArticle(article.id)" style="cursor: pointer;">
+                            <img :src="article.article_cover" alt="cover_image" v-if="article.article_cover != null"></img>
+                            <div>
+                                <span class="recent-category">{{ categoryName(article.category_id) }}</span>
+                                <h3>{{ article.title }}</h3>
+                                <p>
+                                    <span>{{ formatDate(article.edited_time) }}</span>
+                                    <span>阅读文章</span>
+                                </p>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+
+                <section class="dashboard-card category-card" data-aos="fade-up" data-aos-anchor=".music-card" data-aos-duration="800">
+                    <span class="eyebrow">KNOWLEDGE MAP</span>
+                    <h3>正在整理的知识路径</h3>
+                    <div class="category-tags">
+                        <span v-for="tag in featureTags" :key="tag">{{ tag }}</span>
+                    </div>
+                </section>
             </div>
-            
             <!-- 文章 -->
-            <div class="article-list">
+            <div class="article-list" :aria-hidden="!showAllPosts" :inert="!showAllPosts">
+                <div class="article-section-heading">
+                    <div>
+                        <span class="eyebrow">ALL POSTS</span>
+                        <h2>文章列表</h2>
+                    </div>
+                    <button class="view-all-button ghost" @click="hideAllArticles">返回概览</button>
+                </div>
                 <el-card class="article-card" v-for="(article, index) in displayedArticles.slice().reverse()" 
                 :key="index" 
                 @click="goToArticle(article.id)"
                 style="cursor: pointer;"
-                data-aos="fade-up" data-aos-duration="1000">
+                :data-aos="articleRevealReady ? 'fade-up' : null"
+                :data-aos-delay="articleRevealReady ? index * 80 : null"
+                :data-aos-duration="articleRevealReady ? 700 : null">
                 <!-- 文章封面图片 -->
                 <img :src="article.article_cover" alt="cover_image" v-if="article.article_cover != null"></img>
                 <h4 v-else>暂无封面</h4>
@@ -105,7 +166,6 @@
 <script>
 import axios from 'axios';
 import AOS from 'aos';
-import 'aos/dist/aos.css';
 import avatarImage from '@/icons/avatar.png';
 import homeImage1 from '@/icons/home3.png';
 import homeImage2 from '@/icons/home.png';
@@ -114,15 +174,7 @@ import githubIcon from '@/icons_link/GitHub.svg';
 import bilibiliIcon from '@/icons_link/bilibili.svg';
 import musicIcon from '@/icons_link/music.svg';
 
-AOS.init({
-    offset: 40,  // 组件进入视窗40px就触发
-})
-
 export default {
-    components: {
-        AOS,
-    },
-
     props: {
         initialData: {
             type: Array,
@@ -132,6 +184,9 @@ export default {
     data() {
         return {
             avatarImg: avatarImage,
+            showAllPosts: false,
+            articleRevealReady: false,
+            articleRevealTimer: null,
             
             currentIndex: 0,    //首页图片当前序号
             displayedArticles: this.initialData || [],    // 显示的文章列表
@@ -183,14 +238,14 @@ export default {
                     href: 'https://www.kugou.com/songlist/gcid_3z160l9dbz1vz0b4/',
                     src: musicIcon,
                 },
-                // {
-                //     icon: 'icon-anime',
-                //     animate: 'Anime',
-                //     content: '动漫新番表（外链）',
-                //     color: '#e549ed',
-                //     href: 'https://xf.hmacg.cn/',
-                //     src: '/src/icons_link/anime.png'
-                // }
+                {
+                    icon: 'icon-anime',
+                    animate: 'Anime',
+                    content: '动漫新番表（外链）',
+                    color: '#e549ed',
+                    href: 'https://xf.hmacg.cn/',
+                    src: '/src/icons_link/anime.png'
+                },
             ]
         }
     },
@@ -205,20 +260,68 @@ export default {
             try{
                 const response = await axios.get(`api/articles/?page=${this.current_page}&page_size=${this.page_size}`)
                 this.displayedArticles = response.data;       // 文章列表
+                this.total_articles = response.data.length;
+                if (this.showAllPosts) {
+                    this.prepareArticleReveal(80);
+                }
             }catch(error){
                 console.error(error)
             }
             // console.log(this.displayedArticles)
         },
 
-        // 动态获取文章封面图片路径
-        getCoverImagePath() {
-            return '/articles/article_1/img/cover.jpg'
-        },
-
         // 跳转至文章详情页
         goToArticle(id){
             this.$router.push({ name: 'ArticleDetail', params: { id } });
+        },
+
+        showAllArticles() {
+            this.showAllPosts = true;
+            this.prepareArticleReveal(480);
+        },
+
+        hideAllArticles() {
+            this.resetArticleReveal();
+            this.showAllPosts = false;
+        },
+
+        resetArticleReveal() {
+            if (this.articleRevealTimer) {
+                clearTimeout(this.articleRevealTimer);
+                this.articleRevealTimer = null;
+            }
+            this.articleRevealReady = false;
+        },
+
+        prepareArticleReveal(delay = 480) {
+            this.resetArticleReveal();
+            this.articleRevealTimer = setTimeout(() => {
+                this.articleRevealReady = true;
+                this.articleRevealTimer = null;
+                this.$nextTick(() => {
+                    if (AOS.refreshHard) {
+                        AOS.refreshHard();
+                    } else {
+                        AOS.refresh();
+                    }
+                });
+            }, delay);
+        },
+
+        categoryName(id) {
+            const categoryMap = {
+                1: '前端',
+                2: '后端',
+                3: '嵌入式',
+                4: '通信',
+                5: '日语',
+            };
+            return categoryMap[id] || '随笔';
+        },
+
+        formatDate(date) {
+            if (!date) return '暂无时间';
+            return date.toLocaleString('zh').replace('T', ' ').split('.')[0];
         },
 
         // 更新当前页码
@@ -231,30 +334,11 @@ export default {
         scrollToHomeContent() {
             const targetElement = this.$refs.homeContent;
             if (targetElement) {
-                const targetPosition = targetElement.offsetTop;   // 相对于父元素顶部的距离
-                const startPosition = window.pageYOffset;   // 当前页面滚动条位置
-                const distance = targetPosition - startPosition;
-                const duration = 1000; // 滚动总时间（毫秒）
-                let start = null;   // 在第一次调用step时赋值为当前的时间戳（滚动时间起点）
-
-                window.requestAnimationFrame(step);   //在下次重绘之前调用指定的函数
-
-                function step(timestamp) {    // 每次重绘之前调用，传入当前的时间戳
-                    if (!start) start = timestamp;
-                    const progress = timestamp - start;   //计算当前已经滚动的时间
-                    window.scrollTo(0, easeInOutQuad(progress, startPosition, distance, duration));
-                    if (progress < duration) {
-                        window.requestAnimationFrame(step);   // 滚动未结束，继续调用函数继续滚动
-                    }
-                }
-
-                // 缓动函数
-                function easeInOutQuad(t, b, c, d) {   // 当前时间进度、起始位置、滚动距离、滚动总时间
-                    t /= d / 2;   // 将时间进度 t 规范化为 0 到 2 之间的值
-                    if (t < 1) return c / 2 * t * t + b;   // 未过半，加速
-                    t--;
-                    return -c / 2 * (t * (t - 2) - 1) + b;   //过半，减速
-                }
+                const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                targetElement.scrollIntoView({
+                    behavior: reduceMotion ? 'auto' : 'smooth',
+                    block: 'start',
+                });
             }
         },
     },
@@ -268,12 +352,36 @@ export default {
     },
 
     computed: {
-        // // 页面显示的文章数组
-        // displayedArticles() {
-        //     const start = (this.current_page - 1) * this.page_size   // 当前页面文章起始index
-        //     const end = start + this.page_size
-        //     return this.articles.slice(start, end)   // 截取当前页面显示的文章数组
-        // }
+        sortedArticles() {
+            return [...this.displayedArticles].sort((a, b) => new Date(b.edited_time) - new Date(a.edited_time));
+        },
+
+        latestArticle() {
+            return this.sortedArticles[0] || null;
+        },
+
+        recentArticles() {
+            return this.sortedArticles.slice(0, 3);
+        },
+
+        articleCount() {
+            return this.displayedArticles.length;
+        },
+
+        categoryCount() {
+            return new Set(this.displayedArticles.map(article => article.category_id)).size;
+        },
+
+        latestTime() {
+            if (!this.latestArticle) return '--';
+            return this.formatDate(this.latestArticle.edited_time).split(' ')[0];
+        },
+
+        featureTags() {
+            const baseTags = ['Vue', 'Linux', 'Kotlin', 'Shell', 'Embedded', 'Notes'];
+            const articleTags = this.sortedArticles.map(article => this.categoryName(article.category_id));
+            return [...new Set([...articleTags, ...baseTags])].slice(0, 8);
+        },
     },
 
     created() {
@@ -282,6 +390,10 @@ export default {
         }
         
         setInterval(this.showNextImage, 6000);    // 6s切换一次首页图片
+    },
+
+    beforeUnmount() {
+        this.resetArticleReveal();
     },
 }
 </script>

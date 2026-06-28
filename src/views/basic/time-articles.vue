@@ -1,30 +1,55 @@
 <template>
     <div class="blog-time-articles">
-        <div class="blog-study-header">
-            <img :src="timeBg" alt="页首图片" style="width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6);"/>
-            <h1>归档</h1>
+        <div class="blog-time-articles-header">
+            <img :src="timeBg" alt="页首图片"/>
+            <div class="page-hero-copy">
+                <span class="eyebrow">ARCHIVE</span>
+                <h1>归档</h1>
+                <p>把时间线摊开，按年份和月份重新遇见写过的内容。</p>
+            </div>
         </div>
 
-        <el-card class="time-articles-card">
-            <div class="sorted-years" v-for="(year, index) in years">
-                <div class="year-header">
-                    <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-ea893728=""><path fill="currentColor" d="M512 896a320 320 0 1 0 0-640 320 320 0 0 0 0 640zm0 64a384 384 0 1 1 0-768 384 384 0 0 1 0 768z"></path><path fill="currentColor" d="M512 320a32 32 0 0 1 32 32l-.512 224a32 32 0 1 1-64 0L480 352a32 32 0 0 1 32-32z"></path><path fill="currentColor" d="M448 576a64 64 0 1 0 128 0 64 64 0 1 0-128 0zm96-448v128h-64V128h-96a32 32 0 0 1 0-64h256a32 32 0 1 1 0 64h-96z"></path></svg>
-                    <h3 style="cursor: default;">{{ year.time }}</h3>
+        <main class="archive-shell">
+            <section class="archive-heading" data-aos="fade-up">
+                <div>
+                    <span class="eyebrow">TIMELINE</span>
+                    <h2>文章时间轴</h2>
+                </div>
+                <p>{{ sortedArticles.length }} 篇记录，按最近更新时间排序。</p>
+            </section>
+
+            <section class="archive-board" data-aos="fade-up" data-aos-delay="80">
+                <div class="archive-year" v-for="group in groupedArticles" :key="group.year">
+                    <div class="year-marker">
+                        <span>{{ group.year }}</span>
+                        <small>{{ group.items.length }} posts</small>
+                    </div>
+
+                    <div class="archive-list">
+                        <button
+                            class="archive-item"
+                            v-for="article in group.items"
+                            :key="article.id"
+                            @click="goToArticle(article.id)"
+                        >
+                            <time>
+                                <strong>{{ formatMonthDay(article.edited_time) }}</strong>
+                                <small>{{ formatClock(article.edited_time) }}</small>
+                            </time>
+                            <div>
+                                <span class="archive-category">{{ categoryName(article.category_id) }}</span>
+                                <h3>{{ article.title }}</h3>
+                            </div>
+                            <span class="archive-arrow">阅读</span>
+                        </button>
+                    </div>
                 </div>
 
-                <el-timeline>          <!-- 对应年份时间轴 -->
-                    <el-timeline-item
-                    v-for="(article, index) in sortedArticles.slice().reverse()"
-                    :key="index"
-                    :timestamp="article.edited_time.toLocaleString('zh').split('T')[0]"
-                    >
-                        <a @click="goToArticle(article.id)" style="cursor: pointer;">
-                            <h4>{{ article.title }}</h4>
-                        </a>
-                    </el-timeline-item>
-                </el-timeline>
-            </div>
-        </el-card>
+                <div class="archive-empty" v-if="!sortedArticles.length">
+                    暂时还没有归档内容。
+                </div>
+            </section>
+        </main>
     </div>
 </template>
 
@@ -36,29 +61,66 @@ export default {
     data() {
         return {
             timeBg: headerBgImage,
-            years: [{
-                time: '2025',
-                // color: '#00a6ff',
-            }],
-
             sortedArticles: [],    // 显示的文章列表
-            total_articles: 0,    // 文章总数
         };
+    },
+
+    computed: {
+        groupedArticles() {
+            const groups = new Map();
+
+            this.sortedArticles.forEach(article => {
+                const year = this.formatDate(article.edited_time).slice(0, 4) || '未知';
+                if (!groups.has(year)) groups.set(year, []);
+                groups.get(year).push(article);
+            });
+
+            return [...groups.entries()].map(([year, items]) => ({ year, items }));
+        },
     },
 
     methods: {
         async fetchArticles() {
-            try{
-                const response = await axios.get(`api/articles/?page=${this.current_page}&page_size=${this.page_size}`)
-                this.sortedArticles = response.data;       // 文章列表
-            }catch(error){
+            try {
+                const response = await axios.get('api/articles/?page=1&page_size=50')
+                this.sortedArticles = [...response.data].sort((a, b) => new Date(b.edited_time) - new Date(a.edited_time));
+            } catch(error) {
                 console.error(error)
             }
         },
 
         // 跳转至文章详情页
-        goToArticle(id){
+        goToArticle(id) {
             this.$router.push({ name: 'ArticleDetail', params: { id } });
+        },
+
+        categoryName(id) {
+            const categoryMap = {
+                1: '前端',
+                2: '后端',
+                3: '嵌入式',
+                4: '通信',
+                5: '日语',
+            };
+            return categoryMap[id] || '随笔';
+        },
+
+        formatDate(date) {
+            if (!date) return '';
+            return date.toLocaleString('zh').replace('T', ' ').split('.')[0];
+        },
+
+        formatMonthDay(date) {
+            const formatted = this.formatDate(date);
+            const [datePart] = formatted.split(' ');
+            const [, month, day] = datePart.split('-');
+            return month && day ? `${month}.${day}` : '--.--';
+        },
+
+        formatClock(date) {
+            const formatted = this.formatDate(date);
+            const time = formatted.split(' ')[1] || '';
+            return time ? time.slice(0, 5) : '--:--';
         },
     },
 
