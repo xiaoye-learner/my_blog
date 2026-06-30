@@ -26,6 +26,12 @@
     --site-bg-filter: blur(6px) saturate(1.08);
     --site-bg-opacity: 0.72;
     --site-bg-scale: 1.04;
+    --page-hero-image-filter: brightness(0.88) saturate(1.06);
+    --page-hero-overlay-bg:
+        radial-gradient(circle at 20% 12%, rgba(255, 255, 255, 0.34), transparent 28%),
+        radial-gradient(circle at 84% 72%, rgba(106, 124, 255, 0.12), transparent 34%),
+        linear-gradient(180deg, rgba(235, 245, 255, 0.18) 0%, rgba(82, 101, 126, 0.24) 48%, rgba(18, 31, 48, 0.28) 100%);
+    --page-hero-overlay-filter: blur(1.4px) saturate(1.08);
     --primary-color: #6a7cff;
     --accent-color: #78d8ff;
     --pink-accent-color: #fe8599;
@@ -76,6 +82,12 @@
     --glass-nav-shadow: 0 12px 38px rgba(0, 0, 0, 0.28);
     --site-bg-filter: blur(2px) saturate(0.92) brightness(0.58);
     --site-bg-opacity: 0.76;
+    --page-hero-image-filter: brightness(0.58) saturate(1.02);
+    --page-hero-overlay-bg:
+        radial-gradient(circle at 18% 12%, rgba(125, 156, 255, 0.12), transparent 30%),
+        radial-gradient(circle at 84% 72%, rgba(120, 216, 255, 0.08), transparent 34%),
+        linear-gradient(180deg, rgba(8, 13, 26, 0.18) 0%, rgba(8, 13, 26, 0.34) 48%, rgba(8, 13, 26, 0.5) 100%);
+    --page-hero-overlay-filter: blur(1.8px) saturate(1.02);
     --primary-color: #8ea0ff;
     --accent-color: #7dd7ff;
     --card-shadow: 0 24px 70px rgba(0, 0, 0, 0.35);

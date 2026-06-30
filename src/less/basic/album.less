@@ -385,6 +385,22 @@
             line-height: 0;
         }
 
+        .photo-preview-trigger {
+            width: 100%;
+            display: block;
+            padding: 0;
+            border: 0;
+            color: inherit;
+            background: transparent;
+            line-height: 0;
+            cursor: zoom-in;
+
+            &:focus-visible {
+                outline: 2px solid rgba(120, 216, 255, 0.86);
+                outline-offset: 3px;
+            }
+        }
+
         img,
         .el-image {
             width: 100%;
@@ -393,6 +409,7 @@
             background:
                 linear-gradient(135deg, rgba(120, 216, 255, 0.14), rgba(106, 124, 255, 0.08)),
                 rgba(255, 255, 255, 0.16);
+            cursor: zoom-in;
         }
 
         .el-image__inner {
@@ -432,6 +449,50 @@
             border-color: rgba(255, 255, 255, 0.14);
             background: rgba(12, 20, 36, 0.28);
         }
+    }
+}
+
+.viewer-fade-enter-active {
+    animation: album-viewer-fade-in 0.28s cubic-bezier(0.16, 1, 0.3, 1) both !important;
+}
+
+.viewer-fade-leave-active {
+    animation: album-viewer-fade-out 0.3s cubic-bezier(0.4, 0, 0.2, 1) both !important;
+    pointer-events: none;
+}
+
+.album-preview-closing {
+    .el-image-viewer__wrapper {
+        animation: album-viewer-fade-out 0.3s cubic-bezier(0.4, 0, 0.2, 1) both !important;
+        pointer-events: none;
+    }
+}
+
+@keyframes album-viewer-fade-in {
+    0% {
+        opacity: 0;
+        filter: blur(2px);
+        transform: translate3d(0, -12px, 0) scale(0.99);
+    }
+
+    100% {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateZ(0) scale(1);
+    }
+}
+
+@keyframes album-viewer-fade-out {
+    0% {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateZ(0) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        filter: blur(2px);
+        transform: translate3d(0, 10px, 0) scale(0.985);
     }
 }
 

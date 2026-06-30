@@ -4,11 +4,14 @@
         recalc = function () {
             var clientWidth = docEl.clientWidth;
             if (!clientWidth) return;
-            
-            // 设计稿大小为1659px，1rem = 20px, max=82rem
-            docEl.style.fontSize =20 * (clientWidth / 1659) + 'px';
+
+            var scaledSize = clientWidth / 90;
+            var fontSize = Math.max(12, Math.min(18, scaledSize));
+            docEl.style.fontSize = fontSize + 'px';
         };
+
     if (!doc.addEventListener) return;
     win.addEventListener(resizeEvt, recalc, false);
     doc.addEventListener('DOMContentLoaded', recalc, false);
+    recalc();
 })(document, window);

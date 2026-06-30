@@ -27,8 +27,8 @@
             position: absolute;
             inset: 0;
             background:
-                radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0.12), transparent 30%),
-                linear-gradient(180deg, rgba(10, 18, 32, 0.18), rgba(10, 18, 32, 0.58));
+                linear-gradient(180deg, rgba(10, 18, 32, 0.12), rgba(10, 18, 32, 0.58)),
+                linear-gradient(90deg, rgba(10, 18, 32, 0.34), transparent 44%, rgba(10, 18, 32, 0.2));
         }
 
         .page-hero-copy {
@@ -49,6 +49,7 @@
             p {
                 margin: 0;
                 color: rgba(255, 255, 255, 0.84);
+                font-size: 16px;
             }
         }
     }
@@ -94,6 +95,7 @@
         p {
             margin: 0;
             color: var(--text-muted-color);
+            font-size: 16px;
         }
     }
 
@@ -165,6 +167,7 @@
         p {
             margin: 0;
             color: var(--text-muted-color);
+            font-size: 15px;
         }
     }
 
@@ -176,84 +179,91 @@
 
     .friend-card {
         position: relative;
-        min-height: 260px;
+        display: grid;
+        grid-template-rows: auto 1fr;
+        gap: 18px;
+        min-height: 178px;
+        padding: 22px;
         overflow: hidden;
-        border: 1px solid rgba(255, 255, 255, 0.42);
-        border-radius: 26px;
-        color: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.38);
+        border-radius: 22px;
+        color: var(--text-color);
         text-decoration: none;
-        box-shadow: 0 22px 54px rgba(51, 71, 112, 0.18);
-        isolation: isolate;
-        transition: transform 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease;
+        background:
+            linear-gradient(135deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.16)),
+            rgba(255, 255, 255, 0.12);
+        box-shadow: 0 18px 42px rgba(51, 71, 112, 0.12);
+        transition: transform 0.26s ease, border-color 0.26s ease, box-shadow 0.26s ease, background 0.26s ease;
+
+        &::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            background: linear-gradient(135deg, rgba(120, 216, 255, 0.18), rgba(106, 124, 255, 0.08));
+            transition: opacity 0.26s ease;
+            pointer-events: none;
+        }
 
         &:hover {
-            transform: translateY(-6px);
-            border-color: rgba(120, 216, 255, 0.58);
-            box-shadow: var(--card-hover-shadow);
+            transform: translateY(-4px);
+            border-color: rgba(120, 216, 255, 0.68);
+            box-shadow: 0 24px 58px rgba(63, 83, 112, 0.2);
 
-            .friend-bg {
-                transform: scale(1.06);
+            &::before {
+                opacity: 1;
             }
-        }
-    }
 
-    .friend-bg {
-        position: absolute;
-        inset: 0;
-        z-index: -2;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        filter: brightness(0.82) saturate(1.08);
-        transition: transform 0.55s ease;
-    }
+            .friend-avatar {
+                transform: scale(1.04);
+                box-shadow: 0 0 0 5px rgba(120, 216, 255, 0.16), 0 14px 28px rgba(63, 83, 112, 0.18);
+            }
 
-    .friend-overlay {
-        position: absolute;
-        inset: 0;
-        z-index: -1;
-        background:
-            radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.18), transparent 26%),
-            linear-gradient(180deg, rgba(10, 18, 32, 0.08), rgba(10, 18, 32, 0.76));
-    }
-
-    .friend-avatar {
-        width: 72px;
-        height: 72px;
-        margin: 24px;
-        border: 3px solid rgba(255, 255, 255, 0.72);
-        border-radius: 22px;
-        object-fit: cover;
-        box-shadow: 0 16px 34px rgba(0, 0, 0, 0.22);
-    }
-
-    .friend-info {
-        position: absolute;
-        left: 24px;
-        right: 24px;
-        bottom: 22px;
-
-        h3 {
-            margin: 0 0 8px;
-            color: #ffffff;
-            font-size: 24px;
+            h3 {
+                color: var(--primary-color);
+            }
         }
 
         p {
-            margin: 0 0 14px;
-            color: rgba(255, 255, 255, 0.78);
+            position: relative;
+            z-index: 1;
+            margin: 0;
+            color: var(--text-muted-color);
+            font-size: 15px;
+            line-height: 1.7;
         }
+    }
 
-        span {
-            display: inline-flex;
-            padding: 5px 10px;
-            border-radius: 999px;
-            color: #ffffff;
-            background: rgba(120, 216, 255, 0.24);
-            font-size: 12px;
-            font-weight: 900;
-            backdrop-filter: blur(12px);
+    .friend-card-top {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        min-width: 0;
+
+        h3 {
+            min-width: 0;
+            margin: 0;
+            color: var(--text-color);
+            font-size: 22px;
+            line-height: 1.2;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            transition: color 0.26s ease;
         }
+    }
+
+    .friend-avatar {
+        width: 68px;
+        height: 68px;
+        flex: 0 0 68px;
+        border: 3px solid rgba(255, 255, 255, 0.72);
+        border-radius: 50%;
+        object-fit: cover;
+        box-shadow: 0 12px 28px rgba(63, 83, 112, 0.16);
+        transition: transform 0.26s ease, box-shadow 0.26s ease;
     }
 
     .friend-empty {
@@ -292,8 +302,11 @@
         }
 
         .friend-card {
-            border-color: rgba(255, 255, 255, 0.16);
-            box-shadow: 0 22px 54px rgba(0, 0, 0, 0.28);
+            border-color: rgba(255, 255, 255, 0.14);
+            background:
+                linear-gradient(135deg, rgba(36, 44, 63, 0.48), rgba(24, 30, 45, 0.24)),
+                rgba(12, 20, 36, 0.22);
+            box-shadow: 0 18px 42px rgba(0, 0, 0, 0.22);
         }
     }
 }
@@ -316,6 +329,22 @@
 
 @media screen and (max-width: 560px) {
     .blog-friend-links {
+        .blog-friend-links-header {
+            min-height: 230px;
+
+            .page-hero-copy {
+                width: min(100% - 28px, 540px);
+
+                h1 {
+                    font-size: clamp(34px, 10vw, 46px);
+                }
+
+                p {
+                    font-size: 14px;
+                }
+            }
+        }
+
         .friend-shell {
             width: min(calc(100% - 24px), 540px);
             padding-top: 32px;
@@ -324,15 +353,67 @@
         .section-heading {
             align-items: flex-start;
             flex-direction: column;
+            gap: 10px;
         }
 
         .friend-grid {
             grid-template-columns: 1fr;
         }
 
+        .site-card,
+        .friends-section {
+            border-radius: 24px;
+        }
+
         .site-meta div {
             grid-template-columns: 1fr;
             gap: 4px;
+        }
+
+        .friend-card {
+            min-height: 154px;
+            padding: 20px;
+        }
+    }
+}
+
+.blog-friend-links {
+    .site-meta div,
+    .friend-card {
+        position: relative;
+        overflow: hidden;
+        border-color: rgba(255, 255, 255, 0.58);
+        background:
+            radial-gradient(circle at 16% 0%, rgba(255, 255, 255, 0.56), transparent 30%),
+            linear-gradient(135deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.2)),
+            rgba(255, 255, 255, 0.18);
+        box-shadow:
+            0 18px 48px rgba(63, 83, 112, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.64),
+            inset 0 -1px 0 rgba(255, 255, 255, 0.16);
+        backdrop-filter: blur(24px) saturate(1.28);
+        -webkit-backdrop-filter: blur(24px) saturate(1.28);
+    }
+
+    .friend-card:hover {
+        box-shadow:
+            0 26px 64px rgba(63, 83, 112, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    }
+}
+
+.dark-mode {
+    .blog-friend-links {
+        .site-meta div,
+        .friend-card {
+            border-color: rgba(148, 183, 255, 0.18);
+            background:
+                radial-gradient(circle at 16% 0%, rgba(125, 215, 255, 0.1), transparent 32%),
+                linear-gradient(135deg, rgba(36, 44, 63, 0.62), rgba(16, 24, 40, 0.36)),
+                rgba(12, 20, 36, 0.32);
+            box-shadow:
+                0 18px 48px rgba(0, 0, 0, 0.24),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
     }
 }

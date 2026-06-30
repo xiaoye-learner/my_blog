@@ -22,6 +22,7 @@ import './less/basic/friend-links.less'
 import './less/basic/about-me.less'
 import './less/start-loading.less'
 import './less/ArticleDetail.less'
+import './less/page-hero.less'
 import './assets/rem'
 
 AOS.init({

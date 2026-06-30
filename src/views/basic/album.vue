@@ -73,14 +73,21 @@
                     <div class="masonry-container" v-if="activePhotos.length">
                         <div class="masonry-item" v-for="(item, index) in activePhotos" :key="index">
                             <el-card class="photo_list-card" :body-style="{ padding: '0px' }">
-                                <el-image
-                                    :src="item.image"
-                                    :alt="activeAlbumInfo.title"
-                                    fit="cover"
-                                    v-loading="item.loading"
-                                    @load="item.loading = false"
-                                    @error="item.loading = false"
-                                ></el-image>
+                                <button
+                                    class="photo-preview-trigger"
+                                    type="button"
+                                    :aria-label="`${activeAlbumInfo.title} ${index + 1}`"
+                                    @click="openPhotoPreview(index)"
+                                >
+                                    <el-image
+                                        :src="item.image"
+                                        :alt="activeAlbumInfo.title"
+                                        fit="cover"
+                                        v-loading="item.loading"
+                                        @load="item.loading = false"
+                                        @error="item.loading = false"
+                                    ></el-image>
+                                </button>
                             </el-card>
                         </div>
                     </div>
@@ -91,6 +98,16 @@
                 </section>
             </transition>
         </main>
+
+        <el-image-viewer
+            v-if="previewVisible"
+            :url-list="activePhotoUrls"
+            :initial-index="previewIndex"
+            :hide-on-click-modal="true"
+            :teleported="true"
+            :show-progress="true"
+            @close="closePhotoPreview"
+        ></el-image-viewer>
     </div>
 </template>
 
@@ -103,6 +120,10 @@ export default {
             albumBg: headerBgImage,
             activeAlbum: '',
             searchKeyword: '',
+            previewVisible: false,
+            previewClosing: false,
+            previewIndex: 0,
+            previewCloseTimer: null,
             photo_life_list: [
                 { image: 'https://gitee.com/xiaoye2301/blog_images/raw/master/%E6%8F%92%E7%94%BB1.jpg', loading: true },
                 { image: 'https://gitee.com/xiaoye2301/blog_images/raw/master/_20250523171604.jpg', loading: true },
@@ -183,6 +204,10 @@ export default {
         activePhotos() {
             return this.activeAlbumInfo?.photos || [];
         },
+
+        activePhotoUrls() {
+            return this.activePhotos.map(item => item.image);
+        },
     },
 
     methods: {
@@ -212,6 +237,31 @@ export default {
         backToAlbums() {
             this.activeAlbum = '';
         },
+
+        openPhotoPreview(index) {
+            if (this.previewCloseTimer) {
+                window.clearTimeout(this.previewCloseTimer);
+            }
+
+            document.body.classList.remove('album-preview-closing');
+            this.previewClosing = false;
+            this.previewIndex = index;
+            this.previewVisible = true;
+        },
+
+        closePhotoPreview() {
+            if (this.previewClosing) return;
+
+            this.previewClosing = true;
+            document.body.classList.add('album-preview-closing');
+
+            this.previewCloseTimer = window.setTimeout(() => {
+                this.previewVisible = false;
+                this.previewClosing = false;
+                this.previewCloseTimer = null;
+                document.body.classList.remove('album-preview-closing');
+            }, 380);
+        },
     },
 
     mounted() {
@@ -219,6 +269,14 @@ export default {
         [...this.photo_anime_list, ...this.photo_life_list].forEach(item => {
             this.loadImage(item);
         })
-    }
+    },
+
+    beforeUnmount() {
+        if (this.previewCloseTimer) {
+            window.clearTimeout(this.previewCloseTimer);
+        }
+
+        document.body.classList.remove('album-preview-closing');
+    },
 }
 </script>

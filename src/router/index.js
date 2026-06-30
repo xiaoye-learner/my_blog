@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/basic/home.vue'
-import Study from '../views/basic/study.vue'
-import TimeArticles from '../views/basic/time-articles.vue'
-import Album from '../views/basic/album.vue'
-import FriendLinks from '../views/basic/friend-links.vue'
-import AboutMe from '../views/basic/about-me.vue'
-import ArticleDetail from '../components/ArticleDetail.vue'
+const Home = () => import('../views/basic/home.vue')
+const Study = () => import('../views/basic/study.vue')
+const TimeArticles = () => import('../views/basic/time-articles.vue')
+const Album = () => import('../views/basic/album.vue')
+const FriendLinks = () => import('../views/basic/friend-links.vue')
+const AboutMe = () => import('../views/basic/about-me.vue')
+const ArticleDetail = () => import('../components/ArticleDetail.vue')
 
 const routes = [
     {

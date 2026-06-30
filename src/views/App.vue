@@ -96,21 +96,144 @@
             </router-view>
         </main>
         
-        <div class="music" :style="{transform: musicTransform}">
-            <div :class="{ hide: isMusicHidden }">
-                <aplayer ref="aplayer"
-                :music="firstMusic(music_list)" 
-                :list="music_list"
-                :listFolded="true"
-                :mini="false"
-                loop="all"/>
+        <section
+            class="music-player"
+            :class="{ 'is-collapsed': isMusicHidden, 'is-tucked': isMusicTucked, 'is-closing': isMusicClosing, 'is-playing': isMusicPlaying, 'is-list-open': isMusicListOpen }"
+            :style="musicPlayerStyle"
+            aria-label="音乐播放器"
+        >
+            <audio
+                ref="audioPlayer"
+                :src="currentMusic.src"
+                preload="metadata"
+                @loadedmetadata="handleAudioLoaded"
+                @timeupdate="handleAudioTimeUpdate"
+                @ended="playNextMusic(true)"
+                @play="isMusicPlaying = true"
+                @pause="isMusicPlaying = false"
+            ></audio>
+
+            <div class="music-shell">
+                <button class="music-cover-button" type="button" @click="toggleMusicHidden" :aria-label="isMusicHidden ? '展开播放器' : '收起播放器'">
+                    <img :src="currentMusic.pic" :alt="currentMusic.title">
+                    <span class="music-cover-ring"></span>
+                </button>
+
+                <div class="music-main">
+                    <button class="music-title-button" type="button" @click="toggleMusicHidden">
+                        <span class="music-kicker">Now Playing</span>
+                        <strong>{{ currentMusic.title }}</strong>
+                        <small>{{ currentMusic.artist || 'XiaoYe Lab Radio' }}</small>
+                    </button>
+
+                    <transition name="music-expand">
+                        <div class="music-expanded" v-show="isMusicExpandedVisible">
+                            <div class="music-progress-row">
+                                <span>{{ formattedCurrentTime }}</span>
+                                <input
+                                    class="music-range music-progress"
+                                    type="range"
+                                    min="0"
+                                    max="100"
+                                    step="0.1"
+                                    :value="musicProgress"
+                                    aria-label="播放进度"
+                                    @input="seekMusic"
+                                >
+                                <span>{{ formattedDuration }}</span>
+                            </div>
+
+                            <div class="music-controls">
+                                <button class="music-icon-button" type="button" aria-label="上一首" @click="playPrevMusic">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M11 6 5 12l6 6V6Z"></path>
+                                        <path d="M19 6 13 12l6 6V6Z"></path>
+                                    </svg>
+                                </button>
+
+                                <button class="music-play-button" type="button" :aria-label="isMusicPlaying ? '暂停' : '播放'" @click="toggleMusicPlay">
+                                    <svg v-if="!isMusicPlaying" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M8 5v14l11-7L8 5Z"></path>
+                                    </svg>
+                                    <svg v-else viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M7 5h4v14H7V5Z"></path>
+                                        <path d="M13 5h4v14h-4V5Z"></path>
+                                    </svg>
+                                </button>
+
+                                <button class="music-icon-button" type="button" aria-label="下一首" @click="playNextMusic">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="m13 6 6 6-6 6V6Z"></path>
+                                        <path d="m5 6 6 6-6 6V6Z"></path>
+                                    </svg>
+                                </button>
+
+                                <div class="music-volume">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M4 10v4h4l5 4V6L8 10H4Z"></path>
+                                        <path d="M16 9c1 .9 1.5 1.9 1.5 3s-.5 2.1-1.5 3"></path>
+                                    </svg>
+                                    <input
+                                        class="music-range music-volume-range"
+                                        type="range"
+                                        min="0"
+                                        max="1"
+                                        step="0.01"
+                                        :value="musicVolume"
+                                        aria-label="音量"
+                                        @input="changeMusicVolume"
+                                    >
+                                </div>
+
+                                <button class="music-icon-button" type="button" :class="{ active: isMusicListOpen }" aria-label="播放列表" @click="toggleMusicList">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M5 7h14"></path>
+                                        <path d="M5 12h14"></path>
+                                        <path d="M5 17h9"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </transition>
+                </div>
+
+                <button class="music-quick-play" type="button" :aria-label="isMusicPlaying ? '暂停' : '播放'" @click="toggleMusicPlay">
+                    <svg v-if="!isMusicPlaying" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M8 5v14l11-7L8 5Z"></path>
+                    </svg>
+                    <svg v-else viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M7 5h4v14H7V5Z"></path>
+                        <path d="M13 5h4v14h-4V5Z"></path>
+                    </svg>
+                </button>
+
+                <button class="music-toggle" type="button" @click="toggleMusicHidden" :aria-label="isMusicHidden ? '展开播放器' : '收起播放器'">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path v-if="isMusicHidden" d="m9 6 6 6-6 6"></path>
+                        <path v-else d="m15 6-6 6 6 6"></path>
+                    </svg>
+                </button>
             </div>
-            
-            <div class="arrow" style="cursor: pointer;" @click="toggleMusicHidden()">
-                <el-icon v-if="isMusicHidden === true" :size="35"><CaretRight /></el-icon>
-                <el-icon v-else :size="35"><CaretLeft /></el-icon>
-            </div>
-        </div>
+
+            <transition name="music-list">
+                <div class="music-list-panel" v-if="!isMusicHidden && isMusicListOpen">
+                    <button
+                        v-for="(music, index) in music_list"
+                        :key="music.src"
+                        class="music-list-item"
+                        :class="{ active: index === currentMusicIndex }"
+                        type="button"
+                        @click="selectMusic(index)"
+                    >
+                        <img :src="music.pic" :alt="music.title">
+                        <span>
+                            <strong>{{ music.title }}</strong>
+                            <small>{{ music.artist || 'XiaoYe Lab Radio' }}</small>
+                        </span>
+                    </button>
+                </div>
+            </transition>
+        </section>
 
         <div class="footer">
             <p>By XiaoYe | ©2025</p>    <!-- alt+169 -->
@@ -122,19 +245,21 @@
 </template>
 
 <script>
-import aplayer from 'vue3-aplayer'
-import { CaretLeft, CaretRight } from '@element-plus/icons-vue'  //element-plus图标库
 import startLoading from './start-loading.vue'
 import themeSwitch from './theme-switch.vue'
 import AmbientBackground from '@/components/AmbientBackground.vue'
 import axios from 'axios'
 import AOS from 'aos'
+import hidamariAudio from '@/music/Falcom Sound Team jdk - 陽だまりにて和む猫 (阳光下安静的猫).mp3'
+import hidamariCover from '@/music/陽だまりにて和む猫.png'
+import nagomiAudio from '@/music/渡辺善太郎 - なごみ風.mp3'
+import nagomiCover from '@/music/なごみ風.png'
+import lyricalAmberAudio from '@/music/Falcom Sound Team jdk - Lyrical Amber.mp3'
+import lyricalAmberCover from '@/music/Lyrical_Amber.png'
 
 export default {
     name: 'App',
     components: {
-        aplayer,   // 音乐播放器组件
-        CaretLeft, CaretRight,  //音乐播放器显示与隐藏按钮
         startLoading,  //启动动画组件
         themeSwitch,
         AmbientBackground,
@@ -163,27 +288,38 @@ export default {
             isHeaderTop: true,    // 靠近顶部
 
             isMusicHidden: true,  // 音乐播放器显示与隐藏状态
-            musicWeight: 300,  // 音乐播放器宽度
+            isMusicTucked: true,
+            isMusicClosing: false,
+            isMusicExpandedVisible: false,
+            isMusicPlaying: false,
+            isMusicListOpen: false,
+            musicMotionTimer: null,
+            musicMotionEndTimer: null,
+            musicTuckTimer: null,
+            currentMusicIndex: 0,
+            musicCurrentTime: 0,
+            musicDuration: 0,
+            musicVolume: 0.72,
 
             // 音乐列表
             music_list: [
                 {
-                    title: ' 陽だまりにて和む猫 (阳光下安静的猫)',
-                    artist: ' ',
-                    src: 'src/music/Falcom Sound Team jdk - 陽だまりにて和む猫 (阳光下安静的猫).mp3',
-                    pic: 'src/music/陽だまりにて和む猫.png',     //注：pic文件名不支持空格
+                    title: '陽だまりにて和む猫',
+                    artist: 'Falcom Sound Team jdk',
+                    src: hidamariAudio,
+                    pic: hidamariCover,
                 },
                 {
                     title: 'なごみ風',
-                    artist: ' ',
-                    src: 'src/music/渡辺善太郎 - なごみ風.mp3',
-                    pic: 'src/music/なごみ風.png',    
+                    artist: '渡辺善太郎',
+                    src: nagomiAudio,
+                    pic: nagomiCover,
                 },
                 {
                     title: 'Lyrical Amber',
-                    artist: ' ',
-                    src: 'src/music/Falcom Sound Team jdk - Lyrical Amber.mp3',
-                    pic: 'src/music/Lyrical_Amber.png',
+                    artist: 'Falcom Sound Team jdk',
+                    src: lyricalAmberAudio,
+                    pic: lyricalAmberCover,
                 },
             ]
         }
@@ -196,16 +332,45 @@ export default {
                 ? `translateY(-${this.headerHeight}px)` 
                 : 'translateY(0)'
         },
-        //音乐播放器显示与隐藏
-        musicTransform() {
-            return this.isMusicHidden
-                ? `translateX(-${this.musicWeight}px)`
-                : 'translateX(0)' 
-        },
-
         appStyle() {
             return {
                 '--nav-progress-offset': this.isHeaderHidden ? '0px' : '64px',
+            };
+        },
+
+        currentMusic() {
+            return this.music_list[this.currentMusicIndex] || this.music_list[0] || {};
+        },
+
+        musicProgress() {
+            if (!this.musicDuration) return 0;
+            return Math.min(100, (this.musicCurrentTime / this.musicDuration) * 100);
+        },
+
+        formattedCurrentTime() {
+            return this.formatMusicTime(this.musicCurrentTime);
+        },
+
+        formattedDuration() {
+            return this.formatMusicTime(this.musicDuration);
+        },
+
+        musicPlayerStyle() {
+            const collapsed = this.isMusicHidden;
+            const tucked = this.isMusicTucked;
+            const closing = this.isMusicClosing;
+            const width = closing || !collapsed
+                ? 'min(390px, calc(100vw - 44px))'
+                : 'min(318px, calc(100vw - 44px))';
+            const left = closing
+                ? (tucked ? '-282px' : '22px')
+                : (collapsed ? '-210px' : '22px');
+
+            return {
+                '--music-progress': `${this.musicProgress}%`,
+                '--music-volume': `${this.musicVolume * 100}%`,
+                width,
+                left,
             };
         },
 
@@ -214,11 +379,7 @@ export default {
     methods: {
         // 资源预加载控制中心
         async preloadResources() {
-            const modules = import.meta.glob('/src/icons/*.png', { eager: true, import: 'default' });
-            const imageSources = Object.values(modules);      // 所有图片的正确打包路径
-
-            // 追踪图片加载与接口请求
-            const totalTasks = imageSources.length + 1;
+            const totalTasks = 1;
             let completedTasks = 0;
 
             // 更新进度的辅助函数
@@ -236,17 +397,6 @@ export default {
                     }, 200); 
                 }
             };
-
-            // 开始加载图片
-            if (imageSources.length === 0) updateProgress(); // 防御代码
-            imageSources.forEach(src => {
-                const img = new Image();
-                const fileName = src.split('/').pop();
-
-                img.onload = () => updateProgress(`图片: ${fileName}`);
-                img.onerror = () => updateProgress(`图片(失败): ${fileName}`);
-                img.src = src;
-            });
 
             // 请求后端数据
             const baseUrl = window.location.origin;
@@ -436,14 +586,181 @@ export default {
             this.lastScrollTop = currentScrollTop   
         },
 
-        // 取音乐列表首个音乐
-        firstMusic(music_list) {
-            return music_list[0]
+        toggleMusicHidden() {
+            if (this.musicMotionTimer) {
+                clearTimeout(this.musicMotionTimer)
+                this.musicMotionTimer = null
+            }
+            if (this.musicMotionEndTimer) {
+                clearTimeout(this.musicMotionEndTimer)
+                this.musicMotionEndTimer = null
+            }
+            if (this.musicTuckTimer) {
+                clearTimeout(this.musicTuckTimer)
+                this.musicTuckTimer = null
+            }
+
+            if (this.isMusicHidden) {
+                this.isMusicHidden = false
+                this.isMusicTucked = false
+                this.isMusicClosing = false
+                this.isMusicExpandedVisible = true
+                return
+            }
+
+            this.closeMusicPlayer()
         },
 
-        //音乐播放器隐藏与显示
-        toggleMusicHidden() {
-            this.isMusicHidden = !this.isMusicHidden
+        closeMusicPlayer() {
+            if (this.musicMotionTimer) {
+                clearTimeout(this.musicMotionTimer)
+                this.musicMotionTimer = null
+            }
+            if (this.musicMotionEndTimer) {
+                clearTimeout(this.musicMotionEndTimer)
+                this.musicMotionEndTimer = null
+            }
+            if (this.musicTuckTimer) {
+                clearTimeout(this.musicTuckTimer)
+                this.musicTuckTimer = null
+            }
+
+            this.isMusicListOpen = false
+            this.isMusicClosing = true
+            this.isMusicTucked = false
+            this.isMusicExpandedVisible = false
+
+            this.musicMotionTimer = setTimeout(() => {
+                this.isMusicHidden = true
+                this.musicMotionTimer = null
+            }, 320)
+
+            this.musicTuckTimer = setTimeout(() => {
+                this.isMusicTucked = true
+                this.musicTuckTimer = null
+            }, 1000)
+
+            this.musicMotionEndTimer = setTimeout(() => {
+                this.isMusicClosing = false
+                this.musicMotionEndTimer = null
+            }, 1660)
+        },
+
+        openMusicPlayer() {
+            if (this.musicMotionTimer) {
+                clearTimeout(this.musicMotionTimer)
+                this.musicMotionTimer = null
+            }
+            if (this.musicMotionEndTimer) {
+                clearTimeout(this.musicMotionEndTimer)
+                this.musicMotionEndTimer = null
+            }
+            if (this.musicTuckTimer) {
+                clearTimeout(this.musicTuckTimer)
+                this.musicTuckTimer = null
+            }
+
+            this.isMusicClosing = false
+            this.isMusicTucked = false
+            this.isMusicHidden = false
+            this.isMusicExpandedVisible = true
+            this.musicMotionTimer = null
+        },
+
+        toggleMusicList() {
+            this.isMusicListOpen = !this.isMusicListOpen
+        },
+
+        toggleMusicPlay() {
+            const audio = this.$refs.audioPlayer
+            if (!audio) return
+
+            if (this.isMusicPlaying) {
+                audio.pause()
+                return
+            }
+
+            audio.play().catch(error => {
+                console.error('音乐播放失败', error)
+                this.isMusicPlaying = false
+            })
+        },
+
+        selectMusic(index) {
+            this.switchMusic(index, true)
+            this.isMusicHidden = false
+            this.isMusicListOpen = false
+        },
+
+        playPrevMusic() {
+            const nextIndex = (this.currentMusicIndex - 1 + this.music_list.length) % this.music_list.length
+            this.switchMusic(nextIndex, this.isMusicPlaying)
+        },
+
+        playNextMusic(forcePlay = false) {
+            const nextIndex = (this.currentMusicIndex + 1) % this.music_list.length
+            this.switchMusic(nextIndex, forcePlay || this.isMusicPlaying)
+        },
+
+        switchMusic(index, shouldPlay = false) {
+            this.currentMusicIndex = index
+            this.musicCurrentTime = 0
+            this.musicDuration = 0
+
+            this.$nextTick(() => {
+                const audio = this.$refs.audioPlayer
+                if (!audio) return
+
+                audio.volume = this.musicVolume
+                audio.load()
+
+                if (shouldPlay) {
+                    audio.play().catch(error => {
+                        console.error('音乐播放失败', error)
+                        this.isMusicPlaying = false
+                    })
+                }
+            })
+        },
+
+        handleAudioLoaded() {
+            const audio = this.$refs.audioPlayer
+            this.musicDuration = Number.isFinite(audio?.duration) ? audio.duration : 0
+        },
+
+        handleAudioTimeUpdate() {
+            const audio = this.$refs.audioPlayer
+            if (!audio) return
+
+            this.musicCurrentTime = audio.currentTime || 0
+            this.musicDuration = Number.isFinite(audio.duration) ? audio.duration : this.musicDuration
+        },
+
+        seekMusic(event) {
+            const audio = this.$refs.audioPlayer
+            if (!audio || !this.musicDuration) return
+
+            const value = Number(event.target.value)
+            audio.currentTime = (value / 100) * this.musicDuration
+            this.musicCurrentTime = audio.currentTime
+        },
+
+        changeMusicVolume(event) {
+            const value = Number(event.target.value)
+            this.musicVolume = Math.min(1, Math.max(0, value))
+
+            const audio = this.$refs.audioPlayer
+            if (audio) {
+                audio.volume = this.musicVolume
+            }
+        },
+
+        formatMusicTime(seconds) {
+            if (!Number.isFinite(seconds) || seconds <= 0) return '00:00'
+
+            const minutes = Math.floor(seconds / 60)
+            const restSeconds = Math.floor(seconds % 60)
+            return `${String(minutes).padStart(2, '0')}:${String(restSeconds).padStart(2, '0')}`
         },
 
         refreshRouteReveal() {
@@ -483,11 +800,26 @@ export default {
         this.updateDialogWidth()   // 调整搜索弹窗宽度
 
         this.preloadResources();
+
+        this.$nextTick(() => {
+            if (this.$refs.audioPlayer) {
+                this.$refs.audioPlayer.volume = this.musicVolume
+            }
+        })
     },
 
     beforeUnmount() {
         if (this.searchTimer) {
             clearTimeout(this.searchTimer)
+        }
+        if (this.musicMotionTimer) {
+            clearTimeout(this.musicMotionTimer)
+        }
+        if (this.musicMotionEndTimer) {
+            clearTimeout(this.musicMotionEndTimer)
+        }
+        if (this.musicTuckTimer) {
+            clearTimeout(this.musicTuckTimer)
         }
         window.removeEventListener('scroll', this.handleScroll)   // 移除滚动事件
         window.removeEventListener('resize', this.updateDialogWidth)   // 移除窗口变化事件

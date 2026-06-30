@@ -42,7 +42,7 @@
                             <li>头像 URL</li>
                             <li>一句话简介</li>
                         </ul>
-                        <p>发送到邮箱：1520715621@qq.com，邮件标题可以写“申请友链”。</p>
+                        <p>发送到邮箱：520715621@qq.com，邮件标题可以写“申请友链”。</p>
                     </div>
                     <template #footer>
                         <div class="dialog-footer">
@@ -67,17 +67,15 @@
                         v-for="(item, index) in friend_list"
                         :key="index"
                         :href="item.href"
+                        :aria-label="`访问 ${item.name}`"
                         target="_blank"
                         rel="noreferrer"
                     >
-                        <img class="friend-bg" :src="item.image" :alt="item.name"/>
-                        <div class="friend-overlay"></div>
-                        <img class="friend-avatar" :src="item.image" :alt="item.name"/>
-                        <div class="friend-info">
+                        <div class="friend-card-top">
+                            <img class="friend-avatar" :src="item.image" :alt="`${item.name} 头像`"/>
                             <h3>{{ item.name }}</h3>
-                            <p>{{ item.info }}</p>
-                            <span>{{ item.status }}</span>
                         </div>
+                        <p>{{ item.info }}</p>
                     </a>
                 </div>
 
@@ -105,21 +103,18 @@ export default {
                     image: friendAvatar,
                     name: 'Friend Site',
                     info: '认真写点什么的人。',
-                    status: 'Online',
                     href: '#',
                 },
                 {
                     image: friendAvatar,
                     name: 'Creative Lab',
                     info: '代码、设计和生活观察。',
-                    status: 'Online',
                     href: '#',
                 },
                 {
                     image: friendAvatar,
                     name: 'Note Garden',
                     info: '慢慢整理知识的小花园。',
-                    status: 'Online',
                     href: '#',
                 },
             ]
